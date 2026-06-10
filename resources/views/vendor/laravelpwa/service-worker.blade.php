@@ -10,6 +10,7 @@ const urlsToCache = [
 // Install event
 self.addEventListener('install', function(event) {
     console.log('Service Worker: Installing...');
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(function(cache) {
@@ -24,6 +25,11 @@ self.addEventListener('install', function(event) {
 
 // Fetch event
 self.addEventListener('fetch', function(event) {
+    // Skip non-GET and cross-origin requests (e.g. tawk.to analytics)
+    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(function(response) {
@@ -32,7 +38,10 @@ self.addEventListener('fetch', function(event) {
             })
             .catch(function(error) {
                 console.log('Service Worker: Fetch failed', error);
-                return fetch(event.request);
+                // Return fallback for html pages if they fail
+                if (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html')) {
+                    return caches.match('/');
+                }
             })
     );
 });
@@ -41,16 +50,19 @@ self.addEventListener('fetch', function(event) {
 self.addEventListener('activate', function(event) {
     console.log('Service Worker: Activating...');
     event.waitUntil(
-        caches.keys().then(function(cacheNames) {
-            return Promise.all(
-                cacheNames.map(function(cacheName) {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('Service Worker: Deleting old cache', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
+        Promise.all([
+            self.clients.claim(),
+            caches.keys().then(function(cacheNames) {
+                return Promise.all(
+                    cacheNames.map(function(cacheName) {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('Service Worker: Deleting old cache', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+        ])
     );
 });
 

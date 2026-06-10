@@ -40,6 +40,10 @@ self.addEventListener('activate', event => {
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
+    // Skip non-GET and cross-origin requests (e.g. tawk.to analytics)
+    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
     event.respondWith(
         caches.match(event.request)
             .then(response => {
@@ -48,5 +52,5 @@ self.addEventListener("fetch", event => {
             .catch(() => {
                 return caches.match('offline');
             })
-    )
+    );
 });

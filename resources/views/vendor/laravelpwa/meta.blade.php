@@ -1,3 +1,23 @@
+<script type="text/javascript">
+    // Intercept and mock tawk.to performance logging to prevent CORS errors on localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            let url = '';
+            if (args[0]) {
+                if (typeof args[0] === 'string') {
+                    url = args[0];
+                } else if (args[0].url) {
+                    url = args[0].url;
+                }
+            }
+            if (url.includes('tawk.to/log-performance')) {
+                return Promise.resolve(new Response(null, { status: 200 }));
+            }
+            return originalFetch.apply(this, args);
+        };
+    }
+</script>
 <!-- Web Application Manifest -->
 <link rel="manifest" href="{{ route('pwa.manifest') }}">
 <!-- Chrome for Android theme color -->
@@ -33,10 +53,24 @@
 <script type="text/javascript">
     // Initialize the service worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('{{ url("pwa/service-worker") }}', {
+        // Unregister old service workers to clear cache issues
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (let registration of registrations) {
+                if (registration.active && !registration.active.scriptURL.includes('?v=2')) {
+                    registration.unregister().then(function(success) {
+                        if (success) {
+                            console.log('Laravel PWA: Old ServiceWorker unregistered successfully.');
+                        }
+                    });
+                }
+            }
+        });
+
+        navigator.serviceWorker.register('{{ url("pwa/service-worker") }}?v=2', {
             scope: '{{ url("/") }}/'
         }).then(function (registration) {
-            // Registration was successful
+            // Force update checks
+            registration.update();
             console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
         }, function (err) {
             // registration failed :(

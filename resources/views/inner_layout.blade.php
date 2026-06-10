@@ -32,8 +32,6 @@
 
     <!--Todo: web-Menu start  -->
     <div class="flex justify-center relative z-50">
-        <!-- Preloader -->
-        @include('components.preloder')
         <div id="h5-header" class="header-wrapper w-full fixed top-0 z-50 border-b border-white/10 xl:block hidden">
             <div
                 class="top-bar w-full max-w-[1619px] mx-auto border-b border-[#FFFFFF1A] flex justify-between items-center py-2 2xl:px-0 px-2">
@@ -849,7 +847,6 @@
     <script src="{{ asset('frontend/assets/js/plugins.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/gsap.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/ScrollTrigger.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/ScrollSmoother.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
 

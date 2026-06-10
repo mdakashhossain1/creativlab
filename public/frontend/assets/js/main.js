@@ -268,22 +268,12 @@ videoBtn.forEach((btn) => {
     });
 });
 if (window.gsap) {
-    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+    gsap.registerPlugin(ScrollTrigger);
 
     ScrollTrigger.matchMedia({
   // Desktop only
   "(min-width: 1024px)": function () {
-    // create smoother only on desktop
     let device_width = window.innerWidth;
-    if (device_width > 100) {
-        ScrollSmoother.create({
-            smooth: 1.5,
-            effects: device_width >= 1025,
-            smoothTouch: false,
-            normalizeScroll: false,
-            ignoreMobileResize: true,
-        });
-    }
     const progressWrapper = document.querySelector("#progress-wrapper");
     if (device_width > 1280 && progressWrapper) {
         const height = progressWrapper.clientHeight - progressThumbHeight;
@@ -306,15 +296,9 @@ if (window.gsap) {
 $(document).ready(function () {
     setTimeout(function () {
         $("#container-preloader").addClass("loaded");
-        // Once the container-preloader has finished, the scroll appears
-        if ($("#container-preloader").hasClass("loaded")) {
-            // It is so that once the container-preloader is gone, the entire preloader section is deleted
-            $("#preloader")
-                .delay(1000)
-                .queue(function () {
-                    $(this).remove();
-                });
-        }
+        setTimeout(function () {
+            $("#preloader").remove();
+        }, 1000);
     }, 2000);
 });
 

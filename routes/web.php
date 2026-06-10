@@ -26,7 +26,13 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
 
         Route::get('/service-worker', function () {
             $serviceWorker = view('vendor.laravelpwa.service-worker')->render();
-            return response($serviceWorker, 200, ['Content-Type' => 'application/javascript']);
+            return response($serviceWorker, 200, [
+                'Content-Type' => 'application/javascript',
+                'Service-Worker-Allowed' => '/',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
         })->name('service-worker.js');
     });
 

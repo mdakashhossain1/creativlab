@@ -679,7 +679,6 @@
     <script src="{{ asset('frontend/assets/js/plugins.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/gsap.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/ScrollTrigger.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/ScrollSmoother.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
 
