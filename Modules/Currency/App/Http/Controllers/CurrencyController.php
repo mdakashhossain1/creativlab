@@ -111,12 +111,10 @@ class CurrencyController extends Controller
         $stripe_currency = PaymentGateway::where(['key' => 'stripe_currency_id'])->first();
         $paypal_currency = PaymentGateway::where(['key' => 'paypal_currency_id'])->first();
         $razorpay_currency = PaymentGateway::where(['key' => 'razorpay_currency_id'])->first();
-        $flutterwave_currency = PaymentGateway::where(['key' => 'flutterwave_currency_id'])->first();
-        $mollie_currency = PaymentGateway::where(['key' => 'mollie_currency_id'])->first();
         $paystack_currency = PaymentGateway::where(['key' => 'paystack_currency_id'])->first();
         $instamojo_currency = PaymentGateway::where(['key' => 'instamojo_account_mode'])->first();
 
-        if($stripe_currency->value == $id || $paypal_currency->value == $id || $razorpay_currency->value == $id || $flutterwave_currency->value == $id || $mollie_currency->value == $id || $paystack_currency->value == $id || $instamojo_currency->value == $id ){
+        if($stripe_currency->value == $id || $paypal_currency->value == $id || $razorpay_currency->value == $id || $paystack_currency->value == $id || $instamojo_currency->value == $id ){
             $notify_message = trans('You can not delete this currency, this currency connected to multiple gateway');
             $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
             return redirect()->back()->with($notify_message);

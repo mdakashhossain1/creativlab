@@ -38,13 +38,11 @@ Route::group(['prefix' => 'subscription','as' => 'subscription.','middleware' =>
     // Payment entry points
     Route::post('/stripe', [SubscriptionPaymentController::class, 'stripe'])->name('stripe');
     Route::post('/bank', [SubscriptionPaymentController::class, 'bank'])->name('bank');
-    Route::get('/pay-via-mollie', [SubscriptionPaymentController::class, 'pay_via_mollie'])->name('pay-via-mollie');
-    Route::get('/mollie-payment-success', [SubscriptionPaymentController::class, 'mollie_payment_success'])->name('mollie-payment-success');
     Route::get('/pay-via-instamojo', [SubscriptionPaymentController::class, 'pay_via_instamojo'])->name('pay-via-instamojo');
     Route::get('/response-instamojo', [SubscriptionPaymentController::class, 'instamojo_response'])->name('response-instamojo');
     Route::post('/pay-razorpay', [SubscriptionPaymentController::class, 'pay_via_razorpay'])->name('pay-razorpay');
     Route::get('/pay-via-paystack', [SubscriptionPaymentController::class, 'pay_via_payStack'])->name('pay-via-paystack');
-    Route::post('/pay-via-flutterwave', [SubscriptionPaymentController::class, 'pay_via_flutterwave'])->name('pay-via-flutterwave');
+
 
     // PayPal
     Route::get('/paypal', [UserPaypalSubscriptionController::class, 'paypal'])->name('paypal');

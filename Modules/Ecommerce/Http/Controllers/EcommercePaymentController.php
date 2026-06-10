@@ -6,13 +6,11 @@ use Razorpay\Api\Api;
 use App\Constants\Status;
 use PharIo\Manifest\Email;
 use App\Helper\EmailHelper;
-use App\Models\Flutterwave;
+
 use Illuminate\Http\Request;
 use App\Mail\OrderSuccessfully;
 use App\Models\RazorpayPayment;
 use App\Models\InstamojoPayment;
-use App\Models\PaystackAndMollie;
-use Mollie\Laravel\Facades\Mollie;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Mail;
@@ -45,69 +43,6 @@ class EcommercePaymentController extends Controller
         }
 
         $this->payment_setting  = (object) $payment_setting;
-    }
-
-    public function pay_via_mollie(Request $request)
-    {
-
-        if (env('APP_MODE') == 'DEMO') {
-            $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification = array('messege' => $notification, 'alert-type' => 'error');
-            return redirect()->back()->with($notification);
-        }
-
-        $user = Auth::guard('web')->user();
-
-        $orderData = session()->get('orderData');
-
-        $total = $orderData['total'];
-
-        $mollie =  Currency::findOrFail($this->payment_setting->mollie_currency_id);
-        $price = round($total * $mollie->currency_rate,2);
-        $price = number_format($price, 2, '.', '');
-
-
-        $mollie_api_key = PaymentGateway::where('key', 'mollie_key')->first()->value;
-        $currency = strtoupper($mollie->currency_code);
-        Mollie::api()->setApiKey($mollie_api_key);
-        $payment = Mollie::api()->payments()->create([
-            'amount' => [
-                'currency' => $currency,
-                'value' => '' . $price . '',
-            ],
-            'description' => env('APP_NAME'),
-            'redirectUrl' => route('ecommerce.mollie-payment-success'),
-        ]);
-
-        $payment = Mollie::api()->payments()->get($payment->id);
-        session()->put('payment_id', $payment->id);
-        return redirect($payment->getCheckoutUrl(), 303);
-    }
-
-    public function mollie_payment_success(Request $request)
-    {
-
-        $mollie = Currency::findOrFail($this->payment_setting->mollie_currency_id);
-
-        $mollie_api_key = PaymentGateway::where('key', 'mollie_key')->first()->value;
-        Mollie::api()->setApiKey($mollie_api_key);
-        $payment = Mollie::api()->payments->get(session()->get('payment_id'));
-        if ($payment->isPaid()) {
-
-            $user = Auth::guard('web')->user();
-
-            $orderData = session()->get('orderData');
-            $order = $this->create_order($user, $orderData, 'Mollie', Status::APPROVED);
-
-            $notification = trans('Your payment has been made successful. Thanks for your new purchase');
-            $notification = array('messege' => $notification, 'alert-type' => 'success');
-            return redirect()->route('user.orders')->with($notification);
-        } else {
-
-            $notification = trans('Something went wrong, please try again');
-            $notification = array('messege' => $notification, 'alert-type' => 'error');
-            return redirect()->back()->with($notification);
-        }
     }
 
     public function stripe(Request $request)
@@ -231,50 +166,7 @@ class EcommercePaymentController extends Controller
     }
 
 
-    public function pay_via_flutterwave(Request $request, $id)
-    {
 
-        $curl = curl_init();
-        $tnx_id = $request->tnx_id;
-        $url = "https://api.flutterwave.com/v3/transactions/$tnx_id/verify";
-        $token = $this->payment_setting->flutterwave_secret_key;
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => array(
-            "Content-Type: application/json",
-            "Authorization: Bearer $token"
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        $response = json_decode($response);
-
-        if ($response->status == 'success') {
-
-            $user = Auth::guard('web')->user();
-
-            // Create first order
-            $orderData = session()->get('orderData');
-            $order = $this->create_order($user, $orderData, 'Flutterwave', Status::APPROVED);
-
-            $notification = trans('Your payment has been made successful. Thanks for your new purchase');
-            return response()->json(['status' => 'success', 'message' => $notification]);
-
-
-        } else {
-            $notification = trans('Something went wrong, please try again');
-            return response()->json(['status' => 'faild', 'message' => $notification]);
-        }
-    }
 
     public function pay_via_payStack(Request $request)
     {

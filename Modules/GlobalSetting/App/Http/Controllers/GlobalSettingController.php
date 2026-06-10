@@ -386,8 +386,6 @@ class GlobalSettingController extends Controller
         PaymentGateway::where('key', 'stripe_currency_id')->update(['value' => 1]);
         PaymentGateway::where('key', 'paypal_currency_id')->update(['value' => 1]);
         PaymentGateway::where('key', 'razorpay_currency_id')->update(['value' => 1]);
-        PaymentGateway::where('key', 'flutterwave_currency_id')->update(['value' => 1]);
-        PaymentGateway::where('key', 'mollie_currency_id')->update(['value' => 1]);
         PaymentGateway::where('key', 'paystack_currency_id')->update(['value' => 1]);
         PaymentGateway::where('key', 'instamojo_currency_id')->update(['value' => 1]);
 

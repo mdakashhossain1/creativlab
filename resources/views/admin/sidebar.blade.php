@@ -61,26 +61,26 @@
                     <ul class="menu-bar__one-dropdown">
 
 
-                        <li><a href="{{ route('admin.orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.orders') || Route::is('admin.order') ? 'active' : '' }}"><a href="{{ route('admin.orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('All Orders') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.active-orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.active-orders') ? 'active' : '' }}"><a href="{{ route('admin.active-orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Active Orders') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.reject-orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.reject-orders') ? 'active' : '' }}"><a href="{{ route('admin.reject-orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Rejected Orders') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.delivered-orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.delivered-orders') ? 'active' : '' }}"><a href="{{ route('admin.delivered-orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Delivered Orders') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.complete-orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.complete-orders') ? 'active' : '' }}"><a href="{{ route('admin.complete-orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Complete Orders') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.pending-payment-orders') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.pending-payment-orders') ? 'active' : '' }}"><a href="{{ route('admin.pending-payment-orders') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Pending Payment Order') }}</span></span></a>
                         </li>
 
@@ -113,19 +113,19 @@
                 <div class="collapse crancy__dropdown {{ Route::is('admin.product.index') || Route::is('admin.product.create') || Route::is('admin.product.edit') || Route::is('admin.brand.*') || Route::is('admin.category.*') || Route::is('admin.sub-category.*') ? 'show' : '' }}"
                     id="menu-item__ecommerce" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
-                        <li><a href="{{ route('admin.product.create') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.product.create') ? 'active' : '' }}"><a href="{{ route('admin.product.create') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Create Product') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.product.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.product.index') || Route::is('admin.product.edit') ? 'active' : '' }}"><a href="{{ route('admin.product.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Product List') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.category.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.category.*') || Route::is('admin.sub-category.*') ? 'active' : '' }}"><a href="{{ route('admin.category.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Category List') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.brand.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.brand.*') ? 'active' : '' }}"><a href="{{ route('admin.brand.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Brand List') }}</span></span></a></li>
 
                     </ul>
@@ -212,10 +212,10 @@
                     id="coupon" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.coupon.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.coupon.index') || Route::is('admin.coupon.create') || Route::is('admin.coupon.edit') || Route::is('admin.cupon.*') ? 'active' : '' }}"><a href="{{ route('admin.coupon.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Coupon List') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.coupon-history-list') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.coupon-history-list') ? 'active' : '' }}"><a href="{{ route('admin.coupon-history-list') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Coupon History') }}</span></span></a></li>
                     </ul>
                 </div>
@@ -251,21 +251,21 @@
                 <div class="collapse crancy__dropdown {{ Route::is('admin.subscription-plan.*') || Route::is('admin.purchase-history') || Route::is('admin.pending-purchase-history') || Route::is('admin.purchase-history-detail') ? 'show' : '' }}"
                     id="subscriptionPlanMenu" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
-                        <li>
+                        <li class="{{ Route::is('admin.subscription-plan.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.subscription-plan.index') }}">
                                 <span class="menu-bar__text">
                                     <span class="menu-bar__name">{{ __('Plan List') }}</span>
                                 </span>
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ Route::is('admin.purchase-history') || Route::is('admin.purchase-history-detail') ? 'active' : '' }}">
                             <a href="{{ route('admin.purchase-history') }}">
                                 <span class="menu-bar__text">
                                     <span class="menu-bar__name">{{ __('Purchase History') }}</span>
                                 </span>
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ Route::is('admin.pending-purchase-history') ? 'active' : '' }}">
                             <a href="{{ route('admin.pending-purchase-history') }}">
                                 <span class="menu-bar__text">
                                     <span class="menu-bar__name">{{ __('Pending History') }}</span>
@@ -351,10 +351,10 @@
                     id="menu-item__users" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.user-list') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.user-list') || Route::is('admin.user-show') ? 'active' : '' }}"><a href="{{ route('admin.user-list') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('User List') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.pending-user') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.pending-user') ? 'active' : '' }}"><a href="{{ route('admin.pending-user') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Pending User') }}</span></span></a>
                         </li>
                     </ul>
@@ -395,11 +395,11 @@
                     id="menu-item__car_list" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.listings.create') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.listings.create') ? 'active' : '' }}"><a href="{{ route('admin.listings.create') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Create Service') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.listings.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.listings.index') || Route::is('admin.listings.edit') ? 'active' : '' }}"><a href="{{ route('admin.listings.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Service List') }}</span></span></a>
                         </li>
 
@@ -471,22 +471,22 @@
                     id="menu-item__blog" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.blog-category.create') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.blog-category.create') ? 'active' : '' }}"><a href="{{ route('admin.blog-category.create') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Create Categroy') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.blog-category.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.blog-category.index') || Route::is('admin.blog-category.edit') ? 'active' : '' }}"><a href="{{ route('admin.blog-category.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Categroy List') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.blog.create') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.blog.create') ? 'active' : '' }}"><a href="{{ route('admin.blog.create') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Create Blog') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.blog.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.blog.index') || Route::is('admin.blog.edit') ? 'active' : '' }}"><a href="{{ route('admin.blog.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Blog List') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.comment-list') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.comment-list') || Route::is('admin.show-comment') ? 'active' : '' }}"><a href="{{ route('admin.comment-list') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Comment List') }}</span></span></a>
                         </li>
                     </ul>
@@ -521,25 +521,25 @@
                     id="menu-item__pages" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.contact-us', ['lang_code' => admin_lang()]) }}"><span
+                        <li class="{{ Route::is('admin.contact-us') ? 'active' : '' }}"><a href="{{ route('admin.contact-us', ['lang_code' => admin_lang()]) }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Contact Us') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.terms-conditions', ['lang_code' => admin_lang()]) }}"><span
+                        <li class="{{ Route::is('admin.terms-conditions') ? 'active' : '' }}"><a href="{{ route('admin.terms-conditions', ['lang_code' => admin_lang()]) }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Terms and Conditions') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.privacy-policy', ['lang_code' => admin_lang()]) }}"><span
+                        <li class="{{ Route::is('admin.privacy-policy') ? 'active' : '' }}"><a href="{{ route('admin.privacy-policy', ['lang_code' => admin_lang()]) }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Privacy Policy') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.faq.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.faq.*') ? 'active' : '' }}"><a href="{{ route('admin.faq.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('FAQ') }}</span></span></a></li>
 
 
-                        <li><a href="{{ route('admin.custom-page.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.custom-page.*') ? 'active' : '' }}"><a href="{{ route('admin.custom-page.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Custom Page') }}</span></span></a>
                         </li>
 
@@ -568,25 +568,25 @@
                     <ul class="menu-bar__one-dropdown">
 
 
-                        <li class=""><a href="{{ route('admin.section-manage') }}"><span
+                        <li class="{{ Route::is('admin.section-manage') ? 'active' : '' }}"><a href="{{ route('admin.section-manage') }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Section Visibility') }}</span></span></a></li>
 
 
-                        <li><a href="{{ route('admin.slider.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.slider.*') ? 'active' : '' }}"><a href="{{ route('admin.slider.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Slider') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.footer', ['lang_code' => admin_lang()]) }}"><span
+                        <li class="{{ Route::is('admin.footer') ? 'active' : '' }}"><a href="{{ route('admin.footer', ['lang_code' => admin_lang()]) }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Footer Info') }}</span></span></a>
                         </li>
 
 
-                        <li><a href="{{ route('admin.testimonial.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.testimonial.*') ? 'active' : '' }}"><a href="{{ route('admin.testimonial.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Testimonial') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.partner.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.partner.*') ? 'active' : '' }}"><a href="{{ route('admin.partner.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Partner') }}</span></span></a></li>
 
                     </ul>
@@ -753,10 +753,10 @@
                     id="menu-item__languages" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.language.index') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.language.*') ? 'active' : '' }}"><a href="{{ route('admin.language.index') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Languages') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.theme-language', ['lang_code' => 'en']) }}"><span
+                        <li class="{{ Route::is('admin.theme-language') ? 'active' : '' }}"><a href="{{ route('admin.theme-language', ['lang_code' => 'en']) }}"><span
                                     class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Theme Languages') }}</span></span></a>
                         </li>
@@ -813,11 +813,11 @@
                     id="menu-item__apps_email_config" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.email-setting') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.email-setting') ? 'active' : '' }}"><a href="{{ route('admin.email-setting') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Configuration') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.email-template') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.email-template') || Route::is('admin.edit-email-template') ? 'active' : '' }}"><a href="{{ route('admin.email-template') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Email Template') }}</span></span></a>
                         </li>
 
@@ -855,39 +855,39 @@
                     id="menu-item__apps" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.cookie-consent') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.cookie-consent') ? 'active' : '' }}"><a href="{{ route('admin.cookie-consent') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Cookie Consent') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.error-image') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.error-image') ? 'active' : '' }}"><a href="{{ route('admin.error-image') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Error Page') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.login-image') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.login-image') ? 'active' : '' }}"><a href="{{ route('admin.login-image') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Login Page') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.admin-login-image') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.admin-login-image') ? 'active' : '' }}"><a href="{{ route('admin.admin-login-image') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Admin Login') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.breadcrumb') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.breadcrumb') ? 'active' : '' }}"><a href="{{ route('admin.breadcrumb') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Breadcrumb Image') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.social-login') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.social-login') ? 'active' : '' }}"><a href="{{ route('admin.social-login') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Social Login') }}</span></span></a>
                         </li>
 
 
-                        <li><a href="{{ route('admin.default-avatar') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.default-avatar') ? 'active' : '' }}"><a href="{{ route('admin.default-avatar') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Default Avatar') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.pwa-icon-settings') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.pwa-icon-settings') ? 'active' : '' }}"><a href="{{ route('admin.pwa-icon-settings') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('PWA Icon Settings') }}</span></span></a></li>
 
-                        <li><a href="{{ route('admin.maintenance-mode') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.maintenance-mode') ? 'active' : '' }}"><a href="{{ route('admin.maintenance-mode') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Maintenance mode') }}</span></span></a>
                         </li>
 
@@ -1034,11 +1034,11 @@
                     id="menu-item__apps_newsletter" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
-                        <li><a href="{{ route('admin.newsletter-list') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.newsletter-list') ? 'active' : '' }}"><a href="{{ route('admin.newsletter-list') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Subscriber List') }}</span></span></a>
                         </li>
 
-                        <li><a href="{{ route('admin.newsletter-email') }}"><span class="menu-bar__text"><span
+                        <li class="{{ Route::is('admin.newsletter-email') ? 'active' : '' }}"><a href="{{ route('admin.newsletter-email') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Send Mail') }}</span></span></a></li>
 
                     </ul>

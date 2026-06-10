@@ -75,9 +75,6 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
         Route::post('/pay-stripe', 'stripe')->name('stripe');
         Route::post('/pay-bank', 'bank')->name('bank');
         Route::post('/pay-razorpay', 'pay_via_razorpay')->name('pay-razorpay');
-        Route::get('/mollie', 'pay_via_mollie')->name('pay-via-mollie');
-        Route::get('/mollie-success', 'mollie_payment_success')->name('mollie-payment-success');
-        Route::post('/flutterwave', 'flutterwave')->name('pay-via-flutterwave');
         Route::get('/ecommerce/paystack', 'pay_via_payStack')->name('pay-via-paystack');
         Route::get('/pay-via-instamojo', 'pay_via_instamojo')->name('pay-via-instamojo');
         Route::get('/ecommerce/response-instamojo', 'instamojo_response')->name('response-instamojo');

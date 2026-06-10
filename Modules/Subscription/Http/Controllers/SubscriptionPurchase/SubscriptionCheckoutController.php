@@ -91,14 +91,12 @@ class SubscriptionCheckoutController extends Controller
         $stripe = PaymentGateway::where(['key' => 'stripe_currency_id'])->first();
         $paypalStatus = PaymentGateway::where('key', 'paypal_status')->value('value');
         $razorpay = PaymentGateway::where(['key' => 'razorpay_currency_id'])->first();
-        $flutterwave = PaymentGateway::where(['key' => 'flutterwave_currency_id'])->first();
         $paystack = PaymentGateway::where(['key' => 'paystack_currency_id'])->first();
-        $mollie = $paystack;
         $instamojo = PaymentGateway::where(['key' => 'instamojo_currency_id'])->first();
         $bank = PaymentGateway::where(['key' => 'bank_status'])->first();
 
         $razorpay_currency = isset($this->payment_setting->razorpay_currency_id) ? Currency::find($this->payment_setting->razorpay_currency_id) : null;
-        $flutterwave_currency = isset($this->payment_setting->flutterwave_currency_id) ? Currency::find($this->payment_setting->flutterwave_currency_id) : null;
+
         $paystack_currency = isset($this->payment_setting->paystack_currency_id) ? Currency::find($this->payment_setting->paystack_currency_id) : null;
 
 
@@ -110,15 +108,12 @@ class SubscriptionCheckoutController extends Controller
             'paypal',
             'stripe',
             'razorpay',
-            'flutterwave',
             'paystack',
-            'mollie',
             'instamojo',
             'bank',
             'payment_setting',
             'razorpay_currency',
             'payable_amount',
-            'flutterwave_currency',
             'paystack_currency',
             'cta_content',
             'plan'

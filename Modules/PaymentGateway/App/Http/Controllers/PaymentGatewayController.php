@@ -6,13 +6,12 @@ use Image, File;
 use App\Http\Controllers\Controller;
 use Modules\PaymentGateway\App\Models\PaymentGateway;
 use Modules\PaymentGateway\App\Http\Requests\BankRequest;
-use Modules\PaymentGateway\App\Http\Requests\MollieRequest;
 use Modules\PaymentGateway\App\Http\Requests\PaypalRequest;
 use Modules\PaymentGateway\App\Http\Requests\StripeRequest;
 use Modules\PaymentGateway\App\Http\Requests\PaystackRequest;
 use Modules\PaymentGateway\App\Http\Requests\RazorpayRequest;
 use Modules\PaymentGateway\App\Http\Requests\InstamojoRequest;
-use Modules\PaymentGateway\App\Http\Requests\FlutterwaveRequest;
+
 
 class PaymentGatewayController extends Controller
 {
@@ -136,66 +135,6 @@ class PaymentGatewayController extends Controller
         return redirect()->back()->with($notify_message);
     }
 
-    public function update_flutterwave(FlutterwaveRequest $request)
-    {
-        PaymentGateway::where('key', 'flutterwave_currency_id')->update(['value' => $request->currency_id]);
-        PaymentGateway::where('key', 'flutterwave_public_key')->update(['value' => $request->public_key]);
-        PaymentGateway::where('key', 'flutterwave_secret_key')->update(['value' => $request->secret_key]);
-        PaymentGateway::where('key', 'flutterwave_title')->update(['value' => $request->title]);
-
-        PaymentGateway::where('key', 'flutterwave_status')->update(['value' => $request->status ? 1 : 0]);
-
-        $exist_image = PaymentGateway::where('key', 'flutterwave_logo')->first();
-
-        if($request->image){
-            $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
-            $exist_image->save();
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
-        }
-
-
-        $notify_message = trans('Updated successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-        return redirect()->back()->with($notify_message);
-    }
-
-    public function update_mollie(MollieRequest $request)
-    {
-        PaymentGateway::where('key', 'mollie_currency_id')->update(['value' => $request->mollie_currency_id]);
-        PaymentGateway::where('key', 'mollie_key')->update(['value' => $request->mollie_key]);
-        PaymentGateway::where('key', 'mollie_status')->update(['value' => $request->status ? 1 : 0]);
-
-        $exist_image = PaymentGateway::where('key', 'mollie_image')->first();
-
-        if($request->image){
-            $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
-            $exist_image->save();
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
-        }
-
-
-        $notify_message = trans('Updated successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-        return redirect()->back()->with($notify_message);
-    }
 
 
     public function update_paystack(PaystackRequest $request)

@@ -51,26 +51,6 @@
                                 @endif
                             </h4>
                             <ul class="flex flex-wrap gap-5 mt-6">
-                                @if ($payment_setting->mollie_status == 1)
-                                    <li>
-                                        <button
-                                            class="w-[244px] h-[58px] bg-white text-center flex justify-center items-center border border-grayscale-300 current:border current:border-buisness-red rounded-lg gap-7 payment-check transition-all duration-300"
-                                            name="mollie" id="mollie_payment_btn">
-                                            <div
-                                                class="w-0 h-0 overflow-hidden current:w-6 current:h-6 flex justify-center items-center current:bg-buisness-red current:text-white transition-all duration-300">
-                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <rect width="18" height="18" rx="2" fill="#FF002A" />
-                                                    <path
-                                                        d="M7.82919 12.8459C7.73373 12.9448 7.6035 13 7.46821 13C7.33293 13 7.20269 12.9448 7.10724 12.8459L4.22438 9.87525C3.92521 9.56701 3.92521 9.06719 4.22438 8.75953L4.58536 8.38752C4.88463 8.07929 5.3692 8.07929 5.66838 8.38752L7.46821 10.242L12.3316 5.23118C12.6309 4.92294 13.1159 4.92294 13.4146 5.23118L13.7756 5.60318C14.0748 5.91142 14.0748 6.41115 13.7756 6.7189L7.82919 12.8459Z"
-                                                        fill="white" />
-                                                </svg>
-                                            </div>
-                                            <img src="{{ asset($payment_setting->mollie_image) }}" alt=""
-                                                class="max-w-[174px] max-h-7 object-contain" />
-                                        </button>
-                                    </li>
-                                @endif
                                 @if ($payment_setting->paypal_status == 1)
                                     <li>
                                         <button
@@ -209,26 +189,7 @@
                                         </button>
                                     </li>
                                 @endif
-                                @if ($payment_setting->flutterwave_status == 1)
-                                    <li>
-                                        <button
-                                            class="w-[244px] h-[58px] flex justify-center items-center border border-grayscale-300 current:border current:border-buisness-red rounded-lg gap-7 payment-check transition-all duration-300"
-                                            name="ssl" id="payWithFlutterwave">
-                                            <div
-                                                class="w-0 h-0 overflow-hidden current:w-6 current:h-6 flex justify-center items-center current:bg-buisness-red current:text-white transition-all duration-300">
-                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <rect width="18" height="18" rx="2" fill="#FF002A" />
-                                                    <path
-                                                        d="M7.82919 12.8459C7.73373 12.9448 7.6035 13 7.46821 13C7.33293 13 7.20269 12.9448 7.10724 12.8459L4.22438 9.87525C3.92521 9.56701 3.92521 9.06719 4.22438 8.75953L4.58536 8.38752C4.88463 8.07929 5.3692 8.07929 5.66838 8.38752L7.46821 10.242L12.3316 5.23118C12.6309 4.92294 13.1159 4.92294 13.4146 5.23118L13.7756 5.60318C14.0748 5.91142 14.0748 6.41115 13.7756 6.7189L7.82919 12.8459Z"
-                                                        fill="white" />
-                                                </svg>
-                                            </div>
-                                            <img src="{{ asset($payment_setting->flutterwave_logo) }}" alt="img"
-                                                class="max-w-[174px] max-h-7 object-contain" />
-                                        </button>
-                                    </li>
-                                @endif
+
                             </ul>
                         </div>
                     </div>
@@ -490,10 +451,6 @@
                 window.location.href = "{{ route('user.pay-via-paypal') }}";
             })
 
-            $("#mollie_payment_btn").on("click", function() {
-                window.location.href = "{{ route('ecommerce.pay-via-mollie') }}";
-            })
-
             $("#instamojoPayment").on("click", function() {
                 window.location.href = "{{ route('ecommerce.pay-via-instamojo') }}";
             })
@@ -579,84 +536,7 @@
 
     {{-- end paystack payment --}}
 
-    {{-- start flutterwave payment --}}
-    @if ($payment_setting->flutterwave_status == 1)
-        <script src="https://checkout.flutterwave.com/v3.js"></script>
 
-        @php
-
-            $payable_amount = $payable_amount * $flutterwave_currency->currency_rate;
-            $payable_amount = round($payable_amount, 2);
-        @endphp
-
-        <script>
-            "use strict";
-            $(function() {
-                $("#payWithFlutterwave").on("click", function() {
-
-                    var isDemo = "{{ env('APP_MODE') }}"
-                    if (isDemo == 'DEMO') {
-                        toastr.error('This Is Demo Version. You Can Not Change Anything');
-                        return;
-                    }
-
-                    FlutterwaveCheckout({
-                        public_key: "{{ $payment_setting->flutterwave_public_key }}",
-                        tx_ref: "{{ substr(rand(0, time()), 0, 10) }}",
-                        amount: {
-                            {
-                                $payable_amount
-                            }
-                        },
-                        currency: "{{ $flutterwave_currency->currency_code }}",
-                        country: "{{ $flutterwave_currency->country_code }}",
-                        payment_options: " ",
-                        customer: {
-                            email: "{{ $user->email }}",
-                            phone_number: "{{ $user->phone }}",
-                            name: "{{ $user->name }}",
-                        },
-                        callback: function(data) {
-
-                            var tnx_id = data.transaction_id;
-                            var _token = "{{ csrf_token() }}";
-                            $.ajax({
-                                type: 'post',
-                                data: {
-                                    tnx_id,
-                                    _token
-                                },
-                                url: "{{ route('ecommerce.pay-via-flutterwave') }}",
-                                success: function(response) {
-
-                                    if (response.status == 'success') {
-                                        toastr.success(response.message);
-                                        window.location.href =
-                                            "{{ route('user.orders') }}";
-                                    } else {
-                                        toastr.error(response.message);
-                                        window.location.reload();
-                                    }
-                                },
-                                error: function(err) {
-                                    toastr.error(
-                                        "{{ __('Something went wrong, please try again') }}"
-                                    );
-                                    window.location.reload();
-                                }
-                            });
-                        },
-                        customizations: {
-                            title: "{{ $payment_setting->flutterwave_title }}",
-                            logo: "{{ asset($payment_setting->flutterwave_logo) }}",
-                        },
-                    });
-                })
-            });
-        </script>
-    @endif
-
-    {{-- end flutterwave payment --}}
 
 
 

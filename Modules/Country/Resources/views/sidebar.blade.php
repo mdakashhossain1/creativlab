@@ -12,9 +12,9 @@
     <div class="collapse crancy__dropdown {{ Route::is('admin.country.*') || Route::is('admin.city.*') ? 'show' : '' }}" id="menu-item__location_list"  data-bs-parent="#CrancyMenu">
         <ul class="menu-bar__one-dropdown">
 
-            <li><a href="{{ route('admin.country.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('Country List') }}</span></span></a></li>
+            <li class="{{ Route::is('admin.country.*') ? 'active' : '' }}"><a href="{{ route('admin.country.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('Country List') }}</span></span></a></li>
 
-            <li><a href="{{ route('admin.city.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('City List') }}</span></span></a></li>
+            <li class="{{ Route::is('admin.city.*') ? 'active' : '' }}"><a href="{{ route('admin.city.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('City List') }}</span></span></a></li>
 
 
         </ul>

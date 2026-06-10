@@ -190,6 +190,126 @@
 
                             </div>
 
+                            <!-- Second stat row: total users / revenue / today revenue / products -->
+                            <div class="row">
+
+                                <div class="col-lg-3 col-12 mg-top-30">
+                                    <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                        <div class="flex-main text-theme">
+                                            <span>
+                                                <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                    <g clip-path="url(#clip_total_users)">
+                                                        <path d="M27 14C23.134 14 20 17.134 20 21C20 24.866 23.134 28 27 28C30.866 28 34 24.866 34 21C34 17.134 30.866 14 27 14ZM27 26C24.239 26 22 23.761 22 21C22 18.239 24.239 16 27 16C29.761 16 32 18.239 32 21C32 23.761 29.761 26 27 26ZM38 38C38 33.589 32.617 30 27 30C21.383 30 16 33.589 16 38V40H18V38C18 34.691 22.486 32 27 32C31.514 32 36 34.691 36 38V40H38V38Z" fill="currentcolor"/>
+                                                        <path d="M38 19C36.346 19 35 20.346 35 22C35 23.654 36.346 25 38 25C39.654 25 41 23.654 41 22C41 20.346 39.654 19 38 19ZM38 23C37.448 23 37 22.552 37 22C37 21.448 37.452 21 38 21C38.552 21 39 21.448 39 22C39 22.552 38.552 23 38 23ZM40 27H38C35.791 27 34 28.791 34 31V33H36V31C36 29.895 36.895 29 38 29H40C41.105 29 42 29.895 42 31V33H44V31C44 28.791 42.209 27 40 27ZM16 19C14.346 19 13 20.346 13 22C13 23.654 14.346 25 16 25C17.654 25 19 23.654 19 22C19 20.346 17.654 19 16 19ZM16 23C15.448 23 15 22.552 15 22C15 21.448 15.448 21 16 21C16.552 21 17 21.448 17 22C17 22.552 16.552 23 16 23ZM18 27H16C13.791 27 12 28.791 12 31V33H14V31C14 29.895 14.895 29 16 29H18C19.105 29 20 29.895 20 31V33H22V31C22 28.791 20.209 27 18 27Z" fill="currentcolor"/>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip_total_users"><rect width="32" height="32" fill="white" transform="translate(11 11)"/></clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </span>
+                                            <div class="flex-1">
+                                                <div class="crancy-ecom-card__heading">
+                                                    <div class="crancy-ecom-card__icon">
+                                                        <h4 class="crancy-ecom-card__title">{{ __('Total Users') }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="crancy-ecom-card__content">
+                                                    <div class="crancy-ecom-card__camount">
+                                                        <div class="crancy-ecom-card__camount__inside">
+                                                            <h3 class="crancy-ecom-card__amount">{{ $total_users }}</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-12 mg-top-30">
+                                    <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                        <div class="flex-main text-theme">
+                                            <span>
+                                                <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                    <path d="M27 13C19.268 13 13 19.268 13 27C13 34.732 19.268 41 27 41C34.732 41 41 34.732 41 27C41 19.268 34.732 13 27 13ZM27 39C20.373 39 15 33.627 15 27C15 20.373 20.373 15 27 15C33.627 15 39 20.373 39 27C39 33.627 33.627 39 27 39ZM29 26H25C24.448 26 24 25.552 24 25C24 24.448 24.448 24 25 24H30V22H28V20H26V22H25C23.346 22 22 23.346 22 25C22 26.654 23.346 28 25 28H29C29.552 28 30 28.448 30 29C30 29.552 29.552 30 29 30H24V32H26V34H28V32H29C30.654 32 32 30.654 32 29C32 27.346 30.654 26 29 26Z" fill="currentcolor"/>
+                                                </svg>
+                                            </span>
+                                            <div class="flex-1">
+                                                <div class="crancy-ecom-card__heading">
+                                                    <div class="crancy-ecom-card__icon">
+                                                        <h4 class="crancy-ecom-card__title">{{ __('Total Revenue') }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="crancy-ecom-card__content">
+                                                    <div class="crancy-ecom-card__camount">
+                                                        <div class="crancy-ecom-card__camount__inside">
+                                                            <h3 class="crancy-ecom-card__amount">{{ currency($total_revenue) }}</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-12 mg-top-30">
+                                    <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                        <div class="flex-main text-theme">
+                                            <span>
+                                                <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                    <path d="M27 13C19.268 13 13 19.268 13 27C13 34.732 19.268 41 27 41C34.732 41 41 34.732 41 27C41 19.268 34.732 13 27 13ZM27 39C20.373 39 15 33.627 15 27C15 20.373 20.373 15 27 15C33.627 15 39 20.373 39 27C39 33.627 33.627 39 27 39ZM28 27.586V20H26V28.414L30.293 32.707L31.707 31.293L28 27.586Z" fill="currentcolor"/>
+                                                </svg>
+                                            </span>
+                                            <div class="flex-1">
+                                                <div class="crancy-ecom-card__heading">
+                                                    <div class="crancy-ecom-card__icon">
+                                                        <h4 class="crancy-ecom-card__title">{{ __("Today's Revenue") }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="crancy-ecom-card__content">
+                                                    <div class="crancy-ecom-card__camount">
+                                                        <div class="crancy-ecom-card__camount__inside">
+                                                            <h3 class="crancy-ecom-card__amount">{{ currency($today_revenue) }}</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-12 mg-top-30">
+                                    <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                        <div class="flex-main text-theme">
+                                            <span>
+                                                <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                    <path d="M37 17H17C15.897 17 15 17.897 15 19V35C15 36.103 15.897 37 17 37H37C38.103 37 39 36.103 39 35V19C39 17.897 38.103 17 37 17ZM37 35H17V19H37V35ZM19 21H35V23H19V21ZM19 25H35V27H19V25ZM19 29H28V31H19V29Z" fill="currentcolor"/>
+                                                </svg>
+                                            </span>
+                                            <div class="flex-1">
+                                                <div class="crancy-ecom-card__heading">
+                                                    <div class="crancy-ecom-card__icon">
+                                                        <h4 class="crancy-ecom-card__title">{{ __('Total Products') }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="crancy-ecom-card__content">
+                                                    <div class="crancy-ecom-card__camount">
+                                                        <div class="crancy-ecom-card__camount__inside">
+                                                            <h3 class="crancy-ecom-card__amount">{{ $total_products }}</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End second stat row -->
+
                             <div class="row crancy-gap-30">
                                 <div class="col-12">
                                     <!-- Charts One -->
@@ -212,6 +332,52 @@
                                         </div>
                                     </div>
                                     <!-- End Charts One -->
+                                </div>
+                            </div>
+
+                            <div class="row crancy-gap-30">
+                                <div class="col-lg-8 col-12">
+                                    <!-- User Registration Chart -->
+                                    <div class="charts-main charts-home-one mg-top-30">
+                                        <div class="charts-main__heading mg-btm-20">
+                                            <h4 class="charts-main__title">{{ __('User Registrations (Last 12 Months)') }}</h4>
+                                        </div>
+                                        <div class="charts-main__one">
+                                            <div class="crancy-chart__inside crancy-chart__three">
+                                                <canvas id="myChart_user_reg"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End User Registration Chart -->
+                                </div>
+                                <div class="col-lg-4 col-12">
+                                    <!-- Order Status Doughnut Chart -->
+                                    <div class="charts-main charts-home-one mg-top-30">
+                                        <div class="charts-main__heading mg-btm-20">
+                                            <h4 class="charts-main__title">{{ __('Order Status Breakdown') }}</h4>
+                                        </div>
+                                        <div class="charts-main__one">
+                                            <div class="crancy-chart__inside" style="position:relative; height:280px;">
+                                                <canvas id="myChart_order_status"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Order Status Doughnut Chart -->
+                                </div>
+                            </div>
+
+                            <div class="row crancy-gap-30">
+                                <div class="col-12">
+                                    <div class="charts-main charts-home-one mg-top-30">
+                                        <div class="charts-main__heading mg-btm-20">
+                                            <h4 class="charts-main__title">{{ __('Revenue vs Orders (Last 6 Months)') }}</h4>
+                                        </div>
+                                        <div class="charts-main__one">
+                                            <div class="crancy-chart__inside crancy-chart__three">
+                                                <canvas id="myChart_revenue_orders"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -483,5 +649,172 @@
         function itemDeleteConfrimation(id) {
             $("#item_delect_confirmation").attr("action", '{{ url('admin/order-delete/') }}' + "/" + id)
         }
+
+        // Revenue vs Orders dual-axis chart
+        const monthly_labels = JSON.parse(@json($monthly_labels));
+        const monthly_revenue = JSON.parse(@json($monthly_revenue));
+        const monthly_order_counts = JSON.parse(@json($monthly_order_counts));
+        const ctx_rev = document.getElementById('myChart_revenue_orders').getContext('2d');
+        new Chart(ctx_rev, {
+            type: 'bar',
+            data: {
+                labels: monthly_labels,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: '{{ __("Revenue") }}',
+                        data: monthly_revenue,
+                        borderColor: '#2b4dff',
+                        backgroundColor: 'rgba(43,77,255,0.08)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        yAxisID: 'y',
+                    },
+                    {
+                        type: 'bar',
+                        label: '{{ __("Orders") }}',
+                        data: monthly_order_counts,
+                        backgroundColor: 'rgba(40,167,69,0.7)',
+                        borderColor: '#28a745',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        yAxisID: 'y1',
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: {
+                        ticks: { color: '#2b4dff' },
+                        grid: { display: false }
+                    },
+                    y: {
+                        position: 'left',
+                        ticks: {
+                            color: '#2b4dff',
+                            callback: v => v + '$'
+                        },
+                        grid: { color: '#D7DCE7', borderDash: [5,5], drawBorder: false }
+                    },
+                    y1: {
+                        position: 'right',
+                        ticks: { color: '#28a745', stepSize: 1 },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } },
+                    tooltip: {
+                        padding: 10,
+                        backgroundColor: '#fff',
+                        titleColor: '#000',
+                        bodyColor: '#2F3032',
+                        cornerRadius: 12,
+                        borderWidth: 0,
+                    }
+                }
+            }
+        });
+
+        // User Registration Bar Chart
+        const reg_labels = @json($reg_labels);
+        const reg_data = @json($reg_data);
+        const ctx_reg = document.getElementById('myChart_user_reg').getContext('2d');
+        const gradientReg = ctx_reg.createLinearGradient(0, 0, 0, 300);
+        gradientReg.addColorStop(0, 'rgba(45, 77, 255, 0.8)');
+        gradientReg.addColorStop(1, 'rgba(45, 77, 255, 0.2)');
+        new Chart(ctx_reg, {
+            type: 'bar',
+            data: {
+                labels: JSON.parse(reg_labels),
+                datasets: [{
+                    label: '{{ __("Registrations") }}',
+                    data: JSON.parse(reg_data),
+                    backgroundColor: gradientReg,
+                    borderColor: '#2b4dff',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    x: {
+                        ticks: { color: '#2b4dff' },
+                        grid: { display: false }
+                    },
+                    y: {
+                        ticks: { color: '#2b4dff', stepSize: 1 },
+                        grid: { color: '#D7DCE7', borderDash: [5, 5], drawBorder: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        padding: 10,
+                        backgroundColor: '#fff',
+                        titleColor: '#000',
+                        bodyColor: '#2F3032',
+                        cornerRadius: 12,
+                        borderWidth: 0,
+                    }
+                }
+            }
+        });
+
+        // Order Status Doughnut Chart
+        const ctx_donut = document.getElementById('myChart_order_status').getContext('2d');
+        new Chart(ctx_donut, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    '{{ __("Active") }}',
+                    '{{ __("Completed") }}',
+                    '{{ __("Cancelled") }}',
+                    '{{ __("Pending") }}',
+                    '{{ __("Processing") }}',
+                    '{{ __("Shipped") }}'
+                ],
+                datasets: [{
+                    data: [
+                        {{ $active_orders }},
+                        {{ $complete_orders }},
+                        {{ $cancel_orders }},
+                        {{ $pending_orders }},
+                        {{ $processing_orders }},
+                        {{ $shipped_orders }}
+                    ],
+                    backgroundColor: ['#2b4dff','#28a745','#dc3545','#ffc107','#17a2b8','#6f42c1'],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, usePointStyle: true }
+                    },
+                    tooltip: {
+                        padding: 10,
+                        backgroundColor: '#fff',
+                        titleColor: '#000',
+                        bodyColor: '#2F3032',
+                        cornerRadius: 12,
+                        borderWidth: 0,
+                    }
+                }
+            }
+        });
     </script>
 @endpush

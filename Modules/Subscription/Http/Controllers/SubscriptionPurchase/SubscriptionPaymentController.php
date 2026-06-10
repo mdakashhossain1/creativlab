@@ -17,7 +17,6 @@ use Modules\Subscription\Entities\SubscriptionPlan;
 use Modules\Subscription\Entities\SubscriptionHistory;
 use Modules\EmailSetting\App\Models\EmailTemplate;
 use Modules\GlobalSetting\App\Models\GlobalSetting;
-use Mollie\Laravel\Facades\Mollie;
 use Razorpay\Api\Api;
 use Stripe;
 
@@ -72,52 +71,6 @@ class SubscriptionPaymentController extends Controller
                 'alert-type' => 'error'
             ]);
         }
-    }
-
-    public function pay_via_mollie(Request $request)
-    {
-        if (env('APP_MODE') == 'DEMO') {
-            $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            return redirect()->back()->with(['messege' => $notification, 'alert-type' => 'error']);
-        }
-
-        $orderData = session()->get('subscriptionOrderData');
-        $mollieCurrency = Currency::findOrFail($this->payment_setting->mollie_currency_id);
-        $price = round($orderData['total'] * $mollieCurrency->currency_rate, 2);
-        $price = number_format($price, 2, '.', '');
-
-        $mollie_api_key = PaymentGateway::where('key', 'mollie_key')->first()->value;
-        $currency = strtoupper($mollieCurrency->currency_code);
-        Mollie::api()->setApiKey($mollie_api_key);
-        $payment = Mollie::api()->payments()->create([
-            'amount' => [
-                'currency' => $currency,
-                'value' => '' . $price . '',
-            ],
-            'description' => env('APP_NAME') . ' Subscription',
-            'redirectUrl' => route('subscription.mollie-payment-success'),
-        ]);
-
-        $payment = Mollie::api()->payments()->get($payment->id);
-        session()->put('subscription_payment_id', $payment->id);
-        return redirect($payment->getCheckoutUrl(), 303);
-    }
-
-    public function mollie_payment_success(Request $request)
-    {
-        $mollie_api_key = PaymentGateway::where('key', 'mollie_key')->first()->value;
-        Mollie::api()->setApiKey($mollie_api_key);
-        $payment = Mollie::api()->payments->get(session()->get('subscription_payment_id'));
-        if ($payment->isPaid()) {
-            $user = Auth::guard('web')->user();
-            $orderData = session()->get('subscriptionOrderData');
-            $this->create_subscription($user, $orderData, 'Mollie', Status::APPROVED);
-            $notification = trans('Your payment has been made successful. Thanks for your new purchase');
-            $notification = array('messege' => $notification, 'alert-type' => 'success');
-            return redirect()->route('user.subscriptions.history')->with($notification);
-        }
-        $notification = trans('Something went wrong, please try again');
-        return redirect()->back()->with(['messege' => $notification, 'alert-type' => 'error']);
     }
 
     public function bank(Request $request)
@@ -200,41 +153,7 @@ class SubscriptionPaymentController extends Controller
         return response()->json(['status' => 'faild', 'message' => $notification]);
     }
 
-    public function pay_via_flutterwave(Request $request)
-    {
-        $tnx_id = $request->tnx_id;
-        $url = "https://api.flutterwave.com/v3/transactions/$tnx_id/verify";
-        $token = $this->payment_setting->flutterwave_secret_key;
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/json",
-                "Authorization: Bearer $token"
-            ),
-        ));
 
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($response);
-
-        if ($response && $response->status == 'success') {
-            $user = Auth::guard('web')->user();
-            $orderData = session()->get('subscriptionOrderData');
-            $this->create_subscription($user, $orderData, 'Flutterwave', Status::APPROVED);
-            $notification = trans('Your payment has been made successful. Thanks for your new purchase');
-            return response()->json(['status' => 'success', 'message' => $notification]);
-        }
-        $notification = trans('Something went wrong, please try again');
-        return response()->json(['status' => 'faild', 'message' => $notification]);
-    }
 
     public function pay_via_instamojo(Request $request)
     {

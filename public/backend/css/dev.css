@@ -77,6 +77,14 @@ select,
     color: #fd4917 !important;
 }
 
+.menu-bar li ul li.active a span,
+.menu-bar li ul li.active a,
+.menu-bar li ul li a.active span,
+.menu-bar li ul li a.active {
+    color: var(--theme-color) !important;
+}
+
+
 .delete_danger_btn {
     background: #fd4917 !important;
     color: #fff !important;
