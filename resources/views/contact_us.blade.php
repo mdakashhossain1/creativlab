@@ -29,11 +29,11 @@
                                 <span>
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="14" cy="14" r="13.4" stroke="#FFE6EA" stroke-width="1.2" />
-                                        <circle cx="14" cy="13.3333" r="2" stroke="#FF002A" />
+                                        <circle cx="14" cy="14" r="13.4" stroke="#EDE6FF" stroke-width="1.2" />
+                                        <circle cx="14" cy="13.3333" r="2" stroke="#794AFF" />
                                         <path
                                             d="M20 13.2592C20 16.532 16.25 20.6666 14 20.6666C11.75 20.6666 8 16.532 8 13.2592C8 9.98644 10.6863 7.33331 14 7.33331C17.3137 7.33331 20 9.98644 20 13.2592Z"
-                                            stroke="#FF002A" />
+                                            stroke="#794AFF" />
                                     </svg>
                                 </span>
                             </div>
@@ -48,11 +48,11 @@
                                 <span>
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="14" cy="14" r="13.4" stroke="#FFE6EA" stroke-width="1.2" />
-                                        <rect x="7.33203" y="8" width="13.3333" height="12" rx="4" stroke="#FF002A" />
+                                        <circle cx="14" cy="14" r="13.4" stroke="#EDE6FF" stroke-width="1.2" />
+                                        <rect x="7.33203" y="8" width="13.3333" height="12" rx="4" stroke="#794AFF" />
                                         <path
                                             d="M8 11L11.4393 13.8661C12.9226 15.1022 15.0774 15.1022 16.5607 13.8661L20 11"
-                                            stroke="#FF002A" stroke-linecap="round" stroke-linejoin="round" />
+                                            stroke="#794AFF" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </span>
                             </div>
@@ -65,10 +65,10 @@
                                 <span>
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="14" cy="14" r="13.4" stroke="#FFE6EA" stroke-width="1.2" />
+                                        <circle cx="14" cy="14" r="13.4" stroke="#EDE6FF" stroke-width="1.2" />
                                         <path
                                             d="M19.25 18.0833V17.1232C19.25 16.6461 18.9596 16.2172 18.5166 16.04L17.33 15.5653C16.7667 15.34 16.1246 15.5841 15.8533 16.1268L15.75 16.3333C15.75 16.3333 14.2917 16.0417 13.125 14.875C11.9583 13.7083 11.6667 12.25 11.6667 12.25L11.8732 12.1467C12.4159 11.8754 12.66 11.2333 12.4346 10.67L11.96 9.48338C11.7828 9.04044 11.3539 8.75 10.8768 8.75H9.91667C9.27233 8.75 8.75 9.27233 8.75 9.91667C8.75 15.0713 12.9287 19.25 18.0833 19.25C18.7277 19.25 19.25 18.7277 19.25 18.0833Z"
-                                            stroke="#FF002A" stroke-linejoin="round" />
+                                            stroke="#794AFF" stroke-linejoin="round" />
                                     </svg>
                                 </span>
 
@@ -189,7 +189,7 @@
             </div>
             <section class="overflow-hidden mt-10 md:mt-[60px] w-full">
                 <div class="theme-container w-full mx-auto">
-                    <div class="relative w-full h-[240px] sm:h-[450px] mx-auto xl:rounded-lg overflow-hidden bg-red-300">
+                    <div class="relative w-full h-[240px] sm:h-[450px] mx-auto xl:rounded-lg overflow-hidden bg-purple-300">
                         <iframe src="{{ html_decode($contact_us?->map_code) }}" allowfullscreen="" width="100%"
                             height="100%" class="map-radius" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>

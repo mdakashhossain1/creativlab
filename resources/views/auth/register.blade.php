@@ -5,9 +5,6 @@
 @endsection
 @section('frontend_content')
 
-  <div id="smooth-wrapper">
-    <div id="smooth-content">
-      <div>
         <main>
           <section id="h1-breadcrumb" class="bg-main-gray border-b border-[#e7e8e9]">
             <div class=" w-full h-fit overflow-hidden relative  pb-16 md:pb-24">
@@ -89,13 +86,11 @@
                         </div>
                       </div>
                       <div class="col-span-full">
-                        <button type="submit" class="sign_up_btn w-full">
-                          <div
-                            class="home-two-btn-bg py-3  bg-main-black border-main-black !flex before:hidden after:hidden hover:text-white w-full">
-                            <span class="text-base text-white font-semibold">
-                              {{ __('Create Account') }}
-                            </span>
-                          </div>
+                        <button type="submit"
+                          class="sign_up_btn home-two-btn-bg py-3 bg-main-black border-main-black !flex before:hidden after:hidden hover:text-white w-full justify-center">
+                          <span class="text-base text-white font-semibold">
+                            {{ __('Create Account') }}
+                          </span>
                         </button>
                       </div>
                       <div class="col-span-full flex justify-center items-center gap-2">
@@ -106,7 +101,7 @@
 
                       <div class="form-box">
                         <a href="{{ route('user.login-google') }}">
-                          <div class="home-two-btn-bg py-3 flex w-full before:hidden after:hidden hover:border-purple">
+                          <div class="home-two-btn-bg py-3 flex w-full before:hidden after:hidden border border-gray-200 bg-white hover:bg-gray-50 hover:border-purple">
                             <span>
                               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -132,7 +127,7 @@
                       </div>
                       <div class="form-box">
                         <a href="{{ route('user.login-facebook') }}">
-                          <div class="home-two-btn-bg py-3 flex w-full before:hidden after:hidden hover:border-purple">
+                          <div class="home-two-btn-bg py-3 flex w-full before:hidden after:hidden border border-gray-200 bg-white hover:bg-gray-50 hover:border-purple">
                             <span>
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -163,11 +158,6 @@
           <!-- main container  end  -->
 
         </main>
-
-      </div>
-    </div>
-  </div>
-
 @endsection
 
 @push('script_section')

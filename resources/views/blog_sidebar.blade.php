@@ -1,4 +1,4 @@
-<div class="col-span-8 lg:col-span-4">
+﻿<div class="col-span-8 lg:col-span-4 lg:col-start-9 lg:row-start-1">
     <form action="{{ route('blogs') }}" method="GET">
         <div class="flex items-center relative">
             <button type="submit" for="search" class="absolute right-6">
@@ -6,7 +6,7 @@
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M14.2 14.2L17 17M16.2 8.6C16.2 4.40264 12.7974 1 8.6 1C4.40264 1 1 4.40264 1 8.6C1 12.7974 4.40264 16.2 8.6 16.2C12.7974 16.2 16.2 12.7974 16.2 8.6Z"
-                        stroke="#FF002A" stroke-width="1.5" stroke-linecap="round"
+                        stroke="#794AFF" stroke-width="1.5" stroke-linecap="round"
                         stroke-linejoin="round" />
                 </svg>
             </button>

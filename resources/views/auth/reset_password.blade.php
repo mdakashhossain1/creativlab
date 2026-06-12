@@ -4,9 +4,6 @@
     <title>{{ config('app.name', __('Reset Password')) }}</title>
 @endsection
 @section('frontend_content')
-    <div id="smooth-wrapper">
-        <div id="smooth-content">
-            <div>
                 <main>
 
                     <!-- main container  start  -->
@@ -81,16 +78,12 @@
                                         @endif
 
                                         <div class="col-span-full mt-4">
-                                            <div
-                                                class="home-two-btn-bg py-3  bg-blue-seo border-blue-seo !flex before:hidden after:hidden hover:text-white w-full">
-                                                <button type="submit" class="w-full">
-                                                    <span class="text-base text-white font-semibold">
-
-                                                        {{ __('Continue') }}
-
-                                                    </span>
-                                                </button>
-                                            </div>
+                                            <button type="submit"
+                                                class="home-two-btn-bg py-3 bg-purple border-purple !flex before:hidden after:hidden hover:text-white w-full justify-center">
+                                                <span class="text-base text-white font-semibold">
+                                                    {{ __('Continue') }}
+                                                </span>
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -100,9 +93,6 @@
 
                 </main>
 
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('script_section')

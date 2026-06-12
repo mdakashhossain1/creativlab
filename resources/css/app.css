@@ -9,6 +9,12 @@
     @apply inline-flex justify-center gap-2 px-[30px]  rounded-[41px]  items-center border overflow-hidden  relative before:block before:w-[300px] before:h-[300px] before:absolute before:bg-white before:-top-[400px] before:rotate-45 hover:before:-top-[100px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 hover:text-purple after:block after:w-[300px] after:h-[300px] after:absolute after:bg-white after:-bottom-[400px] after:rotate-45 hover:after:-bottom-[100px]  after:transition-all after:duration-1000 after:z-0;
 }
 @layer components {
+    .home-two-btn-white {
+        @apply flex justify-center gap-2 px-5 sm:px-10 py-2 sm:py-[11px] rounded-[40px] bg-transparent items-center border overflow-hidden border-white relative before:block before:w-[320px] before:h-[320px] before:absolute before:bg-white before:-top-[100px] before:rotate-45 hover:before:-top-[400px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 text-purple hover:text-purple after:block after:w-[320px] after:h-[320px] after:absolute after:bg-white after:-bottom-[100px] after:rotate-45 hover:after:-bottom-[400px]  after:transition-all after:duration-1000 after:z-0;
+    }
+    .home-two-btn-white-rev {
+        @apply flex justify-center gap-2 px-10 py-2 sm:py-[11px] rounded-[40px] bg-transparent items-center border overflow-hidden border-white relative before:block before:w-[300px] before:h-[300px] before:absolute before:bg-white before:-top-[400px] before:rotate-45 hover:before:-top-[100px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 text-purple hover:text-purple after:block after:w-[300px] after:h-[300px] after:absolute after:bg-white after:-bottom-[400px] after:rotate-45 hover:after:-bottom-[100px]  after:transition-all after:duration-1000 after:z-0;
+    }
     /* range slider */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {

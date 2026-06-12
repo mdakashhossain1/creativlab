@@ -4,9 +4,6 @@
     <title>{{ config('app.name', __('Forgot Password')) }}</title>
 @endsection
 @section('frontend_content')
-    <div id="smooth-wrapper">
-        <div id="smooth-content">
-            <div>
                 <main>
                     <section id="h1-breadcrumb" class="bg-main-gray border-b border-[#e7e8e9]">
                         <div class=" w-full h-fit overflow-hidden relative  pb-16 md:pb-24">
@@ -61,7 +58,4 @@
 
                 </main>
 
-            </div>
-        </div>
-    </div>
 @endsection

@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="flex space-x-[30px] items-center pointer-events-auto">
                                             <a href="{{ getTranslatedValue($hero_content,'left_button_url') }}">
-                                                <div class="home-two-btn-bg py-3 group bg-purple border-blue-seo">
+                                                <div class="home-two-btn-bg py-3 group bg-purple border-purple">
                                                     <span
                                                         class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
                                                         {{ getTranslatedValue($hero_content, 'left_button_text') }}

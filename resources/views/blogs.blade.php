@@ -13,7 +13,7 @@
             <div
                 class="theme-container w-full mx-auto grid grid-cols-8 lg:grid-cols-12 gap-y-16 lg:gap-y-0 lg:gap-x-[70px]">
                 <!-- blogs start  -->
-                <div class="col-span-8">
+                <div class="col-span-8 lg:col-span-8">
                     @forelse ($blogs as $key => $blog)
                         <!-- single blog start -->
                         <div class="w-full {{ $key == 0 ? '' : 'mt-[50px]' }}">

@@ -17,14 +17,14 @@
                                     <span class="text-black">{{ __('Thank you') }}</span>
                                 </p>
                                 <a href="{{ route('product.shop') }}">
-                                    <div class="home-two-btn-bg py-3 group bg-purple border-blue-seo">
+                                    <div class="home-two-btn-bg py-3 group bg-purple border-purple">
                                         <span
                                             class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
                                             {{ __('Go to Shop') }}
                                         </span>
                                         <svg class="relative z-10" width="7" height="12" viewBox="0 0 7 12"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path class="group-hover:stroke-blue-seo transition-all duration-300"
+                                            <path class="group-hover:stroke-purple transition-all duration-300"
                                                 d="M1.10254 10.5L4.89543 6.70711C5.22877 6.37377 5.39543 6.20711 5.39543 6C5.39543 5.79289 5.22877 5.62623 4.89543 5.29289L1.10254 1.5"
                                                 stroke="white" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round"></path>

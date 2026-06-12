@@ -1,4 +1,4 @@
-@extends('inner_layout')
+﻿@extends('inner_layout')
 @section('title')
     <title>{{ $blog->seo_title }}</title>
     <meta name="title" content="{{ $blog->seo_title }}">
@@ -14,7 +14,7 @@
             <div
                 class="theme-container w-full mx-auto grid grid-cols-8 lg:grid-cols-12 gap-y-16 lg:gap-y-0 lg:gap-x-[70px]">
                 <!-- blogs start  -->
-                <div class="col-span-8">
+                <div class="col-span-8 lg:col-span-8">
                     <!-- single blog start -->
                     <div class="w-full">
                         <img src="{{ asset($blog?->image) }}" alt="" class="w-full object-cover" />

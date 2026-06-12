@@ -117,6 +117,11 @@ module.exports = {
                 "grayscale-300": "#EEEFF2",
                 "error-base": "#FF002A",
                 "yellow-light": "#FFC403",
+                "blue-sass": "#007AFF",
+                "buisness-red": "#794AFF",
+                "buisness-light-black": "#111013",
+                "buisness-gray": "#F9F8FA",
+                "buisness-dark-black": "#161519",
             },
             boxShadow: {
                 common: "0px 10px 60px 0px rgba(121, 74, 255, 0.2)",

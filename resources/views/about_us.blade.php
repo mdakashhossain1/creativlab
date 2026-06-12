@@ -1,4 +1,4 @@
-@extends('inner_layout')
+﻿@extends('inner_layout')
 
 @section('title')
     <title>{{ $seo_setting->seo_title }}</title>
@@ -197,7 +197,7 @@
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M10.9611 8.29308L2.99228 12.8467C1.65896 13.6086 0 12.6459 0 11.1102V2.00295C0 0.467309 1.65896 -0.495425 2.99228 0.266469L10.9611 4.82011C12.3048 5.5879 12.3048 7.52529 10.9611 8.29308Z"
-                                                fill="#FF002A" />
+                                                fill="#794AFF" />
                                         </svg>
                                     </span>
                                     <div class="absolute w-full h-full rounded-full h5-play-btn-line1"></div>

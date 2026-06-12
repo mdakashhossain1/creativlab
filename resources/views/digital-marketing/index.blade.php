@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -245,9 +245,9 @@
                             </div>
                         </a>
                         <a href={{ !Auth::guard('web')->user() ? route('user.login') : route('user.dashboard') }}>
-                            <div class="home-two-btn-bg py-3   group bg-blue-seo border-blue-seo">
+                            <div class="home-two-btn-bg py-3   group bg-purple border-purple">
                                 <span
-                                    class="text-base  text-white group-hover:text-blue-seo  transition-all duration-300 font-semibold font-inter relative z-10">
+                                    class="text-base  text-white group-hover:text-purple  transition-all duration-300 font-semibold font-inter relative z-10">
                                     @if (!Auth::guard('web')->user())
                                         {{ __('Sign In') }}
                                     @else
@@ -256,7 +256,7 @@
                                 </span>
                                 @if (!Auth::guard('web')->user())
                                     <span
-                                        class="relative z-10 text-white group-hover:text-blue-seo transition-all duration-300">
+                                        class="relative z-10 text-white group-hover:text-purple transition-all duration-300">
                                         <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.84289 11.625H8.84961M5.09961 11.625H5.10633"
@@ -340,7 +340,7 @@
                         </svg>
                      <svg class="pointer-events-none hidden transition-all duration-300 fill-current" width="20"
                             height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14.9275 5.00006L4.92749 15M14.9275 14.9999L4.92749 5" stroke="#FF002A"
+                            <path d="M14.9275 5.00006L4.92749 15M14.9275 14.9999L4.92749 5" stroke="#794AFF"
                                 stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                 </button>
@@ -446,14 +446,14 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 pr-5">
                         <a href="{{ Auth::guard('web')->user() ? route('user.dashboard') : route('user.login') }}">
-                        <div class="home-two-btn-bg py-2.5 group bg-blue-seo/10 border-blue-seo/10 group-hover:border-blue-seo w-full">
+                        <div class="home-two-btn-bg py-2.5 group bg-purple/10 border-purple/10 group-hover:border-purple w-full">
                             <span
-                                class="text-base text-black group-hover:text-blue-seo transition-all duration-300 font-semibold font-inter relative z-10">
+                                class="text-base text-black group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
                                 {{ Auth::guard('web')->user() ? __('Dashboard') : __('Log In') }}
                             </span>
                             <svg class="relative z-10" width="7" height="12" viewBox="0 0 7 12"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path class="text-black group-hover:stroke-blue-seo transition-all duration-300"
+                                <path class="text-black group-hover:stroke-purple transition-all duration-300"
                                     d="M1.10254 10.5L4.89543 6.70711C5.22877 6.37377 5.39543 6.20711 5.39543 6C5.39543 5.79289 5.22877 5.62623 4.89543 5.29289L1.10254 1.5"
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
@@ -462,14 +462,14 @@
                     </a>
                     @if(!Auth::guard('web')->check())
                      <a href="{{ route('user.register') }}">
-                        <div class="home-two-btn-bg py-2.5 group bg-blue-seo border-blue-seo w-full">
+                        <div class="home-two-btn-bg py-2.5 group bg-purple border-purple w-full">
                             <span
-                                class="text-base text-white group-hover:text-blue-seo transition-all duration-300 font-semibold font-inter relative z-10">
+                                class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
                                 {{('Sign Up') }}
                             </span>
                             <svg class="relative z-10" width="7" height="12" viewBox="0 0 7 12"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path class="group-hover:stroke-blue-seo transition-all duration-300"
+                                <path class="group-hover:stroke-purple transition-all duration-300"
                                     d="M1.10254 10.5L4.89543 6.70711C5.22877 6.37377 5.39543 6.20711 5.39543 6C5.39543 5.79289 5.22877 5.62623 4.89543 5.29289L1.10254 1.5"
                                     stroke="white" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
