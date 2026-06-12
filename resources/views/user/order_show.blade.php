@@ -6,33 +6,29 @@
 @section('frontend_content')
     <main>
         <!-- breadcrumb -->
-        <section id="h1-breadcrumb">
-            <div class="h1-breadcrumb w-full h-fit overflow-hidden relative bg-main-gray pb-16 md:pb-24">
-                <div class="absolute left-0 w-full h-full top-0 overflow-hidden z-0 pointer-events-none">
-                    <img src="{{ asset(breadcrumb_image()) }}" alt="" class="w-full h-full object-cover" />
-                </div>
-                <div class="theme-container mx-auto h-fit  relative z-20">
-                    <div class="mt-[120px] md:mt-[272px] w-full  relative z-10">
-
-                        <div class="flex gap-3 flex-wrap items-center ">
+        <section id="h1-breadcrumb" class="bg-main-gray border-b border-[#e7e8e9]">
+            <div class="w-full h-fit overflow-hidden relative pb-12 md:pb-16 pt-[120px] xl:pt-[180px] md:pt-[130px]">
+                <div class="theme-container mx-auto h-fit relative z-20">
+                    <div class="w-full relative z-10">
+                        <div class="flex gap-3 flex-wrap items-center">
                             <a href="{{ route('user.dashboard') }}"
-                                class="home-two-nav-item leading-5 relative text-18 font-inter before:border-buisness-red text-white transition-all duration-300 hover:text-buisness-red">
+                                class="home-two-nav-item leading-5 relative text-paragraph hover:text-purple before:border-purple w-fit">
                                 {{ __('Home') }}
                             </a>
                             <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L5 6L1 11" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                <path d="M1 1L5 6L1 11" stroke="#6D6D6D" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
                             <a href="#"
-                                class="home-two-nav-item leading-5 relative text-18 font-inter before:border-buisness-red text-white transition-all duration-300 hover:text-buisness-red">
+                                class="home-two-nav-item leading-5 relative text-paragraph hover:text-purple before:border-purple w-fit">
                                 {{ __('Order Details') }}
                             </a>
                             <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1L5 6L1 11" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                <path d="M1 1L5 6L1 11" stroke="#6D6D6D" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
                             <a href="#"
-                                class="home-two-nav-item leading-5 relative text-18 font-inter before:border-buisness-red text-white transition-all duration-300 hover:text-buisness-red">
+                                class="home-two-nav-item leading-5 relative text-paragraph hover:text-purple before:border-purple w-fit">
                                 {{ __('Order Id') }}: {{ $order->order_id }}
                             </a>
                         </div>

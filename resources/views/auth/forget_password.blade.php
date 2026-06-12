@@ -8,11 +8,8 @@
         <div id="smooth-content">
             <div>
                 <main>
-                    <section id="h1-breadcrumb">
+                    <section id="h1-breadcrumb" class="bg-main-gray border-b border-[#e7e8e9]">
                         <div class=" w-full h-fit overflow-hidden relative  pb-16 md:pb-24">
-                            <div class="absolute left-0 w-full h-full top-0 overflow-hidden z-0 pointer-events-none">
-                                <img src="{{ asset(breadcrumb_image()) }}" alt="" class="w-full h-full object-cover" />
-                            </div>
                             <div class="theme-container mx-auto h-fit w-fit relative z-20">
                                 <div class="mt-[120px] xl:mt-[272px] md:mt-[150px] text-center w-fit mx-auto relative z-10">
 

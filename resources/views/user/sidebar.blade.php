@@ -4,7 +4,7 @@
     @endphp
     <div class="relative flex justify-between items-center">
         <button
-            class="absolute w-10 aspect-square bg-buisness-red/10 flex justify-center items-center rounded-full -left-5 text-black z-10 hover:bg-buisness-red hover:text-white  xl:hidden"
+            class="absolute w-10 aspect-square bg-purple/10 flex justify-center items-center rounded-full -left-5 text-black z-10 hover:bg-purple hover:text-white  xl:hidden"
             id="prevButton">
             <svg class="rotate-180" width="6" height="12" viewBox="0 0 6 12" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -203,7 +203,7 @@
         </div>
 
         <button
-            class="absolute w-10 aspect-square bg-buisness-red/10 flex justify-center items-center rounded-full -right-3  text-black hover:bg-buisness-red hover:text-white xl:hidden"
+            class="absolute w-10 aspect-square bg-purple/10 flex justify-center items-center rounded-full -right-3  text-black hover:bg-purple hover:text-white xl:hidden"
             id="nextButton">
             <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path

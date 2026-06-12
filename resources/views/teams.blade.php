@@ -13,7 +13,7 @@
             <div class="theme-container mx-auto px-[78px] grid grid-cols-5 xl:grid-cols-10 gap-y-16 md:gap-x-[140px]">
                 <div class="col-span-5 flex flex-col justify-center">
                     <h1
-                        class="border text-main-black border-buisness-red/10 py-0.5 px-5 rounded-[30px] w-fit bg-buisness-red/5 font-medium mb-5">
+                        class="border text-main-black border-purple/10 py-0.5 px-5 rounded-[30px] w-fit bg-purple/5 font-medium mb-5">
                         {{ getTranslatedValue($team_hero, 'sub_title') }}
                     </h1>
                     <h2 class="text-main-black font-semibold text-24 sm:text-48 ">
@@ -73,7 +73,7 @@
             <div class="theme-container w-full mx-auto">
                 <div class="flex flex-col justify-center items-center w-full">
                     <h1
-                        class="border text-main-black border-buisness-red/10 py-0.5 px-5 rounded-[30px] w-fit bg-buisness-red/5 font-medium mb-5">
+                        class="border text-main-black border-purple/10 py-0.5 px-5 rounded-[30px] w-fit bg-purple/5 font-medium mb-5">
                         {{ __('Team Member') }}
                     </h1>
                     <h2 class="text-main-black font-semibold text-24 sm:text-48">
@@ -90,7 +90,7 @@
                                     class="w-full object-cover rounded-lg overflow-hidden" />
                                 <!-- social links  -->
                                 <div
-                                    class="flex bg-buisness-red absolute bottom-5 translate-y-16 group-hover/main:translate-y-0 transition-all duration-300 rounded-md overflow-hidden">
+                                    class="flex bg-purple absolute bottom-5 translate-y-16 group-hover/main:translate-y-0 transition-all duration-300 rounded-md overflow-hidden">
                                     <a href="{{ $team?->facebook }}" target="blank" aria-label="facebook"
                                         class="group w-10 h-10 flex justify-center items-center overflow-hidden relative before:inline-block before:absolute before:z-0 before:w-full before:h-full before:bg-white before:scale-x-0 group hover:before:scale-x-100 before:origin-right hover:before:origin-left before:transition-transform before:ease-out before:duration-300">
 

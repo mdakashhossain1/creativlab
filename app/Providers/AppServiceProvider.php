@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
             View::composer('*', function ($view) {
 
                 $hero_image=getContent('home_5_hero_section.content', true);
+                $cta_content=getContent('template_1_cta.content', true);
                  $cta_content_home_5=getContent('theme_5_cta_section.content', true);
                  $testimonial_content_5 = getContent('theme_5_testimonial_section.content', true);
 
@@ -128,6 +129,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('total_unseen_support_messages_for_admin', $total_unseen_support_messages_for_admin);
                 $view->with('total_unseen_support_messages_for_user', $total_unseen_support_messages_for_user);
                 $view->with('hero_image', $hero_image);
+                $view->with('cta_content', $cta_content);
                  $view->with('cta_content_home_5', $cta_content_home_5);
                      $view->with('testimonial_content_5', $testimonial_content_5);
 

@@ -21,42 +21,7 @@ class FrontEndManagementController extends Controller
                 'theme' => 'theme_one',
                 'dispaly_name' => 'digital_marketing',
                 'sections' => ['template_1_hero', 'template_1_about_company', 'template_1_fun_fact', 'template_1_working_process', 'template_1_testimonial', 'template_1_cta']
-            ],
-            [
-                'theme' => 'theme_two',
-                'dispaly_name' => 'seo_agency',
-                'sections' => ['theme_two_hero', 'theme_two_tools', 'explore_services', 'case_studies', 'our_testimonials', 'faqs', 'contact_us']
-            ],
-
-            [
-                'theme' => 'theme_three',
-                'dispaly_name' => 'creative_agency',
-                'sections' => ['themplate_3_hero_section', 'template_3_about_company', 'template_3_pricing_section', 'template_3_cta_section', 'template_3_testimonial_section']
-            ],
-
-            [
-                'theme' => 'theme_four',
-                'dispaly_name' => 'ai_software',
-                'sections' => ['theme_four_hero', 'ur_cool_features', 'what_we_do', 'theme_four_faqs', 'theme_4_moving_image', 'theme_4_pricing_section', 'theme_4_testimonials', 'home_4_cta_section']
-            ],
-
-            [
-                'theme' => 'theme_five',
-                'dispaly_name' => 'business_consulting',
-                'sections' => ['template_5_about_us_section', 'template_5_we_provide_section', 'theme_5_counter_section', 'theme_5_testimonial_section', 'theme_5_cta_section', 'home_5_hero_section']
-            ],
-
-            [
-                'theme' => 'theme_seven',
-                'dispaly_name' => 'it_business',
-                'sections' => ['theme_seven_hero', 'theme_seven_partner', 'theme_seven_about_company', 'theme_seven_explore_services', 'theme_seven_working_process', 'theme_seven_case_story', 'theme_seven_business_benefits', 'theme_seven_testimonial', 'theme_seven_faqs', 'theme_seven_get_consultations']
-            ],
-            [
-                'theme' => 'theme_eight',
-                'dispaly_name' => 'saas',
-                'sections' => ['theme_eight_hero', 'theme_eight_partner', 'theme_eight_why_use_us', 'theme_eight_core_features', 'theme_eight_core_features_two', 'theme_eight_why_use_us_two', 'theme_eight_customer_say_about_us', 'theme_eight_automating_design_system', 'theme_eight_faqs', 'theme_eight_testimonials']
-            ],
-
+            ]
         ];
 
         $selected_theme = GlobalSetting::where('key', 'selected_theme')->first();
