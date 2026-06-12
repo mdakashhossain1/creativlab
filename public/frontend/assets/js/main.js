@@ -2,10 +2,7 @@ const lineLottie = document.querySelector("#line-lottie");
 const lineLottie2 = document.querySelector("#line-lottie2");
 const lineLottie3 = document.querySelector("#line-lottie-style-2");
 const lineLottie4 = document.querySelector("#line-lottie2-style-2");
-const lineLottie5 = document.querySelector("#h2-faq-anim-right");
-const lineLottie6 = document.querySelector("#h2-faq-anim-left");
-const lineLottie7 = document.querySelector("#line-lottie-style-3");
-const lineLottie8 = document.querySelector("#line-lottie3-style-3");
+
 
 function initlineLottie(selector) {
     if (selector) {
@@ -22,10 +19,7 @@ initlineLottie(lineLottie);
 initlineLottie(lineLottie2);
 initlineLottie(lineLottie3);
 initlineLottie(lineLottie4);
-initlineLottie(lineLottie5);
-initlineLottie(lineLottie6);
-initlineLottie(lineLottie7);
-initlineLottie(lineLottie8);
+
 const grid = document.getElementById("win-grid");
 function inCrease(grid) {
     if (grid) {
@@ -114,22 +108,7 @@ function inCrease(grid) {
 }
 inCrease(grid);
 
-const homeFourBanner = document.querySelector("#hero-banner");
-const homeFourImag = document.querySelector("#hero-banner .img");
-let perspectiveValue = 20; // Initial perspective value
-if (homeFourBanner) {
-    document.addEventListener("scroll", (e) => {
-        const top = window.pageYOffset || document.documentElement.scrollTop;
-        if (homeFourImag) {
-            if (top > 500) {
-                homeFourImag.style.transform = "none";
-            } else {
-                const calcValue = perspectiveValue + top / 2;
-                homeFourImag.style.transform = `perspective(${calcValue}px) rotateX(1deg)`;
-            }
-        }
-    });
-}
+
 
 // Digital Marketing header scroll controller
 
@@ -302,94 +281,7 @@ $(document).ready(function () {
     }, 2000);
 });
 
-// dark win grid
-const gridDark = document.getElementById("win-grid-dark");
 
-function inCreaseDark(grid) {
-    if (grid) {
-        for (let i = 0; i < 1000; i++) {
-            const newElement = document.createElement("div");
-            newElement.classList.add("win-btn-sm");
-            newElement.id = i;
-            grid.appendChild(newElement);
-        }
-        /**
-         * You can find an explanation for this code here - https://dev.to/jashgopani
-         */
-        const offset = 49;
-        const angles = []; //in deg
-        for (let i = 0; i <= 360; i += 45) {
-            angles.push((i * Math.PI) / 180);
-        }
-        let nearBy = [];
-
-        function clearNearBy() {
-            nearBy
-                .splice(0, nearBy.length)
-                .forEach((e) => (e.style.borderImage = null));
-        }
-
-        /*Effect #1 explanation - bit.ly/win10-button-effect*/
-        document.querySelectorAll(".win-btn-sm").forEach((b) => {
-
-            b.onmouseleave = (e) => {
-
-                e.target.style.borderImage = null;
-                e.target.border = "1px solid transparent";
-            };
-
-            b.onmouseenter = (e) => {
-                clearNearBy();
-            };
-
-            b.addEventListener("mousemove", (e) => {
-                const rect = e.target.getBoundingClientRect();
-                const x = e.clientX - rect.left; //x position within the element.
-                const y = e.clientY - rect.top; //y position within the element.
-            });
-        });
-
-        const body = document.querySelector(".win-grid-dark");
-        if (body) {
-            body.addEventListener("mousemove", (e) => {
-                const x = e.x; //x position within the element.
-                const y = e.y; //y position within the element.
-
-                clearNearBy();
-                nearBy = angles.reduce((acc, rad, i, arr) => {
-                    const cx = Math.floor(x + Math.cos(rad) * offset);
-                    const cy = Math.floor(y + Math.sin(rad) * offset);
-                    const element = document.elementFromPoint(cx, cy);
-
-                    if (element !== null) {
-
-                        if (
-                            element.className === "win-btn-sm" &&
-                            acc.findIndex((ae) => ae.id === element.id) < 0
-                        ) {
-                            const brect = element.getBoundingClientRect();
-                            const bx = x - brect.left; //x position within the element.
-                            const by = y - brect.top; //y position within the element.
-                            if (!element.style.borderImage)
-                                element.style.borderImage = `radial-gradient(${
-                                    offset * 1.5
-                                }px ${
-                                    offset * 1.5
-                                }px at ${bx}px ${by}px ,#00DF8E 0%,rgba(0, 223, 142, 0) 100%,transparent ) 9 / 1px / 0px stretch `;
-                            return [...acc, element];
-                        }
-                    }
-                    return acc;
-                }, []);
-            });
-            body.onmouseleave = (e) => {
-                clearNearBy();
-            };
-        }
-    }
-}
-
-inCreaseDark(gridDark);
 
 const dropdown = document.getElementById("dropdown-box");
 if (dropdown) {
