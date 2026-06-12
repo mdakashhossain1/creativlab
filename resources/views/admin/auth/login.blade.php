@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="{{ asset('backend/css/dev.css') }}">
     <link rel="stylesheet" href="{{ asset('global/toastr/toastr.min.css') }}">
 
+    @if ($general_setting?->recaptcha_status == 1)
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
 
 </head>
 
@@ -90,6 +93,20 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="crancy-wc__check-inline mg-top-20">
+                                                        <div class="crancy-wc__checkbox">
+                                                            <input type="checkbox" name="remember" id="remember" value="1">
+                                                            <label for="remember">{{ __('Remember Me') }}</label>
+                                                        </div>
+                                                    </div>
+
+                                                    @if ($general_setting?->recaptcha_status == 1)
+                                                        <div class="mg-top-20">
+                                                            <div class="g-recaptcha"
+                                                                data-sitekey="{{ $general_setting?->recaptcha_site_key }}"></div>
+                                                        </div>
+                                                    @endif
 
                                                     <!-- Form Group -->
                                                     <div class="form-group mg-top-30">

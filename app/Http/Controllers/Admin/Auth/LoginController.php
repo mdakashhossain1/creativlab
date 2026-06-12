@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
-use Auth, Hash;
 use App\Models\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Rules\Captcha;
 
 class LoginController extends Controller
 {
@@ -60,6 +64,11 @@ class LoginController extends Controller
             'password.required' => trans('Password is required'),
         ];
 
+        $general_setting = Cache::get('setting');
+        if ($general_setting && $general_setting->recaptcha_status == 1) {
+            $rules['g-recaptcha-response'] = [new Captcha()];
+        }
+
         $this->validate($request, $rules, $custom_error);
 
 
@@ -73,6 +82,11 @@ class LoginController extends Controller
             if($admin->status == $admin::STATUS_ACTIVE){
                 if(Hash::check($request->password, $admin->password)){
                     if(Auth::guard('admin')->attempt($credentials, $request->remember)){
+
+                        if ($request->has('remember')) {
+                            $token = generate_admin_jwt($admin->id);
+                            Cookie::queue('admin_remember_jwt', $token, 30 * 24 * 60);
+                        }
 
                         $notify_message = trans('Login successfully');
                         $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
@@ -141,6 +155,8 @@ class LoginController extends Controller
 
     public function admin_logout(){
         Auth::guard('admin')->logout();
+
+        Cookie::queue(Cookie::forget('admin_remember_jwt'));
 
         $notify_message = trans('Logout successfully');
         $notify_message = array('message' => $notify_message, 'alert-type' => 'success');

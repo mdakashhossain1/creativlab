@@ -64,13 +64,13 @@
                                             <div class="col-span-full flex justify-between">
                                                 <div class="flex items-center gap-2">
                                                     <input type="checkbox" id="remember" name="remember" value="1"
-                                                        class="h-4 w-4 text-red focus:ring-red border-grey-300 rounded remember-me-checkbox">
+                                                        class="h-4 w-4 text-[#794AFF] focus:ring-[#794AFF] border-grey-300 rounded remember-me-checkbox">
                                                     <label for="remember" class="block text-black">
                                                         {{ __('Remember Me') }}
                                                     </label>
                                                 </div>
                                                 <a href="{{ route('user.forget-password') }}"
-                                                    class="text-red-500">{{ __('Forgot Password?') }}</a>
+                                                    class="text-[#794AFF]">{{ __('Forgot Password?') }}</a>
                                             </div>
                                             @if ($general_setting?->recaptcha_status == 1)
                                                 <div class="col-span-full flex justify-between">

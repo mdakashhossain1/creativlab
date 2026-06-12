@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'MaintenanceMode' => MaintenanceMode::class,
         'HtmlSpecialchars' => HtmlSpecialchars::class,
         'admin.redirect' => \App\Http\Middleware\AdminRedirectMiddleware::class,
+        'admin.remember_jwt' => \App\Http\Middleware\AdminRememberJwt::class,
     ];
 }

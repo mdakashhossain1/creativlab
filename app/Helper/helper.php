@@ -2,6 +2,7 @@
 
 use App\Models\Frontend;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\File;
 
 function admin_lang()
 {
@@ -381,5 +382,71 @@ if (!function_exists('get_svg')) {
     function get_svg($filename)
     {
         return view("svg.$filename");
+    }
+}
+
+if (!function_exists('base64UrlEncode')) {
+    function base64UrlEncode($data)
+    {
+        return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
+    }
+}
+
+if (!function_exists('base64UrlDecode')) {
+    function base64UrlDecode($data)
+    {
+        $remainder = strlen($data) % 4;
+        if ($remainder) {
+            $padlen = 4 - $remainder;
+            $data .= str_repeat('=', $padlen);
+        }
+        return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
+    }
+}
+
+if (!function_exists('generate_admin_jwt')) {
+    function generate_admin_jwt($admin_id, $expiry_days = 30)
+    {
+        $header = json_encode(['alg' => 'HS256', 'typ' => 'JWT']);
+        $payload = json_encode([
+            'admin_id' => $admin_id,
+            'exp' => time() + ($expiry_days * 24 * 60 * 60)
+        ]);
+
+        $base64UrlHeader = base64UrlEncode($header);
+        $base64UrlPayload = base64UrlEncode($payload);
+
+        $secret = config('app.key');
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
+        $base64UrlSignature = base64UrlEncode($signature);
+
+        return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+    }
+}
+
+if (!function_exists('verify_admin_jwt')) {
+    function verify_admin_jwt($token)
+    {
+        $parts = explode('.', $token);
+        if (count($parts) !== 3) {
+            return null;
+        }
+
+        list($base64UrlHeader, $base64UrlPayload, $base64UrlSignature) = $parts;
+
+        $secret = config('app.key');
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
+        $expectedSignature = base64UrlEncode($signature);
+
+        if (!hash_equals($expectedSignature, $base64UrlSignature)) {
+            return null;
+        }
+
+        $payload = json_decode(base64UrlDecode($base64UrlPayload), true);
+        if (!$payload || !isset($payload['exp']) || time() >= $payload['exp']) {
+            return null;
+        }
+
+        return $payload;
     }
 }

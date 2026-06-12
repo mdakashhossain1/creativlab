@@ -396,4 +396,6 @@ table.dataTable>thead .sorting_desc_disabled:after {
 
 .home2_explore_img {
     width: 100% !important;
+    max-height: 120px;
+    object-fit: contain;
 }

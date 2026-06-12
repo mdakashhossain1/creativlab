@@ -58,6 +58,25 @@ h6 {
 .win-grid-bg {
     background: transparent;
 }
+.h1-story-pagination-v2 {
+    position: unset;
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.h1-story-pagination-v2 .swiper-pagination-bullet {
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    opacity: 1;
+    border-radius: 50%;
+}
+.h1-story-pagination-v2 .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background: #794aff;
+    width: 10px;
+    height: 10px;
+}
 .testimoial-section-wrapper .swiper-pagination {
     position: unset;
     width: auto;
@@ -338,4 +357,37 @@ h6 {
 }
 .nav-shadow {
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+/* play button rings + video modal */
+@keyframes rotation {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(359deg); }
+}
+@keyframes rotation1 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(359deg); }
+}
+.h5-play-btn-line1 {
+    border: 2px rgba(255, 255, 255, 0.451) solid;
+    border-right-color: transparent;
+    animation: rotation 4s infinite linear;
+}
+.h5-play-btn-line2 {
+    border: 2px rgba(255, 255, 255, 0.451) solid;
+    border-right-color: transparent;
+    animation: rotation1 3s infinite linear;
+}
+.h5-play-btn-line3 {
+    border: 1px rgb(255 255 255 / 14%) solid;
+}
+.player-open-anim {
+    animation: player-open 0.3s linear 0s;
+}
+.active-video-player {
+    display: flex !important;
+}
+@keyframes player-open {
+    0% { transform: scale(0); -webkit-transform: scale(0); }
+    100% { transform: scale(1); -webkit-transform: scale(1); }
 }
