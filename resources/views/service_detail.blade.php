@@ -30,7 +30,7 @@
                     <div data-aos="fade-up" data-aos-delay="100" class="col-span-8 lg:col-span-4">
                         <div class="border border-buisness-red/10 rounded-2xl py-[30px] bg-buisness-gray">
                             <div class="flex gap-5 items-center px-10 pb-[30px]">
-                                @include('theme.svg.category')
+                                @include('svg.category')
                                 <h1 class="text-22 font-semibold text-main-black">
                                     {{ __('Popular Services') }}
                                 </h1>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="border border-buisness-red/10 rounded-2xl py-[30px] bg-buisness-gray mt-[30px]">
                             <div class="flex gap-5 items-center px-10 pb-[30px]">
-                                @include('theme.svg.consultation')
+                                @include('svg.consultation')
 
                                 <h1 class="text-22 font-semibold text-main-black">
                                     {{ __('Get Consultation') }}

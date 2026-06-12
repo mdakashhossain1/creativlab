@@ -380,6 +380,6 @@ if (!function_exists('getImageOrPlaceholder')) {
 if (!function_exists('get_svg')) {
     function get_svg($filename)
     {
-        return view("theme.svg.$filename");
+        return view("svg.$filename");
     }
 }

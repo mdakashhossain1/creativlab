@@ -393,7 +393,7 @@
                                 <div class="flex flex-col items-center relative pt-[52px] pb-10 px-11 bg-white rounded-2xl">
                                     <div class="w-[240px] aspect-square rounded-full testimonial-shape-bg absolute">
                                     </div>
-                                    @include('theme.theme_7.svg.testimonial_red')
+                                    @include('it-business.svg.testimonial_red')
                                     <h1 class="font-medium text-18 text-center text-main-black mt-5 mb-8">
                                         {{ Str::limit($testimonial?->comment, 200) }}
                                     </h1>

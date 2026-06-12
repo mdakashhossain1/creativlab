@@ -31,7 +31,7 @@
                                 <div
                                     class="group shadow-card pl-5 pr-5 md:pl-10 md:pr-16 lg:pl-5 lg:pr-5 xl:pl-10 xl:pr-16 py-5 rounded-2xl absolute top-[50%] md:top-[63%] z-10 bg-white -right-0 h-[146px] hover:h-[185px] transition-all duration-300 hover:bg-buisness-red hover:shadow-business-red-sm hover:-translate-y-[22px] overflow-hidden h5-story_slider_active_card">
                                     <span class="absolute right-2 top-bottom-moving">
-                                        @include('theme.theme_7.svg.card_shape')
+                                        @include('it-business.svg.card_shape')
                                     </span>
                                     <h1 class="text-paragraph group-hover:text-white transition-all duration-300">
                                         {{ $project?->created_at->format('F d, Y') }}
@@ -45,7 +45,7 @@
                                                 class="font-medium text-white leading-5 font-inter border-b border-transparent before:inline-block before:border-white before:border-b before:absolute before:bottom-0 before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-5 relative">
                                                 {{ __('Read More') }}
                                             </span>
-                                            @include('theme.theme_7.svg.arrorw')
+                                            @include('it-business.svg.arrorw')
                                         </div>
                                     </a>
                                 </div>

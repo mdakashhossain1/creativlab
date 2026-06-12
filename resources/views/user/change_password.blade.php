@@ -80,7 +80,7 @@
                 <div class="md:col-span-5">
                   <div class="flex justify-end items-center">
                     <div class="img">
-                      @include('theme.svg.change_password')
+                      @include('svg.change_password')
 
                     </div>
                   </div>

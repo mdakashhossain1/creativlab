@@ -37,6 +37,13 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
     });
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/digital-marketing', [HomeController::class, 'digitalMarketing'])->name('digital-marketing');
+    Route::get('/seo-agency', [HomeController::class, 'seoAgency'])->name('seo-agency');
+    Route::get('/creative-agency', [HomeController::class, 'creativeAgency'])->name('creative-agency');
+    Route::get('/ai-software', [HomeController::class, 'aiSoftware'])->name('ai-software');
+    Route::get('/business-consulting', [HomeController::class, 'businessConsulting'])->name('business-consulting');
+    Route::get('/it-business', [HomeController::class, 'itBusiness'])->name('it-business');
+    Route::get('/saas', [HomeController::class, 'saas'])->name('saas');
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 
     Route::get('/download-file/{file}', [HomeController::class, 'download_file'])->name('download-file');

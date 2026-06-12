@@ -3,7 +3,7 @@
         <div class="error-section flex justify-center mt-[60px]">
             <div class="error-wrapper flex flex-col items-center gap-12 overflow-hidden">
                 <div class="wrapper-img " data-aos="zoom-in">
-                    @include('theme.svg.error_image')
+                    @include('svg.error_image')
                 </div>
                 <div class="wrapper-content text-center max-w-[467px] w-full">
                     <h3 class="text-30 mb-6 font-semibold " data-aos="fade-up" data-aos-duration="500">

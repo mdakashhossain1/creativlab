@@ -35,52 +35,186 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $seo_setting = SeoSetting::where('id', 1)->first();
-
         $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
+        $theme = $request->theme ?? ($theme_setting ? $theme_setting->value : 'theme_one');
 
-        $theme = $request->theme ?? 'theme_one';
+        switch ($theme) {
+            case 'theme_one':
+            case 'all_theme': // Fallback if all_theme is selected
+                return $this->businessConsulting();
+            case 'theme_two':
+                return $this->seoAgency();
+            case 'theme_three':
+                return $this->creativeAgency();
+            case 'theme_four':
+                return $this->aiSoftware();
+            case 'theme_five':
+                return $this->digitalMarketing();
+            case 'theme_six':
+                return $this->itBusiness();
+            case 'theme_seven':
+                return $this->saas();
+            default:
+                return $this->digitalMarketing();
+        }
+    }
 
-        $hero_content = getContent('theme_eight_hero.content', true);
-        $partner_content = getContent('theme_eight_partner.content', true);
-        $why_use_us_content = getContent('theme_eight_why_use_us.content', true);
-        $core_features_content = getContent('theme_eight_core_features.content', true);
-        $core_features_two_content = getContent('theme_eight_core_features_two.content', true);
-        $why_use_us_two_content = getContent('theme_eight_why_use_us_two.content', true);
-        $customer_say_about_us_content = getContent('theme_eight_customer_say_about_us.content', true);
-        $automating_design_system_content = getContent('theme_eight_automating_design_system.content', true);
-        $faqs_content = getContent('theme_eight_faqs.content', true);
-        $testimonials_content = getContent('theme_eight_testimonials.content', true);
-
+    public function digitalMarketing()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $hero_content = getContent('template_1_hero.content', true);
+        $about_content = getContent('template_1_about_company.content', true);
+        $fan_fact_content = getContent('template_1_fun_fact.content', true);
+        $working_process = getContent('template_1_working_process.content', true);
+        $testimonial_content = getContent('template_1_testimonial.content', true);
+        $cta_content = getContent('template_1_cta.content', true);
+        $section_visibility = ManageSection::where('page_name', 'home_one')->where('status', 1)->get();
 
         $partners = Partner::where('status', 'enable')->get();
-        $service_explores = Listing::latest()->take(8)->get();
+        $services = Listing::where('status', 'enable')->latest()->take(6)->get();
+        $testimonials = Testimonial::latest()->take(6)->get();
+        $blogs = Blog::where('status', 1)->with('category')->latest()->take(3)->get();
+
+        return view('digital-marketing.index', compact(
+            'seo_setting', 'hero_content', 'about_content', 'partners',
+            'fan_fact_content', 'services', 'working_process',
+            'testimonial_content', 'testimonials', 'blogs',
+            'cta_content', 'section_visibility'
+        ));
+    }
+
+    public function seoAgency()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
+        $hero_content = getContent('theme_two_hero.content', true);
+        $theme_two_tools = getContent('theme_two_tools.content', true);
+        $about_companies = getContent('about_company.content', true);
+        $explore_services = getContent('explore_services.content', true);
+        $case_studies = getContent('case_studies.content', true);
+        $our_testimonials = getContent('our_testimonials.content', true);
+        $faqs_sections = getContent('faqs.content', true);
+        $contact_us = getContent('contact_us.content', true);
+
+        $testimonials = Testimonial::where('status', 'active')->latest()->get();
+        $faqs = Faq::latest()->take(4)->get();
+        $service_explores = Listing::latest()->take(4)->get();
+        $partners = Partner::where('status', 'enable')->get();
+        $projects = Project::where('status', 'enable')->take(4)->get();
+        $section_visibility_2 = ManageSection::where('page_name', 'home_two')->where('status', 1)->get();
+
+        return view('seo-agency.index', compact(
+            'seo_setting', 'hero_content', 'theme_two_tools', 'about_companies',
+            'explore_services', 'case_studies', 'testimonials', 'faqs',
+            'service_explores', 'our_testimonials', 'faqs_sections',
+            'contact_us', 'partners', 'projects', 'theme_setting',
+            'section_visibility_2'
+        ));
+    }
+
+    public function creativeAgency()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
+        $hero_content_3 = getContent('themplate_3_hero_section.content', true);
+        $partners = Partner::all();
+        $about_content_3 = getContent('template_3_about_company.content', true);
+        $services = Listing::where('status', 'enable')->latest()->take(6)->get();
+        $caseStudies = Project::with('category')->where('status', 'enable')->latest()->take(4)->get();
+        $teams = Team::latest()->take(4)->get();
+        $team_count = Team::count();
+        $currentLang = session()->get('front_lang');
+        $pricing_content = getContent('template_3_pricing_section.content', true);
+        $testimonials = Testimonial::latest()->take(6)->get();
+        $blogs = Blog::where('status', 1)->with('category')->latest()->take(3)->get();
+        $cta_content_3 = getContent('template_3_cta_section.content', true);
+        $testimonial_content_3 = getContent('template_3_testimonial_section.content', true);
+        $section_visibility_3 = ManageSection::where('page_name', 'home_three')->where('status', 1)->get();
+        $subscription_plans = SubscriptionPlan::orderBy('serial', 'asc')->get();
+
+        $socails_media = $currentLang === 'en'
+            ? ($cta_content_3->data_values['social_media'] ?? [])
+            : getTranslatedValue($cta_content_3, 'social_media', $currentLang);
+
+        $packageInformation = $currentLang === 'en'
+            ? ($pricing_content->data_values['package_information'] ?? [])
+            : getTranslatedValue($pricing_content, 'package_information', $currentLang);
+
+        return view('creative-agency.index', compact(
+            'seo_setting', 'hero_content_3', 'partners', 'about_content_3',
+            'services', 'caseStudies', 'teams', 'pricing_content',
+            'subscription_plans', 'testimonials', 'blogs', 'cta_content_3',
+            'socails_media', 'team_count', 'testimonial_content_3',
+            'theme_setting', 'section_visibility_3', 'packageInformation'
+        ));
+    }
+
+    public function aiSoftware()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $hero_content = getContent('theme_four_hero.content', true);
+        $ur_cool_features = getContent('ur_cool_features.content', true);
+        $what_we_do = getContent('what_we_do.content', true);
+        $theme_four_faqs = getContent('theme_four_faqs.content', true);
+        $theme_four_moving_image = getContent('theme_4_moving_image.content', true);
+        $currentLang = session()->get('front_lang');
+        $pricingContent = getContent('theme_4_pricing_section.content', true);
+        $theme_four_testimonials = getContent('theme_4_testimonials.content', true);
+        $cta_content = getContent('home_4_cta_section.content', true);
+        $section_visibility_4 = ManageSection::where('page_name', 'home_four')->where('status', 1)->get();
+        $subscription_plans = SubscriptionPlan::orderBy('serial', 'asc')->get();
+
+        $packageInformation = $currentLang === 'en'
+            ? ($pricingContent->data_values['package_information'] ?? [])
+            : getTranslatedValue($pricingContent, 'package_information', $currentLang);
+
+        $partners = Partner::where('status', 'enable')->get();
         $faqs = Faq::latest()->take(4)->get();
         $testimonials = Testimonial::orderBy('id', 'desc')->get();
-        $subscription_plans = SubscriptionPlan::orderBy('serial', 'asc')->get();
-        $section_visibility_7 = ManageSection::where('page_name', 'home_seven')->where('status', 1)->get();
 
-        if ($theme == 'theme_seven') {
-            return view('theme.theme_8.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content' => $hero_content,
-                'partner_content' => $partner_content,
-                'why_use_us_content' => $why_use_us_content,
-                'core_features_content' => $core_features_content,
-                'core_features_two_content' => $core_features_two_content,
-                'why_use_us_two_content' => $why_use_us_two_content,
-                'customer_say_about_us_content' => $customer_say_about_us_content,
-                'faqs_content' => $faqs_content,
-                'automating_design_system_content' => $automating_design_system_content,
-                'testimonials_content' => $testimonials_content,
-                'section_visibility_7' => $section_visibility_7,
-                'service_explores' => $service_explores,
-                'partners' => $partners,
-                'faqs' => $faqs,
-                'testimonials' => $testimonials,
-            ]);
-        }
+        return view('ai-software.index', compact(
+            'seo_setting', 'hero_content', 'ur_cool_features', 'what_we_do',
+            'theme_four_faqs', 'theme_four_moving_image', 'partners', 'faqs',
+            'testimonials', 'pricingContent', 'subscription_plans',
+            'theme_four_testimonials', 'cta_content', 'section_visibility_4',
+            'packageInformation'
+        ));
+    }
 
+    public function businessConsulting()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $services_items = Listing::where('status', 'enable')->latest()->skip(1)->take(3)->get();
+        $about_content_5 = getContent('template_5_about_us_section.content', true);
+        $we_provide_content = getContent('template_5_we_provide_section.content', true);
+        $counter_content_5 = getContent('theme_5_counter_section.content', true);
+        $testimonial_content_5 = getContent('theme_5_testimonial_section.content', true);
+        $cta_content_home_5 = getContent('theme_5_cta_section.content', true);
+        $hero_image = getContent('home_5_hero_section.content', true);
+        $projects = Project::where('status', 'enable')->take(6)->get();
+        $section_visibility_5 = ManageSection::where('page_name', 'home_five')->where('status', 1)->get();
+
+        $teams = Team::latest()->take(4)->get();
+        $team_count = Team::count();
+        $currentLang = session()->get('front_lang');
+        $pricing_content = getContent('template_3_pricing_section.content', true);
+        $blogs = Blog::where('status', 1)->with('category')->latest()->take(3)->get();
+        $testimonials = Testimonial::latest()->take(6)->get();
+        $partners = Partner::all();
+        $testimonial_content = getContent('theme_seven_testimonial.content', true);
+
+        return view('business-consulting.index', compact(
+            'seo_setting', 'services_items', 'about_content_5', 'we_provide_content',
+            'teams', 'team_count', 'projects', 'counter_content_5',
+            'testimonial_content', 'testimonial_content_5', 'testimonials',
+            'blogs', 'partners', 'cta_content_home_5', 'hero_image',
+            'section_visibility_5'
+        ));
+    }
+
+    public function itBusiness()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
         $hero_content = getContent('theme_seven_hero.content', true);
         $partner_content = getContent('theme_seven_partner.content', true);
         $about_company_content = getContent('theme_seven_about_company.content', true);
@@ -99,229 +233,42 @@ class HomeController extends Controller
         $faqs = Faq::latest()->take(4)->get();
         $section_visibility_6 = ManageSection::where('page_name', 'home_six')->where('status', 1)->get();
 
-        if ($theme == 'theme_six') {
-            return view('theme.theme_7.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content' => $hero_content,
-                'partner_content' => $partner_content,
-                'about_company_content' => $about_company_content,
-                'explore_services_content' => $explore_services_content,
-                'working_process_content' => $working_process_content,
-                'case_story_content' => $case_story_content,
-                'business_benefits_content' => $business_benefits_content,
-                'testimonial_content' => $testimonial_content,
-                'faqs_content' => $faqs_content,
-                'get_consultations_content' => $get_consultations_content,
-                'partners' => $partners,
-                'service_explores' => $service_explores,
-                'projects' => $projects,
-                'testimonials' => $testimonials,
-                'faqs' => $faqs,
-                'section_visibility_6' => $section_visibility_6
-            ]);
-        }
+        return view('it-business.index', compact(
+            'seo_setting', 'hero_content', 'partner_content', 'about_company_content',
+            'explore_services_content', 'working_process_content', 'case_story_content',
+            'business_benefits_content', 'testimonial_content', 'faqs_content',
+            'get_consultations_content', 'partners', 'service_explores',
+            'projects', 'testimonials', 'faqs', 'section_visibility_6'
+        ));
+    }
 
-
-        $hero_content = getContent('theme_four_hero.content', true);
-        $ur_cool_features = getContent('ur_cool_features.content', true);
-        $what_we_do = getContent('what_we_do.content', true);
-        $theme_four_faqs = getContent('theme_four_faqs.content', true);
-        $theme_four_moving_image = getContent('theme_4_moving_image.content', true);
-        $currentLang = session()->get('front_lang');
-        $pricingContent = getContent('theme_4_pricing_section.content', true);
-        $theme_four_testimonials = getContent('theme_4_testimonials.content', true);
-        $cta_content = getContent('home_4_cta_section.content', true);
-        $section_visibility_4 = ManageSection::where('page_name', 'home_four')->where('status', 1)->get();
-
-
-        $packageInformation = $currentLang === 'en'
-            ? ($pricingContent->data_values['package_information'] ?? [])
-            : getTranslatedValue($pricingContent, 'package_information', $currentLang);
+    public function saas()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+        $hero_content = getContent('theme_eight_hero.content', true);
+        $partner_content = getContent('theme_eight_partner.content', true);
+        $why_use_us_content = getContent('theme_eight_why_use_us.content', true);
+        $core_features_content = getContent('theme_eight_core_features.content', true);
+        $core_features_two_content = getContent('theme_eight_core_features_two.content', true);
+        $why_use_us_two_content = getContent('theme_eight_why_use_us_two.content', true);
+        $customer_say_about_us_content = getContent('theme_eight_customer_say_about_us.content', true);
+        $automating_design_system_content = getContent('theme_eight_automating_design_system.content', true);
+        $faqs_content = getContent('theme_eight_faqs.content', true);
+        $testimonials_content = getContent('theme_eight_testimonials.content', true);
 
         $partners = Partner::where('status', 'enable')->get();
+        $service_explores = Listing::latest()->take(8)->get();
         $faqs = Faq::latest()->take(4)->get();
         $testimonials = Testimonial::orderBy('id', 'desc')->get();
+        $section_visibility_7 = ManageSection::where('page_name', 'home_seven')->where('status', 1)->get();
 
-
-
-        if ($theme == 'theme_four') {
-            return view('theme.theme_4.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content' => $hero_content,
-                'ur_cool_features' => $ur_cool_features,
-                'what_we_do' => $what_we_do,
-                'theme_four_faqs' => $theme_four_faqs,
-                'theme_four_moving_image' => $theme_four_moving_image,
-                'partners' => $partners,
-                'faqs' => $faqs,
-                'testimonials' => $testimonials,
-                'pricingContent' => $pricingContent,
-                'subscription_plans' => $subscription_plans,
-                'theme_four_testimonials' => $theme_four_testimonials,
-                'cta_content' => $cta_content,
-                'section_visibility_4' => $section_visibility_4
-
-            ]);
-        }
-
-        $hero_content = getContent('theme_two_hero.content', true);
-        $theme_two_tools = getContent('theme_two_tools.content', true);
-        $about_companies = getContent('about_company.content', true);
-        $explore_services = getContent('explore_services.content', true);
-        $case_studies = getContent('case_studies.content', true);
-        $our_testimonials = getContent('our_testimonials.content', true);
-        $faqs_sections = getContent('faqs.content', true);
-        $contact_us = getContent('contact_us.content', true);
-
-        $testimonials = Testimonial::where('status', 'active')->latest()->get();
-        $faqs = Faq::latest()->take(4)->get();
-        $service_explores = Listing::latest()->take(4)->get();
-
-        $partners = Partner::where('status', 'enable')->get();
-        $projects = Project::where('status', 'enable')->take(4)->get();
-        $section_visibility_2 = ManageSection::where('page_name', 'home_two')->where('status', 1)->get();
-
-        if ($theme == 'theme_two') {
-            return view('theme.theme_2.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content' => $hero_content,
-                'theme_two_tools' => $theme_two_tools,
-                'about_companies' => $about_companies,
-                'explore_services' => $explore_services,
-                'case_studies' => $case_studies,
-                'testimonials' => $testimonials,
-                'faqs' => $faqs,
-                'service_explores' => $service_explores,
-                'our_testimonials' => $our_testimonials,
-                'faqs_sections' => $faqs_sections,
-                'contact_us' => $contact_us,
-                'partners' => $partners,
-                'projects' => $projects,
-                'theme_setting' => $theme_setting,
-                'section_visibility_2' => $section_visibility_2
-            ]);
-        }
-
-        // theme 3 all content get
-        $hero_content_3 = getContent('themplate_3_hero_section.content', true);
-        $partners = Partner::all();
-        $about_content_3 = getContent('template_3_about_company.content', true);
-        $services = Listing::where('status', 'enable')->latest()->take(6)->get();
-        $caseStudies = Project::with('category')->where('status', 'enable')->latest()->take(4)->get();
-        $teams = Team::latest()->take(4)->get();
-        $team_count = Team::count();
-        $currentLang = session()->get('front_lang');
-        $pricing_content = getContent('template_3_pricing_section.content', true);
-        $testimonials = Testimonial::latest()->take(6)->get();
-        $blogs = Blog::where('status', 1)->with('category')->latest()->take(3)->get();
-        $cta_content_3 = getContent('template_3_cta_section.content', true);
-        $testimonial_content_3 = getContent('template_3_testimonial_section.content', true);
-        $section_visibility_3 = ManageSection::where('page_name', 'home_three')->where('status', 1)->get();
-        // cta social media data
-        $socails_media = $currentLang === 'en'
-            ? ($cta_content_3->data_values['social_media'] ?? [])
-            : getTranslatedValue($cta_content_3, 'social_media', $currentLang);
-
-        $packageInformation = $currentLang === 'en'
-            ? ($pricing_content->data_values['package_information'] ?? [])
-            : getTranslatedValue($pricing_content, 'package_information', $currentLang);
-
-        // theme 3 all content get end
-
-        // theme 5 all content get
-        $services_items = Listing::where('status', 'enable')->latest()->skip(1)->take(3)->get();
-        $about_content_5 = getContent('template_5_about_us_section.content', true);
-        $we_provide_content = getContent('template_5_we_provide_section.content', true);
-        $counter_content_5 = getContent('theme_5_counter_section.content', true);
-        $testimonial_content_5 = getContent('theme_5_testimonial_section.content', true);
-        $cta_content_home_5 = getContent('theme_5_cta_section.content', true);
-        $hero_image = getContent('home_5_hero_section.content', true);
-        $projects = Project::where('status', 'enable')->take(6)->get();
-        $section_visibility_5 = ManageSection::where('page_name', 'home_five')->where('status', 1)->get();
-        if ($theme == 'theme_one') {
-            return view('theme.theme_5.index', [
-                'seo_setting' => $seo_setting,
-                'services_items' => $services_items,
-                'about_content_5' => $about_content_5,
-                'we_provide_content' => $we_provide_content,
-                'teams' => $teams,
-                'team_count' => $team_count,
-                'projects' => $projects,
-                'counter_content_5' => $counter_content_5,
-                'testimonial_content' => $testimonial_content,
-                'testimonial_content_5' => $testimonial_content_5,
-                'testimonials' => $testimonials,
-                'blogs' => $blogs,
-                'partners' => $partners,
-                'cta_content_home_5' => $cta_content_home_5,
-                'hero_image' => $hero_image,
-                'section_visibility_5' => $section_visibility_5
-            ]);
-        }
-
-
-        if ($theme == 'theme_three') {
-            return view('theme.theme_3.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content_3' => $hero_content_3,
-                'partners' => $partners,
-                'about_content_3' => $about_content_3,
-                'services' => $services,
-                'caseStudies' => $caseStudies,
-                'teams' => $teams,
-                'pricing_content' => $pricing_content,
-                'subscription_plans' => $subscription_plans,
-                'testimonials' => $testimonials,
-                'blogs' => $blogs,
-                'cta_content_3' => $cta_content_3,
-                'socails_media' => $socails_media,
-                'team_count' => $team_count,
-                'testimonial_content_3' => $testimonial_content_3,
-                'theme_setting' => $theme_setting,
-                'section_visibility_3' => $section_visibility_3
-            ]);
-        }
-
-        // start home one
-        $hero_content = getContent('template_1_hero.content', true);
-        $about_content = getContent('template_1_about_company.content', true);
-        $fan_fact_content = getContent('template_1_fun_fact.content', true);
-        $working_process = getContent('template_1_working_process.content', true);
-        $testimonial_content = getContent('template_1_testimonial.content', true);
-        $cta_content = getContent('template_1_cta.content', true);
-        $section_visibility = ManageSection::where('page_name', 'home_one')->where('status', 1)->get();
-
-        if ($theme == 'theme_five') {
-            return view('theme.theme_1.index', [
-                'seo_setting' => $seo_setting,
-                'hero_content' => $hero_content,
-                'about_content' => $about_content,
-                'partners' => $partners,
-                'fan_fact_content' => $fan_fact_content,
-                'services' => $services,
-                'working_process' => $working_process,
-                'testimonial_content' => $testimonial_content,
-                'testimonials' => $testimonials,
-                'blogs' => $blogs,
-                'cta_content' => $cta_content,
-                'theme_setting' => $theme_setting,
-                'section_visibility' => $section_visibility
-            ]);
-        }
-
-        return view('theme.theme_1.index', [
-            'hero_content' => $hero_content,
-            'about_content' => $about_content,
-            'partners' => $partners,
-            'fan_fact_content' => $fan_fact_content,
-            'services' => $services,
-            'working_process' => $working_process,
-            'testimonial_content' => $testimonial_content,
-            'testimonials' => $testimonials,
-            'blogs' => $blogs,
-            'cta_content' => $cta_content,
-        ]);
-
+        return view('saas.index', compact(
+            'seo_setting', 'hero_content', 'partner_content', 'why_use_us_content',
+            'core_features_content', 'core_features_two_content', 'why_use_us_two_content',
+            'customer_say_about_us_content', 'faqs_content', 'automating_design_system_content',
+            'testimonials_content', 'section_visibility_7', 'service_explores',
+            'partners', 'faqs', 'testimonials'
+        ));
     }
 
     public function about_us()

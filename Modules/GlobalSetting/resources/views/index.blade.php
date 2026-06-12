@@ -173,7 +173,7 @@
                                                                                             <div
                                                                                                 class="crancy__item-form--group  mg-top-form-20">
                                                                                                 <label
-                                                                                                    class="crancy__item-label">{{ __('Select Theme') }}</label>
+                                                                                                    class="crancy__item-label">{{ __('Select Default Theme (served on root / route)') }}</label>
                                                                                                 <select
                                                                                                     class="form-select crancy__item-input"
                                                                                                     name="selected_theme">

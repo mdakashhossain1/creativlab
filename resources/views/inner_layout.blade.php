@@ -527,7 +527,7 @@
                 @endif
 
 
-                @include('theme.theme_5._cta_section')
+                @include('business-consulting._cta_section')
 
                 <footer class="pt-20 bg-buisness-light-black">
                     <div class="theme-container mx-auto flex flex-wrap gap-5 justify-between mb-20">
@@ -702,7 +702,7 @@
                 <div class="flex flex-col gap-30 justify-center items-center">
                     <div class="img">
 
-                        @include('theme.svg.logout_image')
+                        @include('svg.logout_image')
 
                     </div>
                     <div class=" text-center">
@@ -752,7 +752,7 @@
             <div class="w-full  max-w-[408px] bg-white p-30 rounded-xl relative z-20 modal-content">
                 <div class="flex flex-col gap-30 justify-center items-center">
                     <div class="img">
-                        @include('theme.svg.account_delete')
+                        @include('svg.account_delete')
                     </div>
                     <div class=" text-center">
                         <h2 class="text-30 font-semibold leading-10 mb-30"> {{ __('Are you Sure?') }} <br>
