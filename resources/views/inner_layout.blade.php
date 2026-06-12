@@ -34,7 +34,7 @@
     <div class="flex justify-center relative z-50">
         <div class="header-wrapper w-full fixed left-0 top-0 z-20 xl:block hidden h1-header-sticky h1-header-sticky-qs">
             <div class="2xl:px-[110px] px-5 mx-auto relative">
-                <div class="w-full h-[45px] justify-between items-center pl-[50px] bg-white border border-[#e7e8e9] hidden h1-top-bar flex">
+                <div class="w-full h-[45px] justify-between items-center pl-[50px] bg-white border border-[#e7e8e9] hidden h1-top-bar">
                     <span class="2xl:block hidden">{{ __('Welcome to') }}
                         <span class="text-purple font-semibold">{{ env('APP_NAME') }}</span>
                         {{ __('a modern landing page website') }} </span>
@@ -73,9 +73,9 @@
                             <span class="font-normal">{{ __('Call :') }} {{ $footer?->phone }}</span>
                         </div>
                         <div class="flex gap-[14px] items-center mr-[50px]">
-                            <div id="currency_select_inner_dm" class="custom-select home-1 relative flex gap-1 items-center pr-5 text-white">
-                                <form action="{{ route('currency-switcher') }}" method="get" id="currency_switcher_form_inner">
-                                    <select name="currency_code" id="currency_inner" class="hidden">
+                            <div id="currency_select_inner" class="custom-select home-1 relative flex gap-1 items-center pr-5 text-white">
+                                <form action="{{ route('currency-switcher') }}" method="get" id="currency_switcher_form_home_one">
+                                    <select name="currency_code" id="currency_switcher" class="hidden">
                                         <option value="">{{ __('Currency') }}</option>
                                         @foreach ($currency_list as $currency)
                                             <option @selected(session('currency_code') == $currency->currency_code) value="{{ $currency->currency_code }}">{{ $currency->currency_code }}</option>
@@ -92,9 +92,9 @@
                                     </span>
                                 </div>
                             </div>
-                            <div id="language_select_inner_dm" class="custom-select home-page relative flex gap-1 items-center pr-5 text-white">
-                                <form action="{{ route('language-switcher') }}" method="get" id="language_switcher_form_inner">
-                                    <select name="lang_code" id="language_inner" class="hidden">
+                            <div id="language_select" class="custom-select home-page relative flex gap-1 items-center pr-5 text-white">
+                                <form action="{{ route('language-switcher') }}" method="get" id="language_switcher_form_home">
+                                    <select name="lang_code" id="language" class="hidden">
                                         <option value="">{{ __('Language') }}</option>
                                         @foreach ($language_list as $language)
                                             <option @selected(session()->get('front_lang') == $language->lang_code) value="{{ $language->lang_code }}">{{ $language->lang_name }}</option>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full h-[95px] flex justify-between items-center px-0 border border-[#e7e8e9] bg-white border-t-0 relative">
+                <div class="w-full h-[95px] flex justify-between items-center px-[50px] border border-[#e7e8e9] bg-white border-t-0 relative">
                     <div class="flex 2xl:space-x-[100px] xl:space-x-10 justify-between items-center w-full xl:w-auto">
                         <a href="{{ route('home') }}" aria-label="logo">
                             <img src="{{ asset($general_setting->logo) }}" alt="logo" class="light-version-logo" />

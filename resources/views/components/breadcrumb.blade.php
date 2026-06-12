@@ -1,6 +1,6 @@
 @props(['name'])
 <section id="h1-breadcrumb" class="bg-main-gray border-b border-[#e7e8e9]">
-    <div class=" w-full h-fit overflow-hidden relative pb-12 md:pb-16 pt-[120px] xl:pt-[180px] md:pt-[130px]">
+    <div class=" w-full h-fit overflow-hidden relative pb-12 md:pb-16 pt-[120px] md:pt-[130px] xl:pt-[240px]">
         <div class="theme-container mx-auto h-fit w-fit relative z-20">
             <div class="text-center w-fit mx-auto relative z-10">
                 <h1 class="text-main-black text-34 sm:text-48 font-semibold font-inter">

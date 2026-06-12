@@ -38,6 +38,11 @@
 svg.active {
     color: #ff002a;
 }
+
+.mobile-sub-nav.active {
+    height: auto;
+    padding-top: 1rem;
+}
 .three-line-limit {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -78,17 +83,6 @@ svg.active {
 
 .max_height_none {
     max-height: none !important;
-}
-
-.custom_swiper_wrapper {
-    transition-duration: 0ms !important;
-    transform: translate3d(-223.333px, 0px, 0px) !important;
-    transition-delay: 0ms !important;
-}
-
-.custom_partner_swiper_slide {
-    width: 173.333px !important;
-    margin-right: 50px !important;
 }
 
 .testimonial-section{

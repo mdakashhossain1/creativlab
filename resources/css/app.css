@@ -6,15 +6,9 @@
     @apply before:block  hover:before:w-full before:overflow-hidden before:border-b  before:text-purple before:border-purple relative overflow-hidden before:absolute border-b border-transparent before:w-0  transition-all duration-300 before:transition-all before:duration-300 before:-bottom-0 before:text-base before:leading-5 before:font-medium before:font-inter;
 }
 .home-two-btn-bg {
-    @apply inline-flex justify-center gap-2 px-[30px]  rounded-[41px]  items-center border overflow-hidden  relative before:block before:w-[300px] before:h-[300px] before:absolute before:bg-white before:-top-[400px] before:rotate-45 hover:before:-top-[100px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 hover:text-blue-seo after:block after:w-[300px] after:h-[300px] after:absolute after:bg-white after:-bottom-[400px] after:rotate-45 hover:after:-bottom-[100px]  after:transition-all after:duration-1000 after:z-0;
+    @apply inline-flex justify-center gap-2 px-[30px]  rounded-[41px]  items-center border overflow-hidden  relative before:block before:w-[300px] before:h-[300px] before:absolute before:bg-white before:-top-[400px] before:rotate-45 hover:before:-top-[100px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 hover:text-purple after:block after:w-[300px] after:h-[300px] after:absolute after:bg-white after:-bottom-[400px] after:rotate-45 hover:after:-bottom-[100px]  after:transition-all after:duration-1000 after:z-0;
 }
 @layer components {
-    .home-two-btn-white {
-        @apply flex justify-center gap-2 px-5 sm:px-10 py-2 sm:py-[11px] rounded-[40px] bg-transparent items-center border overflow-hidden border-white relative before:block before:w-[320px] before:h-[320px] before:absolute before:bg-white before:-top-[100px] before:rotate-45 hover:before:-top-[400px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 text-blue-seo hover:text-blue-seo after:block after:w-[320px] after:h-[320px] after:absolute after:bg-white after:-bottom-[100px] after:rotate-45 hover:after:-bottom-[400px]  after:transition-all after:duration-1000 after:z-0;
-    }
-    .home-two-btn-white-rev {
-        @apply flex justify-center gap-2 px-10 py-2 sm:py-[11px] rounded-[40px] bg-transparent items-center border overflow-hidden border-white relative before:block before:w-[300px] before:h-[300px] before:absolute before:bg-white before:-top-[400px] before:rotate-45 hover:before:-top-[100px] transition-all duration-300 before:transition-all before:duration-1000 before:z-0 z-10 text-blue-seo hover:text-blue-seo after:block after:w-[300px] after:h-[300px] after:absolute after:bg-white after:-bottom-[400px] after:rotate-45 hover:after:-bottom-[100px]  after:transition-all after:duration-1000 after:z-0;
-    }
     /* range slider */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -22,7 +16,7 @@
         margin: 0;
     }
     input[type="range"]::-webkit-slider-thumb {
-        @apply size-5 rounded-full  bg-white pointer-events-auto appearance-none border-[3px] border-buisness-red border-solid;
+        @apply size-5 rounded-full  bg-white pointer-events-auto appearance-none border-[3px] border-purple border-solid;
     }
     .range-input-container .popover-input {
         @apply w-0 h-0 opacity-0 absolute -z-10;
@@ -31,7 +25,7 @@
         @apply h-1 relative bg-gray-200 rounded;
     }
     .range-input-container .range-slider {
-        @apply h-full left-1/4 right-[15%] absolute rounded-lg bg-buisness-red;
+        @apply h-full left-1/4 right-[15%] absolute rounded-lg bg-purple;
     }
     .range-input-container .range-input {
         @apply relative;
@@ -43,14 +37,8 @@
 .section-title-top-tag {
     @apply text-purple font-medium px-5 py-3 bg-main-gray border border-[#E7E3FA] leading-none rounded-full inline-block;
 }
-.section-title-top-tag-two {
-    @apply px-5 py-3 text-white font-medium rounded-full border border-[#2D2539] bg-white bg-opacity-5 inline-block leading-none;
-}
 .common-transition {
     @apply transition-all duration-300 ease-in-out;
-}
-.home-two-btn-white-rev-sm {
-    @apply py-2.5 px-7;
 }
 @layer utilities {
     .btn-tertiary {
@@ -96,7 +84,7 @@
     }
     .select-items div:hover,
     .same-as-selected {
-        @apply bg-buisness-gray !text-black;
+        @apply bg-main-gray !text-black;
     }
     .select-items div {
         @apply py-2 text-nowrap;
@@ -111,10 +99,10 @@
         @apply relative transition-all duration-200;
     }
     .active.tab-btn {
-        @apply before:content-[''] before:w-full before:h-[2px] before:bg-buisness-red before:-bottom-4 before:left-0 before:absolute before:transition-all before:duration-200 text-black;
+        @apply before:content-[''] before:w-full before:h-[2px] before:bg-purple before:-bottom-4 before:left-0 before:absolute before:transition-all before:duration-200 text-black;
     }
     .product-topbar .tab-btn.active .tab-icon {
-        @apply text-buisness-red;
+        @apply text-purple;
     }
     .color-radio {
         @apply appearance-none w-full h-full relative cursor-pointer;
@@ -127,17 +115,17 @@
         @apply block;
     }
     .category-radio {
-        @apply appearance-none size-3 rounded-full border outline outline-1 outline-offset-2 outline-gray-300 ml-1 bg-transparent border-none checked:outline-buisness-red checked:bg-buisness-red;
+        @apply appearance-none size-3 rounded-full border outline outline-1 outline-offset-2 outline-gray-300 ml-1 bg-transparent border-none checked:outline-purple checked:bg-purple;
     }
     .form-input {
-        @apply outline-none focus:outline-none h-12 bg-buisness-gray border border-[#F0F0F0] rounded-lg px-5 py-[18px] text-base leading-6 text-black w-full block;
+        @apply outline-none focus:outline-none h-12 bg-main-gray border border-[#F0F0F0] rounded-lg px-5 py-[18px] text-base leading-6 text-black w-full block;
     }
     .select-hide {
         @apply hidden;
     }
 
     .size li.active {
-        @apply !border-buisness-red;
+        @apply !border-purple;
     }
 
     .service-article p,
@@ -163,15 +151,6 @@
      }
 }
 /* swiper & feature helpers */
-.h2-testimonial-pagination {
-    @apply flex gap-2 justify-center items-center;
-}
-.h2-testimonial-pagination > .swiper-pagination-bullet {
-    @apply bg-blue-seo/70 transition-all duration-200;
-}
-.h2-testimonial-pagination > .swiper-pagination-bullet-active {
-    @apply bg-blue-seo;
-}
 .h3-testimonial-pagination > .swiper-pagination-bullet {
     @apply bg-purple/70 transition-all duration-200;
 }
@@ -182,35 +161,11 @@
     opacity: 1 !important;
     @apply bg-opacity-30;
 }
-.swiper-button-disabled path {
-    @apply stroke-green-dark;
-}
 
 .product-showcase-3-4 .swiper-slide-thumb-active .product-img {
-    @apply border border-buisness-red;
+    @apply border border-purple;
 }
-.active-h7-faq h1 {
-    @apply text-it-blue;
-}
-.h10-service-pagination .swiper-pagination-bullet {
-    background: #00df8e;
-}
-/* course description */
-.course-description ul {
-    @apply flex flex-wrap mt-5 w-full gap-[40px];
-}
-.course-description ul li {
-    @apply w-1/2 flex relative flex-1 gap-6 min-w-[300px];
-}
-.course-description ul li {
-    @apply before:min-w-[18px] before:min-h-[18px] before:w-[18px] before:h-[18px]  before:aspect-square before:rounded-full before:overflow-hidden before:bg-purple before:flex before:justify-center before:flex-col before:items-center before:content-[url('/assets/images/course/tick.png')] before:mt-1.5 text-paragraph;
-}
-.course-description ol {
-    @apply mt-4;
-}
-.course-description ol li {
-    @apply before:content-[url('/assets/images/course/arrow-right.png')] before:mt-2  text-paragraph flex items-center gap-2;
-}
+
 /* misc */
 .dropdown-deActive {
     @apply h-0;
@@ -225,32 +180,8 @@
         transform: translateY(0);
     }
 }
-/* Button gradient styles */
-.btn-gradient {
-    position: relative;
-    background: linear-gradient(94.31deg, #794aff 5.85%, #1904e5 95.44%);
-}
-.btn-gradient::before {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(60.9deg, #06cff1 6.71%, #defa8e 92.09%);
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease-in-out;
-}
-.btn-gradient:hover::before {
-    opacity: 1;
-}
 #currency_select .select-selected {
     color: #fff !important;
-}
-.home_two_curr_lang #currency_select .select-selected,
-.home_two_curr_lang #language_select .select-selected {
-    color: #161519 !important;
 }
 #currency_select .select-items {
     left: auto;
