@@ -391,7 +391,7 @@
                         <span class="menu-bar__name">{{ __('Manage Service') }}</span></span> <span
                         class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.listings*') ? 'show' : '' }}"
+                <div class="collapse crancy__dropdown {{ Route::is('admin.listings*') || Route::is('admin.select-listing-purpose') || Route::is('admin.awaiting-listing') || Route::is('admin.job-posts') ? 'show' : '' }}"
                     id="menu-item__car_list" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
@@ -549,7 +549,7 @@
 
 
             <li
-                class="{{ Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.explore-section') || Route::is('admin.slider.*') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') ? 'active' : '' }}">
+                class="{{ Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.explore-section') || Route::is('admin.slider.*') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.section-manage') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"
                     data-bs-target="#menu-item__for_section"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
@@ -563,7 +563,7 @@
                         <span class="menu-bar__name">{{ __('Manage Section') }}</span></span> <span
                         class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.slider.*') || Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') ? 'show' : '' }}"
+                <div class="collapse crancy__dropdown {{ Route::is('admin.slider.*') || Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.explore-section') || Route::is('admin.section-manage') ? 'show' : '' }}"
                     id="menu-item__for_section" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
@@ -828,7 +828,7 @@
 
 
             <li
-                class="{{ Route::is('admin.cookie-consent') || Route::is('admin.error-image') || Route::is('admin.login-image') || Route::is('admin.breadcrumb') || Route::is('admin.social-login') || Route::is('admin.default-avatar') || Route::is('admin.maintenance-mode') || Route::is('admin.pwa-icon-settings') ? 'active' : '' }}">
+                class="{{ Route::is('admin.cookie-consent') || Route::is('admin.error-image') || Route::is('admin.login-image') || Route::is('admin.breadcrumb') || Route::is('admin.social-login') || Route::is('admin.default-avatar') || Route::is('admin.maintenance-mode') || Route::is('admin.pwa-icon-settings') || Route::is('admin.admin-login-image') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"
                     data-bs-target="#menu-item__apps"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
