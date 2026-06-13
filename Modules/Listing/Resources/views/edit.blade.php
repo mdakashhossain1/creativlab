@@ -90,23 +90,17 @@
                                         <div class="row">
                                             @if (admin_lang() == request()->get('lang_code'))
 
-                                                @if($logoicon_setting->value == 'all_theme' || $logoicon_setting->value == 'creative_agency' || $logoicon_setting->value == 'digital_marketing')
                                                     <div class="col-3 mg-top-form-20">
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="crancy__item-form--group w-100 h-100">
-                                                                    <label
-                                                                        class="crancy__item-label">{{ $logoicon_setting->value == 'all_theme' ? __('Icon') : __('Home Page Icon') }}
-                                                                    </label>
-                                                                    <div
-                                                                        class="crancy-product-card__upload crancy-product-card__upload--border">
+                                                                    <label class="crancy__item-label">{{ __('Home Page Icon') }}</label>
+                                                                    <div class="crancy-product-card__upload crancy-product-card__upload--border">
                                                                         <input type="file" class="btn-check" name="thumb_image"
                                                                             id="input-img1" autocomplete="off"
                                                                             onchange="previewImage(event)">
-                                                                        <label class="crancy-image-video-upload__label"
-                                                                            for="input-img1">
-                                                                            <img id="view_img"
-                                                                                src="{{ asset($listing->thumb_image) }}">
+                                                                        <label class="crancy-image-video-upload__label" for="input-img1">
+                                                                            <img id="view_img" src="{{ asset($listing->thumb_image) }}">
                                                                             <h4 class="crancy-image-video-upload__title">
                                                                                 {{ __('Click here to') }} <span
                                                                                     class="crancy-primary-color">{{ __('Choose File') }}</span>
@@ -117,7 +111,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endif
 
                                             <div class="col-3 mg-top-form-20">
                                                 <div class="row">
