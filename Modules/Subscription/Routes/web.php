@@ -49,3 +49,31 @@ Route::group(['prefix' => 'subscription','as' => 'subscription.','middleware' =>
     Route::get('/paypal-success-payment', [UserPaypalSubscriptionController::class, 'paypal_success_payment'])->name('paypal-success-payment');
     Route::get('/paypal-failed-payment', [UserPaypalSubscriptionController::class, 'paypal_failed_payment'])->name('paypal-failed-payment');
 });
+
+use Modules\Subscription\Http\Controllers\Admin\ClientProjectController;
+use Modules\Subscription\Http\Controllers\User\ClientProjectUserController;
+use Modules\Subscription\Http\Controllers\SubscriptionPurchase\ClientProjectCheckoutController;
+use Modules\Subscription\Http\Controllers\SubscriptionPurchase\ClientProjectPaymentController;
+
+// Admin client project routes
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admin']], function () {
+    Route::resource('client-projects', ClientProjectController::class);
+    Route::post('client-projects/{id}/toggle-status', [ClientProjectController::class, 'toggleStatus'])->name('client-projects.toggle-status');
+    Route::post('client-projects/installment/{id}/approve', [ClientProjectController::class, 'approveInstallment'])->name('client-projects.installment.approve');
+});
+
+// User client project routes
+Route::group(['prefix' => 'user/client-projects', 'as' => 'user.client-projects.', 'middleware' => ['web', 'HtmlSpecialchars', 'MaintenanceMode', 'auth:web']], function () {
+    Route::get('/', [ClientProjectUserController::class, 'index'])->name('index');
+    Route::get('pay/{installmentId}', [ClientProjectCheckoutController::class, 'payInstallment'])->name('pay');
+    Route::post('stripe', [ClientProjectPaymentController::class, 'stripe'])->name('stripe');
+    Route::post('bank', [ClientProjectPaymentController::class, 'bank'])->name('bank');
+    Route::get('paypal', [ClientProjectPaymentController::class, 'paypal'])->name('paypal');
+    Route::get('paypal-success', [ClientProjectPaymentController::class, 'paypalSuccess'])->name('paypal.success');
+    Route::get('paypal-failed', [ClientProjectPaymentController::class, 'paypalFailed'])->name('paypal.failed');
+    Route::post('razorpay', [ClientProjectPaymentController::class, 'razorpay'])->name('razorpay');
+    Route::get('paystack', [ClientProjectPaymentController::class, 'paystack'])->name('paystack');
+    Route::get('instamojo', [ClientProjectPaymentController::class, 'instamojo'])->name('instamojo');
+    Route::get('instamojo-response', [ClientProjectPaymentController::class, 'instamojoResponse'])->name('instamojo.response');
+    Route::get('{id}', [ClientProjectUserController::class, 'show'])->name('show');
+});

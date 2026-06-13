@@ -221,7 +221,7 @@
                 </div>
             </li>
 
-            <li class="{{ Route::is('admin.subscription-plan.*') || Route::is('admin.purchase-history') || Route::is('admin.pending-purchase-history') || Route::is('admin.purchase-history-detail') ? 'active' : '' }}">
+            <li class="{{ Route::is('admin.subscription-plan.*') || Route::is('admin.purchase-history') || Route::is('admin.pending-purchase-history') || Route::is('admin.purchase-history-detail') || Route::is('admin.client-projects.*') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse" data-bs-target="#subscriptionPlanMenu">
                     <span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
@@ -248,7 +248,7 @@
                     <span class="crancy__toggle"></span>
                 </a>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.subscription-plan.*') || Route::is('admin.purchase-history') || Route::is('admin.pending-purchase-history') || Route::is('admin.purchase-history-detail') ? 'show' : '' }}"
+                <div class="collapse crancy__dropdown {{ Route::is('admin.subscription-plan.*') || Route::is('admin.purchase-history') || Route::is('admin.pending-purchase-history') || Route::is('admin.purchase-history-detail') || Route::is('admin.client-projects.*') ? 'show' : '' }}"
                     id="subscriptionPlanMenu" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
                         <li class="{{ Route::is('admin.subscription-plan.*') ? 'active' : '' }}">
@@ -269,6 +269,13 @@
                             <a href="{{ route('admin.pending-purchase-history') }}">
                                 <span class="menu-bar__text">
                                     <span class="menu-bar__name">{{ __('Pending History') }}</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="{{ Route::is('admin.client-projects.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.client-projects.index') }}">
+                                <span class="menu-bar__text">
+                                    <span class="menu-bar__name">{{ __('Client Projects') }}</span>
                                 </span>
                             </a>
                         </li>
