@@ -276,17 +276,21 @@ class HomeController extends Controller
     public function faq()
     {
         $faqs_page_content = getContent('faqs_page.content', true);
+        $faqs_get_consultations = getContent('faqs_get_consultations.content', true);
         $cta_content = getContent('template_1_cta.content', true);
 
         $faqs = Faq::latest()->get();
+        $partners = Partner::where('status', 'enable')->get();
         $pageTitle = 'FAQs';
         $seo_setting = SeoSetting::where('id', 5)->first();
 
         return view('faq', [
             'faqs' => $faqs,
+            'partners' => $partners,
             'pageTitle' => $pageTitle,
             'seo_setting' => $seo_setting,
             'faqs_page_content' => $faqs_page_content,
+            'faqs_get_consultations' => $faqs_get_consultations,
             'cta_content' => $cta_content,
         ]);
     }

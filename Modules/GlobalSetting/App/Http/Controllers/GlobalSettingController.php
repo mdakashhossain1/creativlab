@@ -78,7 +78,9 @@ class GlobalSettingController extends Controller
     {
         $this->cache_clear();
 
-        GlobalSetting::where('key', 'selected_theme')->update(['value' => $request->selected_theme]);
+        if ($request->filled('selected_theme')) {
+            GlobalSetting::where('key', 'selected_theme')->update(['value' => $request->selected_theme]);
+        }
         GlobalSetting::where('key', 'app_name')->update(['value' => $request->app_name]);
         GlobalSetting::where('key', 'contact_message_mail')->update(['value' => $request->contact_message_mail]);
         GlobalSetting::where('key', 'timezone')->update(['value' => $request->timezone]);

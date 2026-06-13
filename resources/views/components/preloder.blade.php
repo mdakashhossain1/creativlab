@@ -4,17 +4,23 @@
         <div class="animation-preloader">
           <div class="spinner"></div>
           <div class="txt-loading">
-            <span preloader-text="Q" class="characters">{{ __("Q") }}</span>
+            <span preloader-text="C" class="characters">{{ __("C") }}</span>
 
-            <span preloader-text="U" class="characters">{{ __('U') }}</span>
+            <span preloader-text="R" class="characters">{{ __('R') }}</span>
+
+            <span preloader-text="E" class="characters">{{ __('E') }}</span>
+
+            <span preloader-text="A" class="characters">{{ __('A') }}</span>
+
+            <span preloader-text="T" class="characters">{{ __('T') }}</span>
+
+            <span preloader-text="V" class="characters">{{ __('V') }}</span>
 
             <span preloader-text="L" class="characters">{{ __('L') }}</span>
 
             <span preloader-text="A" class="characters">{{ __('A') }}</span>
 
-            <span preloader-text="N" class="characters">{{ __('N') }}</span>
-
-            <span preloader-text="D" class="characters">{{ __('D') }}</span>
+            <span preloader-text="B" class="characters">{{ __('B') }}</span>
           </div>
         </div>
         <div class="loader-section section-left"></div>

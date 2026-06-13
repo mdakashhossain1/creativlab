@@ -37,7 +37,7 @@
                 <div class="w-full h-[45px] justify-between items-center pl-[50px] bg-white border border-[#e7e8e9] hidden h1-top-bar">
                     <span class="2xl:block hidden">{{ __('Welcome to') }}
                         <span class="text-purple font-semibold">{{ env('APP_NAME') }}</span>
-                        {{ __('a modern landing page website') }} </span>
+                        {{ __('get every solution for Branding') }} </span>
                     <div class="2xl:w-[1021px] w-full h-full flex items-center justify-end custom_style">
                         <div class="flex space-x-2.5 items-center mr-7 text-white">
                             <span>
@@ -561,7 +561,7 @@
             X
         </button>
         <iframe class="absolute max-w-[80%] aspect-[1280/720] mx-auto"
-            src="https://www.youtube.com/embed/{{ getTranslatedValue($hero_image, 'hero_video_id') }}" frameborder="0"
+            src="https://www.youtube.com/embed/{{ getTranslatedValue($hero_image ?? null, 'hero_video_id') }}" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>

@@ -7,7 +7,6 @@
       <title>{{ env('APP_NAME') }} || {{ __('Maintenance') }}</title>
 
       <link rel="shortcut icon" href="{{ asset($general_setting->favicon) }}" type="image/x-icon">
-      <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
 
       <link rel="stylesheet" href="{{ asset('frontend/assets/css/swiper-bundle.min.css') }}" />
       <link rel="stylesheet" href="{{ asset('frontend/assets/css/aos.css') }}" />

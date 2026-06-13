@@ -28,8 +28,8 @@
                 <div
                     class="w-full h-[45px] justify-between items-center pl-[50px] bg-white border border-[#e7e8e9] hidden h1-top-bar">
                     <span class="2xl:block hidden">{{ __('Welcome to') }}
-                        <span class="text-purple font-semibold">{{ __('Quland') }}</span>
-                        {{ __('a modern landing page website') }} </span>
+                        <span class="text-purple font-semibold">{{ __('Creativlab') }}</span>
+                        {{ __('get every solution for Branding') }} </span>
                     <div class="2xl:w-[1021px] w-full h-full flex items-center justify-end custom_style">
                         <div class="flex space-x-2.5 items-center mr-7">
                             <span>

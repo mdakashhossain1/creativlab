@@ -1,3 +1,14 @@
+                    <style>
+                        @keyframes dropFromTop {
+                            0%   { opacity: 0; transform: translateY(-40px); }
+                            100% { opacity: 1; transform: translateY(0); }
+                        }
+                        .card-drop { animation: dropFromTop 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+                        .card-drop-1 { animation-delay: 0.1s; }
+                        .card-drop-2 { animation-delay: 0.3s; }
+                        .card-drop-3 { animation-delay: 0.5s; }
+                        .card-drop-4 { animation-delay: 0.7s; }
+                    </style>
                     <section id="home-one-hero">
                         <div class="hero-one-section-wrapper w-full xl:h-[905px] overflow-hidden relative">
                             <div class="win-grid w-full h-full absolute left-0 top-0" id="win-grid"></div>
@@ -16,7 +27,7 @@
                                             </span>
                                         </div>
                                         <h1
-                                            class="text-4xl md:text-65 text-main-black font-semibold mb-[35px] pointer-events-auto custom-heading md:text-left">
+                                            class="text-4xl md:text-65 text-main-black mb-[35px] pointer-events-auto custom-heading md:text-left" style="font-weight: 400 !important;">
                                            {!! strip_tags(clean(getTranslatedValue($hero_content, 'heading')),'<span>') !!}
                                         </h1>
                                         <div
@@ -66,19 +77,19 @@
                                                     class="w-full relative h-full z-10 pointer-events-auto">
                                                     <div  class="layer">
                                                         <span
-                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-[#BA4AFF] 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-br-none rounded-full">{{ getTranslatedValue($hero_content,'card_text_one') }}</span>
+                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-[#BA4AFF] 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-br-none rounded-full card-drop card-drop-1">{{ getTranslatedValue($hero_content,'card_text_one') }}</span>
                                                     </div>
                                                     <div  class="layer">
                                                         <span
-                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-purple 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-full rounded-bl-none">{{ getTranslatedValue($hero_content,'card_text_two') }}</span>
+                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-purple 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-full rounded-bl-none card-drop card-drop-2">{{ getTranslatedValue($hero_content,'card_text_two') }}</span>
                                                     </div>
                                                     <div  class="layer h-fit">
                                                         <span
-                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-blue-sass 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-br-none rounded-full h-fit">{{ getTranslatedValue($hero_content,'card_text_three') }}</span>
+                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-blue-sass 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-br-none rounded-full h-fit card-drop card-drop-3">{{ getTranslatedValue($hero_content,'card_text_three') }}</span>
                                                     </div>
                                                     <div  class="layer h-fit">
                                                         <span
-                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-[#FF8C05] 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-full rounded-bl-none h-fit">{{ getTranslatedValue($hero_content,'card_text_four') }}</span>
+                                                            class="inline-block xl:px-[30px] px-6 xl:py-2.5 py-1.5 bg-[#FF8C05] 2xl:text-pone xl:text-sm lg:text-pone text-white rounded-full rounded-bl-none h-fit card-drop card-drop-4">{{ getTranslatedValue($hero_content,'card_text_four') }}</span>
                                                     </div>
                                                 </div>
                                             </div>

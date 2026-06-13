@@ -173,6 +173,9 @@
                                                                         class="crancy-primary-color">{{ __('Choose File') }}</span>
                                                                     {{ __('and upload') }}
                                                                 </h4>
+                                                                @if ($imageKey === 'hero_image')
+                                                                    <p style="font-size:12px;color:#888;margin-top:4px;">{{ __('Recommended size: 497 x 671px (WebP)') }}</p>
+                                                                @endif
                                                             </label>
                                                         </div>
                                                     </div>

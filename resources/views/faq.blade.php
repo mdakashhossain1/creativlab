@@ -1,4 +1,4 @@
-﻿@extends('inner_layout')
+@extends('inner_layout')
 
 @section('title')
 <title>{{ $seo_setting->seo_title }}</title>
@@ -8,9 +8,6 @@
 @section('frontend_content')
 
 <main>
-    <!-- breadcrumb -->
-    <x-breadcrumb name="{{ $pageTitle }}" />
-
     <!-- faq start  -->
     <section class="relative pt-16 md:pt-[130px]">
         <div class="w-full relative z-10">
@@ -132,7 +129,6 @@
         </div>
     </section>
     <!-- faq end  -->
-
 </main>
 
 @endsection

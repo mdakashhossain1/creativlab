@@ -56,6 +56,7 @@
                                                                             {{ __('Click here to') }} <span
                                                                                 class="crancy-primary-color">{{ __('Choose File') }}</span>
                                                                             {{ __('and upload') }} </h4>
+                                                                        <p style="font-size:12px;color:#888;margin-top:4px;">{{ __('Recommended size: 512 x 115px (SVG)') }}</p>
                                                                     </label>
                                                                 </div>
                                                             </div>
