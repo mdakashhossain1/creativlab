@@ -79,7 +79,7 @@
                                         <div
                                             class="w-[60px] h-[60px] flex justify-center items-center rounded-full common-transition text-purple">
                                             <span>
-                                                <img src="{{ asset($service?->theme_5_thumbnail_image) }}" alt="">
+                                                <img src="{{ asset($service?->thumb_image) }}" alt="">
                                             </span>
                                         </div>
                                         <div class="mt-5 mb-4">

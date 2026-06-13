@@ -6,29 +6,18 @@ use File;
 use App\Models\Frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class FrontEndManagementController extends Controller
 {
     public function index()
     {
         $jsonUrl = resource_path('views/admin/settings.json');
-        $sections = json_decode(file_get_contents($jsonUrl), true);
-        ksort($sections);
+        $all_sections = json_decode(file_get_contents($jsonUrl), true);
+        ksort($all_sections);
 
-        $theme_wise_sections = [
-            [
-                'theme' => 'theme_one',
-                'dispaly_name' => 'digital_marketing',
-                'sections' => ['template_1_hero', 'template_1_about_company', 'template_1_fun_fact', 'template_1_working_process', 'template_1_testimonial', 'template_1_cta']
-            ]
-        ];
+        $sections = array_filter($all_sections, fn($key) => str_starts_with($key, 'template_1_'), ARRAY_FILTER_USE_KEY);
 
-        $selected_theme = GlobalSetting::where('key', 'selected_theme')->first();
-
-
-
-        return view('admin.frontend-management.index', compact('sections', 'selected_theme', 'theme_wise_sections'));
+        return view('admin.frontend-management.index', compact('sections'));
     }
 
     public function section($key)

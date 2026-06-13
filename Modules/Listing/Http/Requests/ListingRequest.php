@@ -3,7 +3,6 @@
 namespace Modules\Listing\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class ListingRequest extends FormRequest
 {
@@ -14,65 +13,33 @@ class ListingRequest extends FormRequest
      */
     public function rules()
     {
-        $logoicon_setting = GlobalSetting::where('key', 'selected_theme')->first();
         if ($this->isMethod('post')) {
             $rules = [
-                'category_id'=>'required',
-                'sub_category_id'=>'nullable',
-                'title'=>'required',
-                'slug'=>'required|unique:listings',
-                'short_description'=>'required|max:555',
-                'description'=>'required',
-                'inner_page_logo'=>'required|mimes:png,jpg,jpeg,webp,svg',
-                'background_image'=>'required|mimes:png,jpg,jpeg,webp',
+                'category_id'      => 'required',
+                'sub_category_id'  => 'nullable',
+                'title'            => 'required',
+                'slug'             => 'required|unique:listings',
+                'short_description'=> 'required|max:555',
+                'description'      => 'required',
+                'thumb_image'      => 'required|mimes:png,jpg,jpeg,webp,svg',
+                'background_image' => 'required|mimes:png,jpg,jpeg,webp',
             ];
-
-            if($logoicon_setting->value == 'all_theme' || $logoicon_setting->value == 'creative_agency' || $logoicon_setting->value == 'digital_marketing'){
-                $rules['thumb_image']='required|mimes:png,jpg,jpeg,webp,svg';
-            }
-
-            if($logoicon_setting->value == 'seo_agency'){
-                $rules['home_two_image'] = 'required|mimes:png,jpg,jpeg,webp,svg';
-            }
-
-            if($logoicon_setting->value == 'it_business'){
-                $rules['it_business_icon'] = 'required|mimes:png,jpg,jpeg,webp,svg';
-            }
-            if($logoicon_setting->value == 'saas'){
-                $rules['saas_icon'] = 'required|mimes:png,jpg,jpeg,webp,svg';
-            }
         }
 
         if ($this->isMethod('put')) {
-            if($this->request->get('lang_code') == admin_lang()){
+            if ($this->request->get('lang_code') == admin_lang()) {
                 $rules = [
-                    'title'=>'required',
-                    'slug'=>'required|unique:listings,slug,'.$this->listing.',id',
-                    'description'=>'required',
-                    'short_description'=>'required|max:555',
-                    'sub_category_id'=>'nullable',
-                    'inner_page_logo'=>'sometimes|required|mimes:png,jpg,jpeg,webp,svg',
+                    'title'            => 'required',
+                    'slug'             => 'required|unique:listings,slug,'.$this->listing.',id',
+                    'description'      => 'required',
+                    'short_description'=> 'required|max:555',
+                    'sub_category_id'  => 'nullable',
+                    'thumb_image'      => 'sometimes|required|mimes:png,jpg,jpeg,webp,svg',
                 ];
-                if($logoicon_setting->value == 'all_theme' || $logoicon_setting->value == 'creative_agency' || $logoicon_setting->value == 'digital_marketing'){
-                    $rules['thumb_image']='sometimes|required|mimes:png,jpg,jpeg,webp,svg';
-                }
-
-                if($logoicon_setting->value == 'it_business'){
-                    $rules['it_business_icon'] = 'sometimes|required|mimes:png,jpg,jpeg,webp,svg';
-                }
-
-                if($logoicon_setting->value == 'seo_agency'){
-                    $rules['home_two_image'] = 'sometimes|required|mimes:png,jpg,jpeg,webp,svg';
-                }
-
-                if($logoicon_setting->value == 'saas'){
-                    $rules['saas_icon'] = 'sometimes|required|mimes:png,jpg,jpeg,webp,svg';
-                }
-
-            }else{
+            } else {
                 $rules = [
-                    'title'=>'required',
-                    'description'=>'required',
+                    'title'      => 'required',
+                    'description'=> 'required',
                 ];
             }
         }

@@ -120,7 +120,6 @@ class GlobalSettingController extends Controller
     {
 
         $logo_setting = GlobalSetting::where('key', 'logo')->first();
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
 
         if($request->logo){
@@ -152,67 +151,6 @@ class GlobalSettingController extends Controller
             $white_logo_setting->save();
             if($old_logo){
                 if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-            }
-        }
-
-        if($theme_setting->selected_theme == 'business_consulting'){
-
-            $home_five_logo_setting = GlobalSetting::where('key', 'home_five_logo')->first();
-
-            if($request->home_five_logo){
-                $old_logo = $home_five_logo_setting?->value;
-                $image = $request->home_five_logo;
-                $ext = $image->getClientOriginalExtension();
-                $logo_name = 'home_five_logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-                $logo_name = 'uploads/website-images/'.$logo_name;
-                $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-                $home_five_logo_setting->value = $logo_name;
-                $home_five_logo_setting->save();
-                if($old_logo){
-                    if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-
-                }
-            }
-        }
-
-        if($theme_setting->selected_theme == 'it_business'){
-
-            $home_six_logo_setting = GlobalSetting::where('key', 'home_six_logo')->first();
-
-            if($request->home_six_logo){
-                $old_logo = $home_six_logo_setting?->value;
-                $image = $request->home_six_logo;
-                $ext = $image->getClientOriginalExtension();
-                $logo_name = 'home_five_logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-                $logo_name = 'uploads/website-images/'.$logo_name;
-                $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-                $home_six_logo_setting->value = $logo_name;
-                $home_six_logo_setting->save();
-                if($old_logo){
-                    if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-                }
-            }
-        }
-
-        if($theme_setting->selected_theme == 'it_business'){
-
-            $home_six_footer_logo_setting = GlobalSetting::where('key', 'home_six_footer_logo')->first();
-
-            if($request->home_six_footer_logo){
-                $old_logo = $home_six_footer_logo_setting?->value;
-                $image = $request->home_six_footer_logo;
-                $ext = $image->getClientOriginalExtension();
-                $logo_name = 'home_five_logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-                $logo_name = 'uploads/website-images/'.$logo_name;
-                $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-                $home_six_footer_logo_setting->value = $logo_name;
-                $home_six_footer_logo_setting->save();
-                if($old_logo){
-                    if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-                }
             }
         }
 

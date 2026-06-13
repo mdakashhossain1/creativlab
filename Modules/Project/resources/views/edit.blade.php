@@ -90,58 +90,6 @@
                                                 @if (admin_lang() == request()->get('lang_code'))
                                                     <div class="col-12 mg-top-form-20">
                                                         <div class="row">
-                                                            @if ($theme_setting->value == 'seo_agency')
-                                                                <div class="col-md-3">
-                                                                    <div class="crancy__item-form--group w-100 h-100">
-                                                                        <label
-                                                                            class="crancy__item-label">{{ __('Home Two Thumbnail Image') }}
-                                                                            * </label>
-                                                                        <div
-                                                                            class="crancy-product-card__upload crancy-product-card__upload--border">
-                                                                            <input type="file" class="btn-check"
-                                                                                name="home_two_thumb_image" id="home_2_img"
-                                                                                autocomplete="off"
-                                                                                onchange="previewImage1(event)">
-                                                                            <label class="crancy-image-video-upload__label"
-                                                                                for="home_2_img">
-                                                                                <img id="view_img2"
-                                                                                    src="{{ asset($project->theme_2_thumb_image) }}">
-                                                                                <h4
-                                                                                    class="crancy-image-video-upload__title">
-                                                                                    {{ __('Click here to') }} <span
-                                                                                        class="crancy-primary-color">{{ __('Choose File') }}</span>
-                                                                                    {{ __('and upload') }} </h4>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            @if ($theme_setting->value == 'creative_agency')
-                                                                <div class="col-md-3">
-                                                                    <div class="crancy__item-form--group w-100 h-100">
-                                                                        <label
-                                                                            class="crancy__item-label">{{ __('Home Three Thumbnail Image') }}
-                                                                            * </label>
-                                                                        <div
-                                                                            class="crancy-product-card__upload crancy-product-card__upload--border">
-                                                                            <input type="file" class="btn-check"
-                                                                                name="home_three_thumb_image"
-                                                                                id="home_3_img" autocomplete="off"
-                                                                                onchange="previewImage5(event)">
-                                                                            <label class="crancy-image-video-upload__label"
-                                                                                for="home_3_img">
-                                                                                <img id="view_img5"
-                                                                                    src="{{ asset($project->theme_3_thumb_image) }}">
-                                                                                <h4
-                                                                                    class="crancy-image-video-upload__title">
-                                                                                    {{ __('Click here to') }} <span
-                                                                                        class="crancy-primary-color">{{ __('Choose File') }}</span>
-                                                                                    {{ __('and upload') }} </h4>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
                                                             <div class="col-md-3">
                                                                 <div class="crancy__item-form--group w-100 h-100">
                                                                     <label

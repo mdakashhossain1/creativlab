@@ -13,7 +13,6 @@ use Modules\Language\App\Models\Language;
 use Modules\Category\Entities\SubCategory;
 use Modules\Project\App\Models\ProjectGallery;
 use Modules\Project\App\Models\ProjectTranslation;
-use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class ProjectController extends Controller
 {
@@ -27,9 +26,8 @@ class ProjectController extends Controller
     public function create()
     {
         $categories = Category::with('translate')->where('status', 'enable')->get();
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
-        return view('project::create', compact('categories','theme_setting'));
+        return view('project::create', compact('categories'));
     }
 
     /**
@@ -55,10 +53,7 @@ class ProjectController extends Controller
             'author_name' => 'nullable|string|max:255',
             'author_designation' => 'nullable|string|max:255',
             'author_comment' => 'nullable|string',
-            'home_two_thumb_image'=>'nullable|image|mimes:jpeg,png,jpg,webp',
-            'home_three_thumb_image'=>'nullable|image|mimes:jpeg,png,jpg,webp',
         ]);
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
         $project = new Project();
 
@@ -69,26 +64,6 @@ class ProjectController extends Controller
                 ->encode('webp', 80)
                 ->save(public_path() . '/' . $image_name);
             $project->thumb_image = $image_name;
-        }
-
-
-        if ($request->home_two_thumb_image) {
-            $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-            $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->home_two_thumb_image)
-                ->encode('webp', 80)
-                ->save(public_path() . '/' . $image_name);
-            $project->theme_2_thumb_image = $image_name;
-        }
-
-
-        if ($request->home_three_thumb_image) {
-            $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-            $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->home_three_thumb_image)
-                ->encode('webp', 80)
-                ->save(public_path() . '/' . $image_name);
-            $project->theme_3_thumb_image = $image_name;
         }
 
 
@@ -143,13 +118,11 @@ class ProjectController extends Controller
     public function edit(Request $request, $id)
     {
         $project = Project::findOrFail($id);
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
         $project_translate = ProjectTranslation::where(['project_id' => $id, 'lang_code' => $request->lang_code])->first();
         $categories = Category::with('translate')->where('status', 'enable')->get();
 
-
-        return view('project::edit', compact('project', 'project_translate', 'categories','theme_setting'));
+        return view('project::edit', compact('project', 'project_translate', 'categories'));
     }
 
     /**
@@ -182,26 +155,6 @@ class ProjectController extends Controller
                     ->save(public_path() . '/' . $image_name);
                 $project->thumb_image = $image_name;
             }
-
-            if ($request->home_two_thumb_image) {
-                $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-                $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($request->home_two_thumb_image)
-                    ->encode('webp', 80)
-                    ->save(public_path() . '/' . $image_name);
-                $project->theme_2_thumb_image = $image_name;
-            }
-
-
-            if ($request->home_three_thumb_image) {
-                $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-                $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($request->home_three_thumb_image)
-                    ->encode('webp', 80)
-                    ->save(public_path() . '/' . $image_name);
-                $project->theme_3_thumb_image = $image_name;
-            }
-
 
             if($request->author_image) {
                 $old_image = $project->author_image;
@@ -268,21 +221,6 @@ class ProjectController extends Controller
 
         if($old_image){
             if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-        }
-
-        if($listing->theme_2_thumb_image !='' and file_exists(public_path().'/'.$listing->theme_2_thumb_image)){
-            $old_image = $listing->theme_2_thumb_image;
-
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
-        }
-
-        if($listing->theme_3_thumb_image !='' and file_exists(public_path().'/'.$listing->theme_3_thumb_image)){
-            $old_image = $listing->theme_3_thumb_image;
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
         }
 
         ProjectTranslation::where('project_id',$id)->delete();

@@ -12,7 +12,7 @@ use Modules\Language\App\Models\Language;
 use Modules\Ecommerce\Entities\ProductReview;
 use Modules\Listing\Entities\ListingTranslation;
 use Modules\Listing\Http\Requests\ListingRequest;
-use Modules\GlobalSetting\App\Models\GlobalSetting;
+
 
 class ListingController extends Controller
 {
@@ -28,24 +28,13 @@ class ListingController extends Controller
     public function create(Request $request)
     {
         $categories = Category::with('translate')->where('status', 'enable')->get();
-        $logoicon_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
-        return view('listing::create', compact('categories', 'logoicon_setting'));
+        return view('listing::create', compact('categories'));
     }
 
     public function store(ListingRequest $request)
     {
         $listing = new Listing();
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
-
-        if($request->home_two_image){
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->home_two_image->getClientOriginalExtension();
-            $image_name ='uploads/custom-images/'.$image_name;
-            $request->home_two_image->move(public_path('uploads/custom-images'), $image_name);
-
-            $listing->theme_2_thumbnail_image = $image_name;
-
-        }
 
         if($request->thumb_image){
 
@@ -55,29 +44,6 @@ class ListingController extends Controller
 
             $listing->thumb_image = $image_name ?? null;
 
-        }
-
-        if($request->inner_page_logo){
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->inner_page_logo->getClientOriginalExtension();
-            $image_name ='uploads/custom-images/'.$image_name;
-            $request->inner_page_logo->move(public_path('uploads/custom-images'), $image_name);
-
-            $listing->theme_5_thumbnail_image = $image_name;
-        }
-        if($request->it_business_icon){
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->it_business_icon->getClientOriginalExtension();
-            $image_name ='uploads/custom-images/'.$image_name;
-            $request->it_business_icon->move(public_path('uploads/custom-images'), $image_name);
-
-            $listing->it_business_icon = $image_name;
-        }
-
-        if($request->saas_icon){
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->saas_icon->getClientOriginalExtension();
-            $image_name ='uploads/custom-images/'.$image_name;
-            $request->saas_icon->move(public_path('uploads/custom-images'), $image_name);
-
-            $listing->saas_icon = $image_name;
         }
 
         if($request->background_image){
@@ -124,62 +90,15 @@ class ListingController extends Controller
 
         $categories = Category::with('translate')->where('status', 'enable')->get();
 
-        $logoicon_setting = GlobalSetting::where('key', 'selected_theme')->first();
-
-
-        return view('listing::edit', compact('categories', 'listing', 'listing_translate','logoicon_setting'));
+        return view('listing::edit', compact('categories', 'listing', 'listing_translate'));
     }
 
     public function update(ListingRequest $request, $id)
     {
 
         $listing = Listing::findOrFail($id);
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
         if($request->lang_code == admin_lang()) {
-
-            if($request->home_two_image){
-                $old_image = $listing->theme_2_thumbnail_image;
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->home_two_image->getClientOriginalExtension();
-                $image_name ='uploads/custom-images/'.$image_name;
-                $request->home_two_image->move(public_path('uploads/custom-images'), $image_name);
-
-                $listing->theme_2_thumbnail_image = $image_name;
-
-                $listing->save();
-
-                if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                }
-            }
-            if($request->it_business_icon){
-                $old_image = $listing->it_business_icon;
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->it_business_icon->getClientOriginalExtension();
-                $image_name ='uploads/custom-images/'.$image_name;
-                $request->it_business_icon->move(public_path('uploads/custom-images'), $image_name);
-
-                $listing->it_business_icon = $image_name;
-
-                $listing->save();
-
-                if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                }
-            }
-            if($request->saas_icon){
-                $old_image = $listing->saas_icon;
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->saas_icon->getClientOriginalExtension();
-                $image_name ='uploads/custom-images/'.$image_name;
-                $request->saas_icon->move(public_path('uploads/custom-images'), $image_name);
-
-                $listing->saas_icon = $image_name;
-
-                $listing->save();
-
-                if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                }
-            }
 
             if($request->thumb_image){
 
@@ -189,40 +108,6 @@ class ListingController extends Controller
 
                 $listing->thumb_image = $image_name;
 
-            }
-
-            if($request->inner_page_logo){
-                $old_image = $listing->inner_page_logo;
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->inner_page_logo->getClientOriginalExtension();
-                $image_name ='uploads/custom-images/'.$image_name;
-                $request->inner_page_logo->move(public_path('uploads/custom-images'), $image_name);
-
-                $listing->theme_5_thumbnail_image = $image_name;
-
-                $listing->save();
-
-                if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                }
-            }
-
-            if($theme_setting->value == 'all_theme'){
-
-                if($request->thumb_image){
-                    $old_image = $listing->thumb_image;
-                    $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->thumb_image->getClientOriginalExtension();
-                    $image_name ='uploads/custom-images/'.$image_name;
-                    $request->thumb_image->move(public_path('uploads/custom-images'), $image_name);
-
-                    $listing->thumb_image = $image_name;
-
-                    $listing->save();
-
-                    if($old_image) {
-                        if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                    }
-
-                }
             }
 
 
@@ -269,20 +154,9 @@ class ListingController extends Controller
 
         $listing = Listing::findOrFail($id);
         $old_image = $listing->thumb_image;
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
-
-
 
         if($old_image){
             if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-        }
-
-        if($listing->theme_2_thumbnail_image !='' and file_exists(public_path().'/'.$listing->theme_2_thumbnail_image)){
-            $old_image = $listing->theme_2_thumbnail_image;
-
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
         }
 
         ListingTranslation::where('listing_id',$id)->delete();

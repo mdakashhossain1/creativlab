@@ -152,7 +152,7 @@
                         <div data-aos="fade-left" data-aos-duration="1000"
                             class="bg-white px-5 pt-5 pb-4 md:px-10 md:pt-10 md:pb-8 col-span-4 rounded-3xl hover:shadow-business-red-md transition-all duration-300 cursor-pointer border border-buisness-red/10 hover:border-white">
                             <a href="{{ route('service', $service?->slug) }}">
-                                <img src="{{ asset($service?->theme_5_thumbnail_image) }}" alt="">
+                                <img src="{{ asset($service?->thumb_image) }}" alt="">
 
                                 <h1 class="text-main-black font-semibold text-22 mt-6 mb-2">
                                     {{ $service?->title }}

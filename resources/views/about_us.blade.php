@@ -379,10 +379,10 @@
         <section class="testimonial-section py-[70px] sm:py-[130px]">
             <div class="theme-container mx-auto w-full">
                 <h1 class="px-5 py-2 bg-white/5 border border-white/10 text-white font-medium rounded-[30px] w-fit mx-auto">
-                    {{ getTranslatedValue($testimonial_content, 'section_title') }}
+                    {{ getTranslatedValue($about_us_testimonials, 'section_title') }}
                 </h1>
                 <h2 class="max-w-[747px] font-semibold text-24 sm:text-48 text-white text-center mx-auto mt-5">
-                    {{ getTranslatedValue($testimonial_content, 'title') }}
+                    {{ getTranslatedValue($about_us_testimonials, 'title') }}
                 </h2>
                 <div class="w-full">
                     <div class="swiper h1-story-slider-v2  mt-10 sm:mt-[70px]">

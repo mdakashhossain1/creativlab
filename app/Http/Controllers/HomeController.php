@@ -71,17 +71,13 @@ class HomeController extends Controller
         $about_us_global_clients = getContent('about_us_global_clients.content', true);
         $about_us_testimonials = getContent('about_us_testimonials.content', true);
         $cta_content = getContent('template_1_cta.content', true);
-        $testimonial_content_5 = getContent('theme_5_testimonial_section.content', true);
         $partners = Partner::where('status', 'enable')->get();
         $testimonials = Testimonial::orderBy('id', 'desc')->get();
         $teams = Team::latest()->take(4)->get();
         $teams_count = Team::count();
         $pageTitle = trans('About Us');
-        $testimonial_content = getContent('theme_seven_testimonial.content', true);
 
         $seo_setting = SeoSetting::where('id', 3)->first();
-
-
 
         return view('about_us', [
             'seo_setting' => $seo_setting,
@@ -96,10 +92,6 @@ class HomeController extends Controller
             'cta_content' => $cta_content,
             'teams_count' => $teams_count,
             'about_company_section' => $about_company_section,
-            'testimonial_content_5' => $testimonial_content_5,
-            'testimonial_content' => $testimonial_content
-
-
         ]);
     }
 
