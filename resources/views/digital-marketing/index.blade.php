@@ -487,68 +487,13 @@
         <div id="smooth-content">
             <div>
                 <main>
-                    <!--Todo: hero -->
-                    @foreach ($section_visibility?->where('serial_number', '1') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: clients -->
-                    @foreach ($section_visibility?->where('serial_number', '2') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: about -->
-                    @foreach ($section_visibility?->where('serial_number', '3') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: fun fact -->
-                    @foreach ($section_visibility?->where('serial_number', '4') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: service -->
-                    @foreach ($section_visibility?->where('serial_number', '5') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: working Process -->
-                    @foreach ($section_visibility?->where('serial_number', '6') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: testimonial -->
-                    @foreach ($section_visibility?->where('serial_number', '7') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: blogs -->
-                    @foreach ($section_visibility?->where('serial_number', '8') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
-
-                    <!--Todo: consultation -->
-                    @foreach ($section_visibility?->where('serial_number', '9') as $visibility)
-                        @if ($visibility->component_name != null)
-                            @include('digital-marketing.' . $visibility->component_name)
-                        @endif
-                    @endforeach
+                    @include('digital-marketing._hero_section')
+                    @include('digital-marketing._why_choose_section')
+                    @include('digital-marketing._solutions_section')
+                    @include('digital-marketing._process_section')
+                    @include('digital-marketing._stats_section')
+                    @include('digital-marketing._clients_section')
+                    @include('digital-marketing._cta_banner_section')
                 </main>
                 <footer>
                     <div class="footer-one-wrapper w-full md:pt-[130px] pt-[70px]">

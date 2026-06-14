@@ -38,6 +38,11 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/digital-marketing', [HomeController::class, 'digitalMarketing'])->name('digital-marketing');
+    Route::get('/creative-content', [HomeController::class, 'creativeContent'])->name('creative-content');
+    Route::get('/web-development', [HomeController::class, 'webDevelopment'])->name('web-development');
+    Route::get('/seo-optimization', [HomeController::class, 'seoOptimization'])->name('seo-optimization');
+    Route::get('/ad-films', [HomeController::class, 'adFilms'])->name('ad-films');
+    Route::get('/whatsapp-api', [HomeController::class, 'whatsappApi'])->name('whatsapp-api');
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 
     Route::get('/download-file/{file}', [HomeController::class, 'download_file'])->name('download-file');

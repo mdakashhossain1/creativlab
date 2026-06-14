@@ -42,24 +42,43 @@ class HomeController extends Controller
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
         $hero_content = getContent('template_1_hero.content', true);
-        $about_content = getContent('template_1_about_company.content', true);
-        $fan_fact_content = getContent('template_1_fun_fact.content', true);
-        $working_process = getContent('template_1_working_process.content', true);
-        $testimonial_content = getContent('template_1_testimonial.content', true);
-        $cta_content = getContent('template_1_cta.content', true);
-        $section_visibility = ManageSection::where('page_name', 'home_one')->where('status', 1)->get();
 
-        $partners = Partner::where('status', 'enable')->get();
-        $services = Listing::where('status', 'enable')->latest()->take(6)->get();
-        $testimonials = Testimonial::latest()->take(6)->get();
-        $blogs = Blog::where('status', 1)->with('category')->latest()->take(3)->get();
+        return view('digital-marketing.index', compact('seo_setting', 'hero_content'));
+    }
 
-        return view('digital-marketing.index', compact(
-            'seo_setting', 'hero_content', 'about_content', 'partners',
-            'fan_fact_content', 'services', 'working_process',
-            'testimonial_content', 'testimonials', 'blogs',
-            'cta_content', 'section_visibility'
-        ));
+    public function creativeContent()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+
+        return view('creative-content.index', compact('seo_setting'));
+    }
+
+    public function webDevelopment()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+
+        return view('web-development.index', compact('seo_setting'));
+    }
+
+    public function seoOptimization()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+
+        return view('seo-optimization.index', compact('seo_setting'));
+    }
+
+    public function adFilms()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+
+        return view('ad-films.index', compact('seo_setting'));
+    }
+
+    public function whatsappApi()
+    {
+        $seo_setting = SeoSetting::where('id', 1)->first();
+
+        return view('whatsapp-api.index', compact('seo_setting'));
     }
 
 
