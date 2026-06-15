@@ -1,6 +1,7 @@
 <section class="w-full bg-white md:py-[100px] py-16">
     <div class="theme-container mx-auto">
         <div class="flex flex-col items-center mb-14 md:mb-20" data-aos="fade-up">
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR PROCESS</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
                 How We Create <span class="text-purple">Amazing Content</span>
             </h2>

@@ -1,26 +1,18 @@
 <style>
-    .wd-hero-bg { background: linear-gradient(135deg, #F4F1FF 0%, #EDE8FF 40%, #F8F6FF 100%); }
     @keyframes wdFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
     @keyframes wdFloatR { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}  }
     .wd-float      { animation: wdFloat  4.5s ease-in-out infinite; }
     .wd-float-rev  { animation: wdFloatR 5.5s ease-in-out infinite reverse; }
     .wd-float-slow { animation: wdFloat  7s   ease-in-out infinite; }
-    .wd-modern-highlight {
-        display:inline-block; position:relative;
-        background: linear-gradient(135deg, #794AFF 0%, #BA4AFF 100%);
-        -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    }
-    .wd-modern-highlight::after { content:''; position:absolute; left:0; right:0; bottom:-4px; height:3px; border-radius:2px; background:linear-gradient(90deg,#794AFF,#BA4AFF); }
     .wd-pill-btn { box-shadow:0 8px 24px rgba(121,74,255,.15); }
     .wd-device-frame { background:#1a1432; border-radius:16px; padding:8px; box-shadow:0 40px 80px -10px rgba(121,74,255,.35), 0 0 0 1px rgba(121,74,255,.2); }
     .wd-device-inner { background:#0e0b20; border-radius:10px; overflow:hidden; position:relative; }
 </style>
 
-<section class="wd-hero-bg w-full xl:pt-[200px] pt-[110px] xl:pb-0 pb-16 overflow-hidden relative">
-    <div class="absolute top-20 left-0 w-72 h-72 rounded-full bg-purple/5 blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 right-10 w-96 h-96 rounded-full bg-[#BA4AFF]/6 blur-3xl pointer-events-none"></div>
+<section class="w-full xl:pt-[200px] pt-[110px] xl:pb-0 pb-16 overflow-hidden relative">
+    <div class="win-grid w-full h-full absolute left-0 top-0" id="win-grid"></div>
 
-    <div class="theme-container mx-auto">
+    <div class="theme-container mx-auto relative z-10">
         <div class="grid xl:grid-cols-2 grid-cols-1 items-center xl:gap-12 gap-12">
 
             {{-- LEFT: text --}}
@@ -33,28 +25,32 @@
                     <span class="text-purple text-sm font-semibold tracking-wide">Web Development Agency</span>
                 </div>
 
-                <h1 class="xl:text-[64px] md:text-[52px] text-[36px] font-bold text-main-black leading-[1.07] tracking-tight mb-6">
-                    We Build <span class="wd-modern-highlight">Modern</span> Websites That Drive Results
+                <h1 class="text-4xl md:text-65 text-main-black mb-[35px] pointer-events-auto custom-heading md:text-left" style="font-weight: 400 !important;">
+                    We Build <span>Modern</span> Websites That Drive Results
                 </h1>
 
-                <p class="text-paragraph font-medium text-base leading-7 mb-9 xl:max-w-[440px]">
-                    We design and develop high-performance websites that are fast, responsive, visually engaging, and built to grow your business online.
-                </p>
+                <div class="px-6 py-[14px] bg-white border-l-2 border-blue-sass mb-[35px] xl:w-full md:w-[500px]">
+                    <p class="text-ptwo text-paragraph">
+                        We design and develop high-performance websites that are fast, responsive, visually engaging, and built to grow your business online.
+                    </p>
+                </div>
 
-                <div class="flex flex-wrap items-center gap-5">
-                    <a href="{{ route('contact-us') }}"
-                       class="inline-flex items-center gap-3 bg-purple text-white font-bold text-sm uppercase tracking-widest px-9 py-4 rounded-full hover:bg-main-black transition-all duration-300 shadow-purple">
-                        Start Your Project
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="flex space-x-[30px] items-center pointer-events-auto">
+                    <a href="{{ route('contact-us') }}">
+                        <div class="home-two-btn-bg py-3 group bg-purple border-purple">
+                            <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
+                                Start Your Project
+                            </span>
+                            <span>{{ get_svg('home_cta_white') }}</span>
+                        </div>
                     </a>
-                    <a href="{{ route('services') }}"
-                       class="flex items-center gap-2 group text-main-black font-semibold hover:text-purple transition-colors duration-300">
-                        <span class="border-b-2 border-main-black group-hover:border-purple pb-0.5 transition-colors duration-300">View Portfolio</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <a href="{{ route('services') }}">
+                        <div class="flex items-center gap-2 group">
+                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['View_Portfolio'] before:absolute before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">
+                                View Portfolio
+                            </p>
+                            <span>{{ get_svg('arrow2') }}</span>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -186,18 +182,5 @@
 
         </div>
 
-        {{-- brand logos strip --}}
-        <div class="w-full border-t border-purple/10 mt-12 xl:mt-4 pt-8" data-aos="fade-up">
-            <div class="flex flex-wrap items-center justify-between gap-8 opacity-70">
-                @foreach(['Redshift','Air-Shift','AlphaWave','Active Corp','4S Degrees','9Portals'] as $brand)
-                <div class="flex items-center gap-2">
-                    <div class="size-7 rounded-md bg-purple/15 flex items-center justify-center">
-                        <span class="size-3 rounded-sm bg-purple inline-block"></span>
-                    </div>
-                    <span class="text-main-black font-bold text-base">{{ $brand }}</span>
-                </div>
-                @endforeach
-            </div>
-        </div>
     </div>
 </section>

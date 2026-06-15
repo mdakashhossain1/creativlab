@@ -1,5 +1,7 @@
-<section class="w-full bg-white md:py-[100px] py-16">
-    <div class="theme-container mx-auto">
+<section class="w-full bg-white md:py-[100px] py-16 relative overflow-hidden">
+    <div class="absolute size-80 rounded-full bg-purple/10 blur-3xl pointer-events-none"></div>
+
+    <div class="theme-container mx-auto relative">
         <div class="flex flex-col items-center mb-12 md:mb-16" data-aos="fade-up">
             <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">WHAT WE CREATE</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
@@ -22,7 +24,7 @@
                         'color' => '#FF7E40',
                         'icon'  => '<path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
                         'title' => 'Reels Editing',
-                        'desc'  => 'Engaging reels that trends and drive maximum reach.',
+                        'desc'  => 'Engaging reels that trend and drive maximum reach.',
                     ],
                     [
                         'bg'    => 'bg-[#E8F4FF]',
@@ -70,16 +72,16 @@
             @endphp
 
             @foreach($solutions as $s)
-            <div class="group flex items-start gap-4 bg-[#FAFAFA] hover:bg-white border border-transparent hover:border-purple/10 rounded-2xl p-6 hover:shadow-common transition-all duration-300 cursor-pointer"
+            <div class="group flex items-start gap-4 bg-white hover:bg-purple border border-purple/8 hover:border-purple rounded-2xl p-6 hover:shadow-purple transition-all duration-300 cursor-pointer"
                  data-aos="fade-up" data-aos-delay="{{ ($loop->index % 4) * 80 }}">
-                <div class="size-12 rounded-xl {{ $s['bg'] }} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:{{ $s['color'] }}">
+                <div class="size-12 rounded-xl {{ $s['bg'] }} group-hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all duration-300">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:{{ $s['color'] }}" class="group-hover:!text-white transition-colors duration-300">
                         {!! $s['icon'] !!}
                     </svg>
                 </div>
                 <div>
-                    <h3 class="font-bold text-main-black text-base mb-1.5 group-hover:text-purple transition-colors duration-300">{{ $s['title'] }}</h3>
-                    <p class="text-paragraph text-sm leading-5">{{ $s['desc'] }}</p>
+                    <h3 class="font-bold text-main-black group-hover:text-white text-base mb-1.5 transition-colors duration-300">{{ $s['title'] }}</h3>
+                    <p class="text-paragraph group-hover:text-white/80 text-sm leading-5 transition-colors duration-300">{{ $s['desc'] }}</p>
                 </div>
             </div>
             @endforeach

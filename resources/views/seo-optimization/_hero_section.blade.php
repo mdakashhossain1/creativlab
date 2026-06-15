@@ -16,6 +16,7 @@
 </style>
 
 <section class="seo-hero-bg w-full xl:pt-[200px] pt-[110px] xl:pb-0 pb-16 overflow-hidden relative">
+    <div class="win-grid w-full h-full absolute left-0 top-0" id="win-grid"></div>
     <div class="absolute top-20 left-0 w-72 h-72 rounded-full bg-purple/5 blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-0 right-10 w-96 h-96 rounded-full bg-[#BA4AFF]/6 blur-3xl pointer-events-none"></div>
 
@@ -24,36 +25,37 @@
 
             {{-- LEFT: text --}}
             <div class="xl:pb-24 relative z-10" data-aos="fade-right">
-                <div class="inline-flex items-center gap-2.5 bg-white border border-purple/15 rounded-full px-5 py-2.5 mb-6 shadow-sm">
-                    <span class="flex size-2 relative">
-                        <span class="animate-ping absolute inline-flex size-2 rounded-full bg-purple opacity-75"></span>
-                        <span class="relative inline-flex size-2 rounded-full bg-purple"></span>
-                    </span>
-                    <span class="text-purple text-sm font-semibold tracking-wide">SEO Optimization Agency</span>
+                <div class="inline-flex md:px-6 px-3 py-2.5 md:py-[14px] bg-white space-x-2.5 items-center rounded-full shadow-style-one mb-5">
+                    <span>{{ get_svg('star') }}</span>
+                    <span class="md:text-20 text-sm text-purple font-semibold pointer-events-auto">SEO Optimization Agency</span>
                 </div>
 
-                <h1 class="xl:text-[64px] md:text-[52px] text-[36px] font-bold text-main-black leading-[1.07] tracking-tight mb-6">
-                    We Drive <span class="seo-highlight">SEO</span> That Ranks &amp; Generates Leads
+                <h1 class="text-4xl md:text-65 text-main-black mb-[35px] pointer-events-auto custom-heading md:text-left" style="font-weight: 400 !important;">
+                    We Drive <span>SEO</span> That Ranks &amp; Generates Leads
                 </h1>
 
-                <p class="text-paragraph font-medium text-base leading-7 mb-9 xl:max-w-[440px]">
-                    We optimize websites with proven SEO strategies that improve rankings, drive organic traffic, and grow your business.
-                </p>
+                <div class="px-6 py-[14px] bg-white border-l-2 border-blue-sass mb-[35px] xl:w-full md:w-[500px]">
+                    <p class="text-ptwo text-paragraph">
+                        We optimize websites with proven SEO strategies that improve rankings, drive organic traffic, and grow your business.
+                    </p>
+                </div>
 
-                <div class="flex flex-wrap items-center gap-5">
-                    <a href="{{ route('contact-us') }}"
-                       class="inline-flex items-center gap-3 bg-purple text-white font-bold text-sm uppercase tracking-widest px-9 py-4 rounded-full hover:bg-main-black transition-all duration-300 shadow-purple">
-                        Start Your Journey
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="flex space-x-[30px] items-center pointer-events-auto">
+                    <a href="{{ route('contact-us') }}">
+                        <div class="home-two-btn-bg py-3 group bg-purple border-purple">
+                            <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
+                                Start Your Journey
+                            </span>
+                            <span>{{ get_svg('home_cta_white') }}</span>
+                        </div>
                     </a>
-                    <a href="{{ route('services') }}"
-                       class="flex items-center gap-2 group text-main-black font-semibold hover:text-purple transition-colors duration-300">
-                        <span class="border-b-2 border-main-black group-hover:border-purple pb-0.5 transition-colors duration-300">View Case Studies</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <a href="{{ route('services') }}">
+                        <div class="flex items-center gap-2 group">
+                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['View_Case_Studies'] before:absolute before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">
+                                View Case Studies
+                            </p>
+                            <span>{{ get_svg('arrow2') }}</span>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -184,18 +186,5 @@
 
         </div>
 
-        {{-- brand logos strip --}}
-        <div class="w-full border-t border-purple/10 mt-12 xl:mt-4 pt-8" data-aos="fade-up">
-            <div class="flex flex-wrap items-center justify-between gap-8 opacity-70">
-                @foreach(['Redshift','Air-Shift','AlphaWave','Active Corp','4S Degrees','9Portals'] as $brand)
-                <div class="flex items-center gap-2">
-                    <div class="size-7 rounded-md bg-purple/15 flex items-center justify-center">
-                        <span class="size-3 rounded-sm bg-purple inline-block"></span>
-                    </div>
-                    <span class="text-main-black font-bold text-base">{{ $brand }}</span>
-                </div>
-                @endforeach
-            </div>
-        </div>
     </div>
 </section>

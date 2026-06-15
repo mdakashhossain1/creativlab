@@ -1,14 +1,4 @@
 <style>
-    .wd-projects-swiper .swiper-button-next,
-    .wd-projects-swiper .swiper-button-prev {
-        width: 44px; height: 44px; background:#fff; border-radius:50%;
-        box-shadow:0 4px 16px rgba(121,74,255,.15); border:1px solid rgba(121,74,255,.12);
-        color:#794AFF; transition:background .25s, color .25s;
-    }
-    .wd-projects-swiper .swiper-button-next::after,
-    .wd-projects-swiper .swiper-button-prev::after { font-size:13px; font-weight:700; }
-    .wd-projects-swiper .swiper-button-next:hover,
-    .wd-projects-swiper .swiper-button-prev:hover { background:#794AFF; color:#fff; }
     .wd-proj-card { border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 4px 20px rgba(121,74,255,.08); transition:transform .35s, box-shadow .35s; }
     .wd-proj-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px rgba(121,74,255,.18); }
     .wd-proj-card .wd-img-wrap { position:relative; overflow:hidden; aspect-ratio:4/3; }
@@ -17,6 +7,29 @@
     .wd-projects-swiper { padding:10px 4px 50px !important; }
     .wd-projects-swiper .swiper-pagination-bullet { background:#794AFF; opacity:.3; width:8px; height:8px; }
     .wd-projects-swiper .swiper-pagination-bullet-active { opacity:1; width:24px; border-radius:4px; }
+
+    .wd-proj-nav {
+        position: absolute;
+        top: 0;
+        bottom: 50px; /* exclude pagination area */
+        display: flex;
+        align-items: center;
+        z-index: 10;
+    }
+    .wd-proj-nav-btn {
+        width: 44px; height: 44px;
+        background: #fff;
+        border-radius: 50%;
+        border: 1px solid rgba(121,74,255,.15);
+        box-shadow: 0 4px 16px rgba(121,74,255,.15);
+        color: #794AFF;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: background .25s, color .25s;
+        flex-shrink: 0;
+    }
+    .wd-proj-nav-btn:hover { background: #794AFF; color: #fff; }
+    .wd-proj-nav-btn.swiper-button-disabled { opacity: .35; pointer-events: none; }
 </style>
 
 <section class="w-full bg-white md:py-[100px] py-16">
@@ -29,11 +42,29 @@
         </div>
 
         <div class="relative">
+            {{-- prev button outside swiper, centered on slides (not pagination) --}}
+            <div class="wd-proj-nav" style="left: -22px;">
+                <button class="wd-proj-nav-btn wd-proj-prev" aria-label="Previous">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5M5 12L11 6M5 12L11 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            {{-- next button outside swiper, centered on slides (not pagination) --}}
+            <div class="wd-proj-nav" style="right: -22px;">
+                <button class="wd-proj-nav-btn wd-proj-next" aria-label="Next">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
             <div class="wd-projects-swiper swiper w-full">
                 <div class="swiper-wrapper">
                     @php
                         $projects = [
-                            ['img' => 'frontend/assets/images/projects/1.webp', 'title' => 'FinEdge — Finance Website',   'tags' => ['Finance','WordPress']],
+                            ['img' => 'frontend/assets/images/projects/1.webp', 'title' => 'FinEdge — Finance Website',    'tags' => ['Finance','WordPress']],
                             ['img' => 'frontend/assets/images/projects/2.webp', 'title' => 'Trendrix — E-commerce Store',  'tags' => ['E-commerce','Shopify']],
                             ['img' => 'frontend/assets/images/projects/3.webp', 'title' => 'Saasify — SaaS Landing Page',  'tags' => ['SaaS','Laravel']],
                             ['img' => 'frontend/assets/images/projects/4.webp', 'title' => 'Archiva — Architecture Website','tags' => ['Portfolio','Webflow']],
@@ -64,8 +95,6 @@
                 </div>
 
                 <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
             </div>
         </div>
     </div>
@@ -80,8 +109,8 @@
                 loop: true,
                 pagination: { el: '.wd-projects-swiper .swiper-pagination', clickable: true },
                 navigation: {
-                    nextEl: '.wd-projects-swiper .swiper-button-next',
-                    prevEl: '.wd-projects-swiper .swiper-button-prev',
+                    nextEl: '.wd-proj-next',
+                    prevEl: '.wd-proj-prev',
                 },
                 breakpoints: {
                     480:  { slidesPerView: 1.8, spaceBetween: 18 },

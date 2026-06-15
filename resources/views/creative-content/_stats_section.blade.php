@@ -1,45 +1,89 @@
-<section class="w-full bg-purple md:py-20 py-14 relative overflow-hidden">
-    {{-- decorative circles --}}
-    <div class="absolute -top-20 -left-20 size-64 rounded-full bg-white/5 pointer-events-none"></div>
-    <div class="absolute -bottom-16 -right-16 size-80 rounded-full bg-white/5 pointer-events-none"></div>
-    <div class="absolute top-1/2 left-1/3 size-48 rounded-full bg-white/5 pointer-events-none"></div>
+<section class="w-full bg-[#F4F1FF] md:py-[100px] py-16 overflow-hidden">
+    <div class="theme-container mx-auto">
+        <div class="flex flex-col items-center mb-12 md:mb-16" data-aos="fade-up">
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">CLIENT LOVE</span>
+            <h2 class="md:text-48 text-34 font-bold text-main-black text-center mb-4">
+                What Our <span class="text-purple">Brands</span> Say
+            </h2>
+            <p class="text-paragraph text-center xl:max-w-[480px] leading-7">
+                Real results from real businesses — here's how CreativLab helped brands grow their presence online.
+            </p>
+        </div>
 
-    <div class="theme-container mx-auto relative z-10">
-        <div class="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-8 md:gap-12">
+        <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
             @php
-                $stats = [
+                $testimonials = [
                     [
-                        'icon' => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-                        'value' => '50+',
-                        'label' => 'Brands Served',
+                        'quote'  => 'CreativLab transformed our Instagram completely. Our engagement went from 2% to over 12% in just two months. The reels are absolutely fire.',
+                        'name'   => 'Priya Sharma',
+                        'role'   => 'Founder, Bloom Organics',
+                        'color'  => '#794AFF',
+                        'rating' => 5,
                     ],
                     [
-                        'icon' => '<path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-                        'value' => '500+',
-                        'label' => 'Reels Created',
+                        'quote'  => 'Every graphic they deliver is better than the last. Our brand now looks premium and our customers notice it. Best investment we made.',
+                        'name'   => 'Rahul Mehta',
+                        'role'   => 'CEO, FitFuel Nutrition',
+                        'color'  => '#BA4AFF',
+                        'rating' => 5,
                     ],
                     [
-                        'icon' => '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>',
-                        'value' => '1M+',
-                        'label' => 'Reach Generated',
+                        'quote'  => 'The motion graphics they created for our product launch got 2.4 million views organically. Absolutely incredible work and team.',
+                        'name'   => 'Ananya Nair',
+                        'role'   => 'Marketing Head, Zestify',
+                        'color'  => '#FF7E40',
+                        'rating' => 5,
                     ],
                     [
-                        'icon' => '<path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 4L12 14.01l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-                        'value' => '100%',
-                        'label' => 'Client Satisfaction',
+                        'quote'  => 'Fast, creative, and always on brand. They understand our audience better than we do sometimes. Couldn\'t be happier with the results.',
+                        'name'   => 'Kiran Patel',
+                        'role'   => 'Director, UrbanNest Interiors',
+                        'color'  => '#22C55E',
+                        'rating' => 5,
+                    ],
+                    [
+                        'quote'  => 'Our YouTube channel grew from 1k to 48k subscribers after we started using CreativLab\'s thumbnails and video editing. Highly recommend.',
+                        'name'   => 'Sneha Reddy',
+                        'role'   => 'Content Creator, TravelWithSneha',
+                        'color'  => '#3B82F6',
+                        'rating' => 5,
+                    ],
+                    [
+                        'quote'  => 'Professional, responsive, and genuinely talented. They delivered a full month of social media content in under a week. Outstanding.',
+                        'name'   => 'Vikram Singh',
+                        'role'   => 'Owner, SipCraft Brewery',
+                        'color'  => '#F59E0B',
+                        'rating' => 5,
                     ],
                 ];
             @endphp
 
-            @foreach($stats as $stat)
-            <div class="flex flex-col items-center text-center group" data-aos="fade-up">
-                <div class="size-16 rounded-2xl bg-white/15 flex items-center justify-center mb-4 group-hover:bg-white/25 transition-all duration-300">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
-                        {!! $stat['icon'] !!}
+            @foreach($testimonials as $t)
+            <div class="bg-white rounded-2xl p-7 border border-purple/8 hover:shadow-common transition-all duration-300"
+                 data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 80 }}">
+                {{-- star rating --}}
+                <div class="flex gap-1 mb-5">
+                    @for($i = 0; $i < $t['rating']; $i++)
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
+                    @endfor
                 </div>
-                <h3 class="xl:text-[48px] md:text-[42px] text-[36px] font-bold text-white leading-none mb-2">{{ $stat['value'] }}</h3>
-                <p class="text-white/80 text-base font-medium">{{ $stat['label'] }}</p>
+
+                {{-- quote --}}
+                <p class="text-paragraph text-sm leading-7 mb-6">"{{ $t['quote'] }}"</p>
+
+                {{-- author --}}
+                <div class="flex items-center gap-3">
+                    <div class="size-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                         style="background: {{ $t['color'] }}">
+                        {{ strtoupper(substr($t['name'], 0, 1)) }}
+                    </div>
+                    <div>
+                        <p class="font-bold text-main-black text-sm leading-tight">{{ $t['name'] }}</p>
+                        <p class="text-paragraph text-xs mt-0.5">{{ $t['role'] }}</p>
+                    </div>
+                </div>
             </div>
             @endforeach
         </div>

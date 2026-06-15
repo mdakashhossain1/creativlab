@@ -282,6 +282,7 @@
             <div>
                 <main>
                     @include('seo-optimization._hero_section')
+                    @include('seo-optimization._partner_section')
                     @include('seo-optimization._features_section')
                     @include('seo-optimization._solutions_section')
                     @include('seo-optimization._results_section')

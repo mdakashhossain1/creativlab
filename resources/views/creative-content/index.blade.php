@@ -282,14 +282,13 @@
             <div>
                 <main>
                     @include('creative-content._hero_section')
+                    @include('creative-content._partner_section')
                     @include('creative-content._features_section')
                     @include('creative-content._content_solutions_section')
                     @include('creative-content._recent_creations_section')
-                    @include('creative-content._how_we_create_section')
-                    @include('creative-content._creative_stats_section')
-                    @include('creative-content._premium_cta_section')
-                    @include('creative-content._services_section')
                     @include('creative-content._process_section')
+                    @include('creative-content._creative_stats_section')
+                    @include('creative-content._services_section')
                     @include('creative-content._stats_section')
                     @include('creative-content._portfolio_section')
                     @include('creative-content._cta_banner_section')

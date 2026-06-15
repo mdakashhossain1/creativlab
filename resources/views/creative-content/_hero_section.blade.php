@@ -1,40 +1,10 @@
 <style>
-    .cc-hero-bg { background: linear-gradient(135deg, #F4F1FF 0%, #EDE8FF 40%, #F8F6FF 100%); }
-    .cc-device-glow { background: radial-gradient(circle at 60% 50%, rgba(121,74,255,0.18) 0%, transparent 70%); }
-    @keyframes ccFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes ccFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
     @keyframes ccFloatR { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}  }
     @keyframes ccPulseRing { 0%{transform:scale(1);opacity:.6} 100%{transform:scale(1.6);opacity:0} }
     .cc-float      { animation: ccFloat  4.5s ease-in-out infinite; }
     .cc-float-rev  { animation: ccFloatR 5.5s ease-in-out infinite reverse; }
     .cc-float-slow { animation: ccFloat  7s   ease-in-out infinite; }
-    .stands-highlight {
-        display: inline-block;
-        background: linear-gradient(135deg, #794AFF 0%, #BA4AFF 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        position: relative;
-    }
-    .stands-highlight::after {
-        content: '';
-        position: absolute;
-        left: 0; right: 0; bottom: -4px;
-        height: 3px;
-        border-radius: 2px;
-        background: linear-gradient(90deg, #794AFF, #BA4AFF);
-    }
-    .cc-device-frame {
-        background: #1a1432;
-        border-radius: 20px;
-        padding: 10px;
-        box-shadow: 0 40px 80px -10px rgba(121,74,255,0.35), 0 0 0 1px rgba(121,74,255,0.2);
-    }
-    .cc-device-inner {
-        background: #0e0b20;
-        border-radius: 12px;
-        overflow: hidden;
-        position: relative;
-    }
     .cc-stat-badge {
         background: #fff;
         border-radius: 14px;
@@ -44,16 +14,14 @@
     }
 </style>
 
-<section class="cc-hero-bg w-full xl:pt-[200px] pt-[110px] xl:pb-0 pb-16 overflow-hidden relative">
-    {{-- decorative blobs --}}
-    <div class="absolute top-20 left-0 w-72 h-72 rounded-full bg-purple/5 blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 right-10 w-96 h-96 rounded-full bg-[#BA4AFF]/6 blur-3xl pointer-events-none"></div>
+<section class="w-full xl:pt-[200px] pt-[110px] xl:pb-0 pb-16 overflow-hidden relative">
+    <div class="win-grid w-full h-full absolute left-0 top-0" id="win-grid"></div>
 
-    <div class="theme-container mx-auto">
+    <div class="theme-container mx-auto relative z-10">
         <div class="grid xl:grid-cols-2 grid-cols-1 items-center xl:gap-16 gap-12">
 
             {{-- LEFT: text --}}
-            <div class="xl:pb-24" data-aos="fade-right">
+            <div class="xl:pb-24 relative z-10" data-aos="fade-right">
                 {{-- badge --}}
                 <div class="inline-flex items-center gap-2.5 bg-white border border-purple/15 rounded-full px-5 py-2.5 mb-6 shadow-sm">
                     <span class="flex size-2">
@@ -63,29 +31,32 @@
                     <span class="text-purple text-sm font-semibold tracking-wide">Creative Content Studio</span>
                 </div>
 
-                <h1 class="xl:text-[64px] md:text-[52px] text-[36px] font-bold text-main-black leading-[1.07] tracking-tight mb-6">
-                    We Create Creative Content That
-                    <span class="stands-highlight">Stands</span> Out
+                <h1 class="text-4xl md:text-65 text-main-black mb-[35px] pointer-events-auto custom-heading md:text-left" style="font-weight: 400 !important;">
+                    We Create <span>Creative</span> Content That Stands Out
                 </h1>
 
-                <p class="text-paragraph font-medium text-base leading-7 mb-9 xl:max-w-[440px]">
-                    We help startups, local businesses, and brands build a strong online presence. High-quality reels, graphics, motion visuals, and brand content crafted to capture attention and build engagement.
-                </p>
+                <div class="px-6 py-[14px] bg-white border-l-2 border-blue-sass mb-[35px] xl:w-full md:w-[500px]">
+                    <p class="text-ptwo text-paragraph">
+                        We help startups, local businesses, and brands build a strong online presence. High-quality reels, graphics, motion visuals, and brand content crafted to capture attention and build engagement.
+                    </p>
+                </div>
 
-                <div class="flex flex-wrap items-center gap-5">
-                    <a href="{{ route('contact-us') }}"
-                       class="inline-flex items-center gap-3 bg-[#101828] text-white font-bold text-sm uppercase tracking-widest px-9 py-4 rounded-full hover:bg-purple transition-all duration-300">
-                        Book Your Meeting
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="flex space-x-[30px] items-center pointer-events-auto">
+                    <a href="{{ route('contact-us') }}">
+                        <div class="home-two-btn-bg py-3 group bg-purple border-purple">
+                            <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
+                                Book Your Meeting
+                            </span>
+                            <span>{{ get_svg('home_cta_white') }}</span>
+                        </div>
                     </a>
-                    <a href="{{ route('services') }}"
-                       class="flex items-center gap-2 group text-main-black font-semibold hover:text-purple transition-colors duration-300">
-                        <span class="border-b-2 border-main-black group-hover:border-purple pb-0.5 transition-colors duration-300">View Our Work</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <a href="{{ route('services') }}">
+                        <div class="flex items-center gap-2 group">
+                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['View_Our_Work'] before:absolute before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">
+                                View Our Work
+                            </p>
+                            <span>{{ get_svg('arrow2') }}</span>
+                        </div>
                     </a>
                 </div>
 
@@ -109,61 +80,12 @@
             </div>
 
             {{-- RIGHT: device mockup + floating badges --}}
-            <div class="relative flex justify-center xl:justify-end items-end" data-aos="fade-left">
-                {{-- glow --}}
-                <div class="absolute inset-0 cc-device-glow pointer-events-none rounded-3xl"></div>
-
-                {{-- laptop frame --}}
-                <div class="relative z-10 cc-float xl:w-[460px] md:w-[380px] w-[300px]">
-                    <div class="cc-device-frame">
-                        {{-- screen area --}}
-                        <div class="cc-device-inner xl:h-[280px] md:h-[230px] h-[180px]">
-                            {{-- creative content display inside screen --}}
-                            <div class="w-full h-full relative overflow-hidden" style="background: linear-gradient(135deg, #1a1432 0%, #2d1b6b 50%, #1a1432 100%);">
-                                {{-- grid overlay --}}
-                                <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(0deg,rgba(255,255,255,.3) 0,rgba(255,255,255,.3) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0,rgba(255,255,255,.3) 1px,transparent 1px,transparent 40px);"></div>
-
-                                {{-- mock content cards --}}
-                                <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-3 w-36">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <div class="size-6 rounded-full bg-purple flex items-center justify-center text-white text-[8px] font-bold">CL</div>
-                                        <span class="text-white text-[9px] font-semibold">Reel — Live</span>
-                                    </div>
-                                    <div class="h-1.5 bg-purple/60 rounded-full mb-1.5 w-full"></div>
-                                    <div class="h-1.5 bg-white/20 rounded-full mb-1.5 w-3/4"></div>
-                                    <div class="h-1.5 bg-white/20 rounded-full w-1/2"></div>
-                                    <div class="mt-2 flex gap-1">
-                                        <div class="bg-purple/80 text-white text-[7px] font-bold px-2 py-0.5 rounded-full">+2.4k views</div>
-                                    </div>
-                                </div>
-
-                                <div class="absolute top-4 right-4 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-3 w-28">
-                                    <p class="text-white/60 text-[8px] mb-1.5">Engagement</p>
-                                    <p class="text-white font-bold text-base leading-none">84.2%</p>
-                                    <svg class="mt-2 w-full" height="24" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0 20 C10 20 15 8 24 6 C33 4 38 14 46 10 C54 6 60 2 80 4" stroke="#22C55E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                                    </svg>
-                                </div>
-
-                                <div class="absolute bottom-4 left-4 right-4 bg-white/5 border border-white/10 rounded-xl px-3 py-2 flex items-center gap-3">
-                                    <div class="size-8 rounded-lg bg-purple/80 flex items-center justify-center flex-shrink-0">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-white text-[9px] font-semibold truncate">Brand Reel — Summer Campaign</p>
-                                        <div class="h-1 bg-white/10 rounded-full mt-1.5 relative">
-                                            <div class="h-full w-2/3 bg-purple rounded-full"></div>
-                                        </div>
-                                    </div>
-                                    <span class="text-white/50 text-[8px]">0:32</span>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- laptop base --}}
-                        <div class="h-3 bg-[#1a1432]/60 rounded-b-lg mt-1 mx-4"></div>
-                    </div>
-                    {{-- laptop foot --}}
-                    <div class="h-3 bg-[#16122a] rounded-b-xl mx-6 shadow-lg"></div>
+            <div class="relative flex justify-center xl:justify-end items-center" data-aos="fade-left">
+                {{-- laptop image --}}
+                <div class="relative z-10 cc-float w-full xl:scale-110 xl:translate-x-4">
+                    <img src="{{ asset('frontend/assets/images/creative-content/laptop-hero.png') }}"
+                         alt="Creative Content Studio"
+                         class="w-full h-auto object-contain" />
                 </div>
 
                 {{-- Floating badge: Views --}}
@@ -194,10 +116,10 @@
                 </div>
 
                 {{-- Floating pill: Engagement --}}
-                <div class="absolute xl:-left-2 left-0 xl:top-1/2 top-[45%] z-20 cc-float">
-                    <div class="bg-purple text-white px-4 py-2.5 rounded-full shadow-purple">
+                <div class="absolute left-1/2 -translate-x-1/2 xl:bottom-4 bottom-2 z-20 cc-float">
+                    <div class="bg-purple text-white px-5 py-2.5 rounded-full shadow-purple flex items-center gap-2">
                         <p class="text-sm font-bold">84.2%</p>
-                        <p class="text-[10px] opacity-80">Engagement</p>
+                        <p class="text-[10px] opacity-80">Engagement Rate</p>
                     </div>
                 </div>
 
@@ -213,7 +135,9 @@
                 {{-- CreativLab badge --}}
                 <div class="absolute xl:left-4 left-4 xl:bottom-28 bottom-10 z-20 cc-float-slow">
                     <div class="flex items-center gap-2.5 bg-white rounded-2xl px-4 py-2.5 shadow-common border border-purple/10">
-                        <div class="size-9 rounded-full bg-purple flex items-center justify-center text-white font-bold text-sm flex-shrink-0">C</div>
+                        <div class="size-9 rounded-full bg-purple flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            <img src="{{ asset($general_setting?->favicon) }}" alt="CreativLab" class="w-full h-full object-cover" />
+                        </div>
                         <div>
                             <p class="text-xs font-bold text-main-black leading-tight">CreativLab</p>
                             <p class="text-[10px] text-paragraph">Content Studio</p>

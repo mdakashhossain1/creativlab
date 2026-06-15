@@ -1,11 +1,12 @@
-<section class="w-full md:py-10 py-8 relative overflow-hidden"
-         style="background: linear-gradient(90deg, #794AFF 0%, #BA4AFF 50%, #794AFF 100%);">
-    {{-- subtle decorative blobs --}}
-    <div class="absolute -top-8 left-1/4 size-32 rounded-full bg-white/10 pointer-events-none"></div>
-    <div class="absolute -bottom-6 right-1/4 size-24 rounded-full bg-white/8 pointer-events-none"></div>
+<section class="w-full bg-white md:py-10 py-8">
+    <div class="theme-container mx-auto">
+        <div class="relative rounded-[20px] overflow-hidden md:py-8 py-6 px-6 md:px-10"
+             style="background: linear-gradient(90deg, #794AFF 0%, #BA4AFF 50%, #794AFF 100%);">
+            {{-- subtle decorative blobs --}}
+            <div class="absolute -top-8 left-1/4 size-32 rounded-full bg-white/10 pointer-events-none"></div>
+            <div class="absolute -bottom-6 right-1/4 size-24 rounded-full bg-white/8 pointer-events-none"></div>
 
-    <div class="theme-container mx-auto relative z-10">
-        <div class="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-6 md:gap-0 md:divide-x divide-white/20">
+            <div class="relative z-10 grid xl:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-6 md:gap-0 md:divide-x divide-white/20">
             @php
                 $stats = [
                     [
@@ -44,6 +45,7 @@
                 </div>
             </div>
             @endforeach
+            </div>
         </div>
     </div>
 </section>

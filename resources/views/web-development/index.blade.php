@@ -282,6 +282,7 @@
             <div>
                 <main>
                     @include('web-development._hero_section')
+                    @include('web-development._partner_section')
                     @include('web-development._features_section')
                     @include('web-development._solutions_section')
                     @include('web-development._recent_projects_section')

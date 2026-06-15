@@ -65,22 +65,25 @@ class HomeController extends Controller
     public function creativeContent()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
+        $partners = Partner::where('status', 'enable')->get();
 
-        return view('creative-content.index', compact('seo_setting'));
+        return view('creative-content.index', compact('seo_setting', 'partners'));
     }
 
     public function webDevelopment()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
+        $partners = Partner::where('status', 'enable')->get();
 
-        return view('web-development.index', compact('seo_setting'));
+        return view('web-development.index', compact('seo_setting', 'partners'));
     }
 
     public function seoOptimization()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
+        $partners = Partner::where('status', 'enable')->get();
 
-        return view('seo-optimization.index', compact('seo_setting'));
+        return view('seo-optimization.index', compact('seo_setting', 'partners'));
     }
 
     public function adFilms()
