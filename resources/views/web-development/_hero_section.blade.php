@@ -126,6 +126,33 @@
                     </div>
                 </div>
 
+                {{-- floating pill: Responsive Design --}}
+                <div class="absolute xl:-left-8 left-2 xl:top-[38%] top-[35%] z-30 wd-float">
+                    <div class="flex items-center gap-2 bg-[#EC4899] rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="4" width="13" height="11" rx="1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <rect x="11" y="9" width="6" height="10" rx="1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 15h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold text-white">Responsive Design</span>
+                    </div>
+                </div>
+
+                {{-- floating pill: E-Commerce --}}
+                <div class="absolute xl:-left-4 left-0 xl:top-[68%] top-[65%] z-30 wd-float-slow">
+                    <div class="flex items-center gap-2 bg-[#3B82F6] rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold text-white">E-Commerce</span>
+                    </div>
+                </div>
+
                 {{-- floating pill: Custom Website --}}
                 <div class="absolute xl:-right-2 right-0 xl:top-1/3 top-1/4 z-30 wd-float">
                     <div class="flex items-center gap-2 bg-orange rounded-full pl-2 pr-4 py-2 shadow-common">
