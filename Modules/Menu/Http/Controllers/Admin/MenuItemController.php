@@ -161,9 +161,26 @@ class MenuItemController extends Controller
         $menuItem = MenuItem::find($request->menu_id);
         $menu = $menuItem->menu;
         $menuItem->load('translations');
-        $menu_translate = MenuItemTranslation::where('menu_item_id', $request->menu_id)->where('locale', $request->lang_code)->first();
+
+        $language_list = Language::all();
+
+        $lang_code = $request->lang_code ?? admin_lang();
+
+        $menu_translate = MenuItemTranslation::where('menu_item_id', $request->menu_id)
+                            ->where('locale', $lang_code)
+                            ->first();
+
+        // Auto-create the translation row if it doesn't exist yet
+        if (!$menu_translate) {
+            $menu_translate = MenuItemTranslation::create([
+                'menu_item_id' => $menuItem->id,
+                'locale'       => $lang_code,
+                'title'        => $menuItem->title,
+            ]);
+        }
+
         $parentItems = $menu->allMenuItems()->where('id', '!=', $menuItem->id)->active()->get();
-        return view('menu::admin.menu-items.edit', compact('menu', 'menuItem', 'parentItems','menu_translate','frontendRoutes'));
+        return view('menu::admin.menu-items.edit', compact('menu', 'menuItem', 'parentItems', 'menu_translate', 'frontendRoutes', 'language_list'));
     }
 
     /**
