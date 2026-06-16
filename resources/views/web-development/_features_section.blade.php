@@ -2,75 +2,12 @@
     <div class="theme-container mx-auto">
         <div class="grid xl:grid-cols-2 grid-cols-1 gap-12 xl:gap-16 items-center">
 
-            {{-- LEFT: desktop + phone mockup --}}
+            {{-- LEFT: web-solutions image --}}
             <div class="relative flex justify-center items-center" data-aos="fade-right">
-                <div class="absolute size-80 rounded-full bg-purple/10 blur-3xl pointer-events-none"></div>
-
-                {{-- desktop monitor --}}
-                <div class="relative z-10 xl:w-[380px] w-[300px]">
-                    <div style="background:#1a1432; border-radius:14px; padding:8px; box-shadow:0 40px 80px -10px rgba(121,74,255,.35), 0 0 0 1px rgba(121,74,255,.15);">
-                        <div style="background:linear-gradient(135deg,#2d1b6b,#1a1432); border-radius:8px; overflow:hidden;" class="xl:h-[230px] h-[185px]">
-                            <div class="flex items-center gap-1.5 px-3 py-2 bg-black/30">
-                                <span class="size-2 rounded-full bg-red-400"></span>
-                                <span class="size-2 rounded-full bg-yellow-400"></span>
-                                <span class="size-2 rounded-full bg-green-400"></span>
-                            </div>
-                            <div class="p-4">
-                                <p class="text-white font-bold text-sm mb-3">Building Digital Experiences That Grow Brands</p>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="bg-white/10 rounded-lg p-2.5">
-                                        <div class="h-1.5 bg-purple/60 rounded-full mb-1.5 w-full"></div>
-                                        <div class="h-1.5 bg-white/20 rounded-full mb-1.5 w-3/4"></div>
-                                        <div class="h-1.5 bg-white/20 rounded-full w-1/2"></div>
-                                    </div>
-                                    <div class="bg-purple/30 rounded-lg p-2.5 flex items-center justify-center">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- monitor stand --}}
-                    <div class="h-4 w-16 bg-[#1a1432] mx-auto"></div>
-                    <div class="h-1.5 w-28 bg-[#16122a] rounded-full mx-auto"></div>
-                </div>
-
-                {{-- phone overlapping --}}
-                <div class="absolute xl:-right-2 right-0 bottom-0 z-20 xl:w-[100px] w-[78px]">
-                    <div style="background:#1a1432; border-radius:16px; padding:5px; box-shadow:0 30px 60px -10px rgba(121,74,255,.4);">
-                        <div class="w-7 h-1.5 bg-[#0e0b20] rounded-full mx-auto mb-1"></div>
-                        <div style="background:linear-gradient(160deg,#2d1b6b,#1a1432); border-radius:12px; overflow:hidden; aspect-ratio:9/18;">
-                            <div class="p-2 space-y-1.5">
-                                <div class="bg-white/10 rounded-md h-10 flex items-center justify-center">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
-                                <div class="h-1 bg-white/20 rounded-full w-full"></div>
-                                <div class="h-1 bg-white/20 rounded-full w-2/3"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- floating badge --}}
-                <div class="absolute xl:-left-6 left-0 top-10 bg-white rounded-2xl px-4 py-3 shadow-common border border-purple/10 z-30"
-                     style="animation: wdFloat 4s ease-in-out infinite;">
-                    <div class="flex items-center gap-2">
-                        <div class="size-8 rounded-xl bg-green-400/15 flex items-center justify-center">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <div>
-                            <p class="text-[9px] text-paragraph leading-none">Site Launched</p>
-                            <p class="text-xs font-bold text-main-black">100% Live</p>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- floating badge: performance --}}
-                <div class="absolute xl:-left-4 left-0 bottom-12 bg-purple text-white rounded-2xl px-4 py-2.5 shadow-purple z-30"
-                     style="animation: wdFloat 6s ease-in-out infinite reverse;">
-                    <p class="text-[9px] opacity-80">Page Speed</p>
-                    <p class="text-sm font-bold">98 / 100</p>
-                </div>
+                <img src="{{ asset('frontend/assets/images/web-delopmnet/web-developmnet.webp') }}"
+                     alt="Web Solutions"
+                     class="w-full h-auto object-cover"
+                     style="border-radius: 32px;">
             </div>
 
             {{-- RIGHT: text + checklist --}}
@@ -100,7 +37,7 @@
                     @endphp
                     @foreach($features as $f)
                     <li class="flex items-start gap-4">
-                        <div class="size-6 rounded-full bg-purple flex-shrink-0 flex items-center justify-center mt-0.5 shadow-purple">
+                        <div class="size-6 rounded-full bg-purple flex-shrink-0 flex items-center justify-center mt-0.5">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
                         <div>
