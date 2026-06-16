@@ -1,8 +1,13 @@
 <style>
-    @keyframes seoCtaFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes seoCtaFloatR { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}  }
-    .seo-cta-float     { animation: seoCtaFloat  4.5s ease-in-out infinite; }
-    .seo-cta-float-rev { animation: seoCtaFloatR 5.5s ease-in-out infinite reverse; }
+    .seo-cta-img { width: 620px; height: auto; }
+
+    @media (max-width: 1024px) {
+        .seo-cta-img { width: 480px; height: auto; }
+    }
+    @media (max-width: 767px) {
+        .seo-cta-img-wrap { width: 100%; justify-content: center; }
+        .seo-cta-img { height: auto; width: 100%; max-width: 320px; }
+    }
 </style>
 
 <section class="w-full md:py-[100px] py-16">
@@ -42,49 +47,12 @@
                     </div>
                 </div>
 
-                {{-- Right: laptop with SEO growth chart --}}
-                <div class="relative md:self-end self-center mt-8 md:mt-0 flex-shrink-0 flex items-end justify-center" data-aos="fade-left">
-                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-purple/20 blur-2xl pointer-events-none"></div>
-
-                    <div class="relative z-10 seo-cta-float xl:w-[340px] md:w-[270px] w-[240px]">
-                        <div style="background:#1a1432; border-radius:12px; padding:7px; box-shadow:0 30px 60px -10px rgba(121,74,255,.4);">
-                            <div style="background:linear-gradient(135deg,#2d1b6b,#1a1432); border-radius:7px; overflow:hidden;" class="xl:h-[200px] md:h-[160px] h-[145px]">
-                                <div class="flex items-center justify-between px-3 py-2 bg-black/30">
-                                    <span class="text-white text-[10px] font-bold">SEO Growth</span>
-                                    <span class="text-green-400 text-[10px] font-bold">12,540</span>
-                                </div>
-                                <div class="p-3">
-                                    <div class="bg-white/10 rounded-lg p-3">
-                                        <svg class="w-full" height="90" viewBox="0 0 280 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0 82 C35 82 50 56 75 50 C105 43 120 36 150 28 C185 19 205 14 240 8 C260 5 270 4 280 3" stroke="#22C55E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                            <path d="M0 82 C35 82 50 56 75 50 C105 43 120 36 150 28 C185 19 205 14 240 8 C260 5 270 4 280 3 L280 90 L0 90Z" fill="#22C55E" opacity="0.12"/>
-                                            <circle cx="240" cy="8" r="4" fill="#22C55E"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="h-2 bg-[#16122a] rounded-b-lg mx-8"></div>
-                    </div>
-
-                    {{-- floating badge: ranking --}}
-                    <div class="absolute xl:-left-6 left-0 top-4 bg-white rounded-2xl px-4 py-2.5 shadow-card border border-purple/10 z-30 seo-cta-float-rev">
-                        <div class="flex items-center gap-2">
-                            <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#794AFF" stroke-width="2" stroke-linecap="round"/></svg>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-paragraph leading-none">Ranking</p>
-                                <p class="text-xs font-bold text-main-black">#1 on Google</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- floating badge: traffic --}}
-                    <div class="absolute xl:-right-4 right-0 bottom-16 bg-purple text-white rounded-2xl px-4 py-2.5 shadow-purple z-30 seo-cta-float">
-                        <p class="text-[9px] opacity-80">Traffic</p>
-                        <p class="text-sm font-bold">↑ 152%</p>
-                    </div>
+                {{-- Right: bottom image --}}
+                <div class="seo-cta-img-wrap relative md:self-center self-center mt-8 md:mt-0 flex-shrink-0 flex items-center justify-center" data-aos="fade-left">
+                    <img src="{{ asset('frontend/assets/images/seo-optimization/bottom.webp') }}"
+                         alt="SEO Growth"
+                         class="seo-cta-img"
+                         style="object-fit:contain; object-position:center; display:block;">
                 </div>
             </div>
         </div>
