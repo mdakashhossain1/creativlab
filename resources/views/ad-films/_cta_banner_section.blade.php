@@ -1,8 +1,28 @@
 <style>
-    @keyframes afCtaFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes afCtaFloatR { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}  }
+    @keyframes afCtaFloat  { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-10px)} }
+    @keyframes afCtaFloatR { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-8px)}  }
     .af-cta-float     { animation: afCtaFloat  4.5s ease-in-out infinite; }
     .af-cta-float-rev { animation: afCtaFloatR 5.5s ease-in-out infinite reverse; }
+
+    .af-cta-img { width: 460px; height: 460px; }
+    .af-cam-icon { width: 44px; height: 44px; }
+    .af-cam-label { font-size: 12px; }
+
+    @media (max-width: 1024px) {
+        .af-cta-img { width: 360px; height: 360px; }
+    }
+    @media (max-width: 767px) {
+        .af-cta-img-wrap { width: 100%; }
+        .af-cta-img { width: 100%; height: auto; max-width: 380px; }
+        .af-cam-card { padding: 8px 12px !important; gap: 8px !important; border-radius: 12px !important; }
+        .af-cam-icon { width: 34px !important; height: 34px !important; }
+        .af-cam-label { font-size: 11px !important; }
+    }
+    @media (max-width: 480px) {
+        .af-cta-img { max-width: 280px; }
+        .af-cam-card { padding: 6px 10px !important; gap: 6px !important; }
+        .af-cam-icon { width: 28px !important; height: 28px !important; }
+    }
 </style>
 
 <section class="w-full md:py-[100px] py-16">
@@ -40,64 +60,27 @@
                     </div>
                 </div>
 
-                {{-- Right: camera / film scene --}}
-                <div class="relative md:self-end self-center mt-8 md:mt-0 flex-shrink-0 flex items-end justify-center" data-aos="fade-left">
-                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-purple/20 blur-2xl pointer-events-none"></div>
-
-                    {{-- film scene card --}}
-                    <div class="relative z-10 af-cta-float rounded-2xl overflow-hidden xl:w-[340px] md:w-[280px] w-[240px]"
-                         style="background:linear-gradient(135deg,#1a1432,#2d1b6b); box-shadow:0 30px 60px -10px rgba(121,74,255,.4);">
-                        <div class="relative xl:h-[210px] md:h-[175px] h-[155px] p-4">
-                            <div class="absolute top-4 right-6 size-12 rounded-full bg-yellow-200/20 blur-xl"></div>
-
-                            {{-- camera --}}
-                            <div class="absolute bottom-4 right-4 bg-[#0e0b20] rounded-xl p-3 border border-white/10 w-28">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <div class="size-8 rounded-full bg-purple/30 border-2 border-purple flex items-center justify-center">
-                                        <div class="size-3.5 rounded-full bg-purple"></div>
-                                    </div>
-                                    <div class="flex items-center gap-1">
-                                        <span class="size-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                                        <span class="text-red-400 text-[7px] font-bold">REC</span>
-                                    </div>
-                                </div>
-                                <div class="h-1 bg-white/20 rounded-full w-full"></div>
-                            </div>
-
-                            {{-- clapperboard --}}
-                            <div class="absolute top-5 left-4 bg-white rounded-md p-2 shadow-lg rotate-[-6deg] w-20">
-                                <div class="flex gap-0.5 mb-1">
-                                    @for($i=0;$i<5;$i++)<div class="flex-1 h-1.5 {{ $i % 2 == 0 ? 'bg-main-black' : 'bg-white border border-main-black' }} -skew-x-12"></div>@endfor
-                                </div>
-                                <div class="h-1 bg-gray-200 rounded-full w-full"></div>
-                            </div>
-
-                            {{-- center play --}}
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <button class="size-14 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-xl">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#794AFF" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-                                </button>
-                            </div>
+                {{-- Right: footer image --}}
+                <div class="af-cta-img-wrap relative md:self-end self-center mt-8 md:mt-0 flex-shrink-0 flex items-end justify-center" data-aos="fade-left">
+                    <img src="{{ asset('frontend/assets/images/ad-film/bottom-footer.webp') }}"
+                         alt="Ad Film"
+                         class="af-cta-img"
+                         style="object-fit:contain; object-position:bottom; display:block;">
+                    {{-- floating video camera card — hovers above the image --}}
+                    <div class="af-cta-float-rev af-cam-card" style="position:absolute; top:20px; left:50%; transform:translateX(-50%); z-index:20; display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.95); border-radius:14px; padding:10px 16px; box-shadow:0 8px 28px rgba(121,74,255,0.18); border:1px solid rgba(121,74,255,0.12); white-space:nowrap;">
+                        {{-- corner brackets --}}
+                        <span style="position:absolute;top:5px;left:5px;width:10px;height:10px;border-top:2px solid #794AFF;border-left:2px solid #794AFF;border-radius:2px 0 0 0;"></span>
+                        <span style="position:absolute;top:5px;right:5px;width:10px;height:10px;border-top:2px solid #794AFF;border-right:2px solid #794AFF;border-radius:0 2px 0 0;"></span>
+                        <span style="position:absolute;bottom:5px;left:5px;width:10px;height:10px;border-bottom:2px solid #794AFF;border-left:2px solid #794AFF;border-radius:0 0 0 2px;"></span>
+                        <span style="position:absolute;bottom:5px;right:5px;width:10px;height:10px;border-bottom:2px solid #794AFF;border-right:2px solid #794AFF;border-radius:0 0 2px 0;"></span>
+                        <img src="{{ asset('frontend/assets/images/ad-film/video-camera.png') }}"
+                             alt="Video Camera"
+                             class="af-cam-icon"
+                             style="object-fit:contain; display:block;">
+                        <div>
+                            <p style="font-size:9px; color:#6B7280; margin:0; line-height:1;">Now Filming</p>
+                            <p class="af-cam-label" style="font-weight:700; color:#111827; margin:0;">4K Ad Film</p>
                         </div>
-                    </div>
-
-                    {{-- floating play badge --}}
-                    <div class="absolute xl:-right-4 right-0 top-6 bg-white rounded-2xl px-4 py-2.5 shadow-card border border-purple/10 z-30 af-cta-float-rev">
-                        <div class="flex items-center gap-2">
-                            <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="#794AFF" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-paragraph leading-none">Now Playing</p>
-                                <p class="text-xs font-bold text-main-black">Brand Film</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- floating views badge --}}
-                    <div class="absolute xl:-left-6 left-0 bottom-14 bg-purple text-white rounded-2xl px-4 py-2.5 shadow-purple z-30 af-cta-float">
-                        <p class="text-[9px] opacity-80">Views</p>
-                        <p class="text-sm font-bold">50M+</p>
                     </div>
                 </div>
             </div>

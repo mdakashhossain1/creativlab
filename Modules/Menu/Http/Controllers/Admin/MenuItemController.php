@@ -194,6 +194,7 @@ class MenuItemController extends Controller
             // Update menu item fields (only for admin language)
             if (admin_lang() == $request->lang_code) {
                 $menuItem->update([
+                    'title' => $request->title,
                     'parent_id' => $request->parent_id ?: null,
                     'url' => $request->url === 'custom' ? $request->custom_url : $request->url,
                     'target' => $request->target,

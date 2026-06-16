@@ -2,65 +2,27 @@
     <div class="theme-container mx-auto">
         <div class="grid xl:grid-cols-2 grid-cols-1 gap-12 xl:gap-16 items-center">
 
-            {{-- LEFT: video story mockup --}}
+            {{-- LEFT: production image --}}
             <div class="relative flex justify-center items-center" data-aos="fade-right">
-                <div class="absolute size-80 rounded-full bg-purple/10 blur-3xl pointer-events-none"></div>
+                <img src="{{ asset('frontend/assets/images/ad-film/ad-production.webp') }}"
+                     alt="Ad Film Production"
+                     class="w-full h-auto object-contain relative z-10">
 
-                {{-- video card --}}
-                <div class="relative z-10 rounded-2xl overflow-hidden shadow-common border border-purple/8 xl:w-[400px] w-[300px]"
-                     style="background:linear-gradient(135deg,#1a1432,#2d1b6b);">
-                    <div class="relative xl:h-[300px] h-[240px] p-5">
-                        <div class="absolute top-6 right-8 size-16 rounded-full bg-yellow-200/20 blur-2xl"></div>
-
-                        {{-- director chair --}}
-                        <div class="absolute bottom-6 left-6 bg-[#0e0b20] rounded-xl p-3 border border-white/10 w-28">
-                            <div class="h-12 bg-purple/30 rounded-md mb-2 flex items-center justify-center">
-                                <span class="text-white/50 text-[8px] font-bold">DIRECTOR</span>
-                            </div>
-                            <div class="h-1 bg-white/20 rounded-full w-full mb-1"></div>
-                            <div class="h-1 bg-white/20 rounded-full w-2/3"></div>
-                        </div>
-
-                        {{-- clapperboard --}}
-                        <div class="absolute top-6 right-6 bg-white rounded-lg p-2.5 shadow-lg rotate-6 w-24">
-                            <div class="flex gap-0.5 mb-1.5">
-                                @for($i=0;$i<5;$i++)<div class="flex-1 h-1.5 {{ $i % 2 == 0 ? 'bg-main-black' : 'bg-white border border-main-black' }} -skew-x-12"></div>@endfor
-                            </div>
-                            <div class="h-1 bg-gray-200 rounded-full w-full"></div>
-                        </div>
-
-                        {{-- center play --}}
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <button class="size-16 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-xl hover:scale-110 transition-transform duration-300">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#794AFF" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    {{-- bottom bar: Story That Sells --}}
-                    <div class="bg-white p-4 flex items-center justify-between">
-                        <div class="flex items-center gap-2.5">
-                            <span class="size-9 rounded-full bg-purple flex items-center justify-center">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-                            </span>
-                            <p class="font-bold text-main-black text-sm">Story That Sells</p>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex -space-x-2">
-                                @foreach(['#794AFF','#BA4AFF','#FF7E40','#22C55E'] as $c)
-                                <div class="size-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[8px] font-bold" style="background:{{ $c }}">C</div>
-                                @endforeach
-                            </div>
-                            <span class="text-[10px] font-bold text-purple ml-1.5">+50</span>
-                        </div>
-                    </div>
+                {{-- Story That Sells badge --}}
+                <div class="absolute sm:bottom-16 bottom-10 left-0 z-20 bg-white rounded-full sm:px-5 px-3 sm:py-3 py-2 shadow-lg sm:flex hidden items-center gap-3"
+                     style="box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+                    <span class="size-7 sm:size-8 rounded-full bg-purple flex items-center justify-center flex-shrink-0">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <p class="font-bold text-main-black sm:text-sm text-xs whitespace-nowrap">Story That Sells</p>
                 </div>
 
-                {{-- floating badge: views --}}
-                <div class="absolute xl:-left-4 left-0 top-10 bg-purple text-white rounded-2xl px-4 py-2.5 shadow-purple z-20"
-                     style="animation: afFloat 6s ease-in-out infinite reverse;">
-                    <p class="text-[9px] opacity-80">Total Views</p>
-                    <p class="text-sm font-bold">50M+</p>
+                {{-- Avatar group --}}
+                <div class="absolute sm:bottom-4 bottom-2 right-0 z-20 bg-white rounded-2xl sm:px-4 px-3 sm:py-2.5 py-1.5 shadow-lg sm:flex hidden items-center gap-2"
+                     style="box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+                    <img src="{{ asset('frontend/assets/images/ad-film/about-group.webp') }}"
+                         alt="Team" style="height:28px; width:auto; object-fit:contain;">
+                    <span class="sm:text-sm text-xs font-bold text-purple">+120</span>
                 </div>
             </div>
 
@@ -92,7 +54,7 @@
                     @endphp
                     @foreach($features as $f)
                     <div class="flex items-center gap-3">
-                        <div class="size-6 rounded-full bg-purple flex-shrink-0 flex items-center justify-center shadow-purple">
+                        <div class="size-6 rounded-full bg-purple flex-shrink-0 flex items-center justify-center">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
                         <p class="font-semibold text-main-black text-sm">{{ $f }}</p>
@@ -100,12 +62,13 @@
                     @endforeach
                 </div>
 
-                <a href="{{ route('services') }}"
-                   class="inline-flex items-center gap-2.5 bg-purple text-white font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full hover:bg-main-black transition-all duration-300 shadow-purple">
-                    Learn More
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                <a href="{{ route('services') }}">
+                    <div class="home-two-btn-bg py-3 group bg-purple border-purple">
+                        <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
+                            Learn More
+                        </span>
+                        <span>{{ get_svg('home_cta_white') }}</span>
+                    </div>
                 </a>
             </div>
 

@@ -47,26 +47,88 @@
         gap: 14px;
     }
     
+    /* Tablet: keep horizontal, scale down */
     @media (max-width: 768px) {
         .partner-badges-card {
-            flex-direction: column;
-            height: auto;
-            align-items: center;
-            padding: 16px 0;
-            gap: 16px;
+            height: 58px;
+            max-width: 100%;
+            border-radius: 10px;
         }
-        .partner-card-left, .partner-card-right {
-            width: 100%;
-            align-items: center;
-            padding: 0 16px;
+        .partner-card-left {
+            padding: 0 12px;
+            gap: 4px;
         }
-        .partner-card-divider {
-            display: none;
+        .partner-card-right {
+            padding: 0 12px;
+            gap: 4px;
+        }
+        .partner-card-left img {
+            height: 20px;
         }
         .partner-card-row {
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
+            gap: 8px;
+        }
+        .partner-label-text {
+            font-size: 9px !important;
+        }
+        .partner-name-text {
+            font-size: 11px !important;
+        }
+        .partner-sub-text {
+            font-size: 8px !important;
+        }
+        .partner-card-row img[alt="WhatsApp"] {
+            height: 22px !important;
+            width: 22px !important;
+        }
+        .partner-card-row img[alt="Meta"] {
+            height: 14px !important;
+        }
+        .partner-card-inner-divider {
+            margin: 0 8px !important;
+            height: 26px !important;
+        }
+    }
+
+    /* Small mobile */
+    @media (max-width: 480px) {
+        .partner-badges-card {
+            height: 50px;
+            border-radius: 8px;
+        }
+        .partner-card-left {
+            padding: 0 8px;
+            gap: 3px;
+        }
+        .partner-card-right {
+            padding: 0 8px;
+            gap: 3px;
+        }
+        .partner-card-left img {
+            height: 16px;
+        }
+        .partner-card-row {
+            gap: 5px;
+        }
+        .partner-card-inner-divider {
+            margin: 0 5px !important;
+            height: 22px !important;
+        }
+        .partner-card-row img[alt="WhatsApp"] {
+            height: 18px !important;
+            width: 18px !important;
+        }
+        .partner-card-row img[alt="Meta"] {
+            height: 11px !important;
+        }
+        .partner-label-text {
+            font-size: 8px !important;
+        }
+        .partner-name-text {
+            font-size: 9px !important;
+        }
+        .partner-sub-text {
+            font-size: 7px !important;
         }
     }
 
@@ -167,9 +229,9 @@
 
                     {{-- Left 45% --}}
                     <div class="partner-card-left">
-                        <p style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Official Partner of</p>
+                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Official Partner of</p>
                         <img src="{{ asset('frontend/assets/images/whatsapp-api/aisensy.png') }}"
-                             alt="AiSensy" style="height:34px;width:auto;max-width:140px;object-fit:contain;object-position:left;">
+                             alt="AiSensy" style="height:24px;width:auto;max-width:110px;object-fit:contain;object-position:left;">
                     </div>
 
                     {{-- Divider --}}
@@ -177,7 +239,7 @@
 
                     {{-- Right 55% --}}
                     <div class="partner-card-right">
-                        <p style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Powered By</p>
+                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Powered By</p>
                         <div class="partner-card-row">
 
                             {{-- WhatsApp --}}
@@ -185,19 +247,19 @@
                                 <img src="{{ asset('frontend/assets/images/whatsapp-api/whatapp.png') }}"
                                      alt="WhatsApp" style="height:34px;width:34px;object-fit:contain;flex-shrink:0;">
                                 <div style="line-height:1;">
-                                    <p style="font-size:13px;font-weight:700;color:#111827;margin:0;">WhatsApp</p>
-                                    <p style="font-size:10px;color:#6B7280;margin:3px 0 0 0;">Business API</p>
+                                    <p class="partner-name-text" style="font-size:13px;font-weight:700;color:#111827;margin:0;">WhatsApp</p>
+                                    <p class="partner-sub-text" style="font-size:10px;color:#6B7280;margin:3px 0 0 0;">Business API</p>
                                 </div>
                             </div>
 
                             {{-- Inner divider --}}
-                            <div class="partner-card-divider" style="height:32px;margin:0 14px;"></div>
+                            <div class="partner-card-divider partner-card-inner-divider" style="height:32px;margin:0 14px;"></div>
 
                             {{-- Meta --}}
                             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
                                 <img src="{{ asset('frontend/assets/images/whatsapp-api/meta.png') }}"
                                      alt="Meta" style="height:20px;width:auto;object-fit:contain;flex-shrink:0;">
-                                <p style="font-size:10px;color:#6B7280;margin:0;white-space:nowrap;line-height:1;">Business Partner</p>
+                                <p class="partner-sub-text" style="font-size:10px;color:#6B7280;margin:0;white-space:nowrap;line-height:1;">Business Partner</p>
                             </div>
 
                         </div>
