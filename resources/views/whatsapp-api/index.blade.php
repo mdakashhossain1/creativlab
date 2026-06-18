@@ -281,11 +281,11 @@
         <div id="smooth-content">
             <div>
                 <main>
-                    @include('whatsapp-api._hero_section')
-                    @include('whatsapp-api._services_section')
-                    @include('whatsapp-api._why_work_section')
-                    @include('whatsapp-api._process_section')
-                    @include('whatsapp-api._cta_banner_section')
+                    @foreach ($section_visibility?->sortBy('serial_number') ?? [] as $visibility)
+                        @if ($visibility->component_name != null)
+                            @include('whatsapp-api.' . $visibility->component_name)
+                        @endif
+                    @endforeach
                 </main>
 
                 <footer>

@@ -51,7 +51,7 @@
                                                     </td>
 
                                                     <td class="crancy-table__column-2">
-                                                        {{ ucwords(str_replace('_', ' ', $page)) }}
+                                                        {{ $pageLabels[$page] ?? ucwords(str_replace('_', ' ', $page)) }}
                                                     </td>
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <a href="{{ route('admin.section-edit', $page) }}"class="crancy-btn"><i

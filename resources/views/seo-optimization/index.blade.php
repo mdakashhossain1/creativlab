@@ -281,14 +281,11 @@
         <div id="smooth-content">
             <div>
                 <main>
-                    @include('seo-optimization._hero_section')
-                    @include('seo-optimization._partner_section')
-                    @include('seo-optimization._features_section')
-                    @include('seo-optimization._solutions_section')
-                    @include('seo-optimization._results_section')
-                    @include('seo-optimization._process_section')
-                    @include('seo-optimization._stats_section')
-                    @include('seo-optimization._cta_banner_section')
+                    @foreach ($section_visibility?->sortBy('serial_number') ?? [] as $visibility)
+                        @if ($visibility->component_name != null)
+                            @include('seo-optimization.' . $visibility->component_name)
+                        @endif
+                    @endforeach
                 </main>
 
                 <footer>

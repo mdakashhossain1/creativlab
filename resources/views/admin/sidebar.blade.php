@@ -556,7 +556,7 @@
 
 
             <li
-                class="{{ Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.explore-section') || Route::is('admin.slider.*') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.section-manage') ? 'active' : '' }}">
+                class="{{ Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.explore-section') || Route::is('admin.slider.*') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.section-manage') || Route::is('admin.section-edit') || Route::is('admin.section-update') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"
                     data-bs-target="#menu-item__for_section"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
@@ -570,14 +570,14 @@
                         <span class="menu-bar__name">{{ __('Manage Section') }}</span></span> <span
                         class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.slider.*') || Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.explore-section') || Route::is('admin.section-manage') ? 'show' : '' }}"
+                <div class="collapse crancy__dropdown {{ Route::is('admin.slider.*') || Route::is('admin.testimonial.*') || Route::is('admin.footer') || Route::is('admin.partner.*') || Route::is('admin.subscription-plan.*') || Route::is('admin.explore-section') || Route::is('admin.section-manage') || Route::is('admin.section-edit') || Route::is('admin.section-update') ? 'show' : '' }}"
                     id="menu-item__for_section" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
 
-                        <li class="{{ Route::is('admin.section-manage') ? 'active' : '' }}"><a href="{{ route('admin.section-manage') }}"><span
+                        <li class="{{ Route::is('admin.section-manage') || Route::is('admin.section-edit') ? 'active' : '' }}"><a href="{{ route('admin.section-manage') }}"><span
                                     class="menu-bar__text"><span
-                                        class="menu-bar__name">{{ __('Section Visibility') }}</span></span></a></li>
+                                        class="menu-bar__name">{{ __('Section Management') }}</span></span></a></li>
 
 
                         <li class="{{ Route::is('admin.slider.*') ? 'active' : '' }}"><a href="{{ route('admin.slider.index') }}"><span class="menu-bar__text"><span
@@ -600,7 +600,7 @@
                 </div>
             </li>
 
-            <li class="{{ Route::is('admin.front-end.frontend-section') ? 'active' : '' }}"><a class="collapsed"
+            <li class="{{ Route::is('admin.front-end.frontend-section') || Route::is('admin.front-end.section') || Route::is('admin.front-end.store') ? 'active' : '' }}"><a class="collapsed"
                     href="{{ route('admin.front-end.frontend-section') }}"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -641,7 +641,7 @@
                             </svg>
 
                         </span>
-                        <span class="menu-bar__name">{{ __('Manage Frontend') }}</span></span></a>
+                        <span class="menu-bar__name">{{ __('Frontend Management') }}</span></span></a>
             </li>
 
 

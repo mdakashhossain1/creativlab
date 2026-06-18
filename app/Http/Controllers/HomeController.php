@@ -66,38 +66,43 @@ class HomeController extends Controller
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
         $partners = Partner::where('status', 'enable')->get();
+        $section_visibility = ManageSection::where('page_name', 'home_two')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('creative-content.index', compact('seo_setting', 'partners'));
+        return view('creative-content.index', compact('seo_setting', 'partners', 'section_visibility'));
     }
 
     public function webDevelopment()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
         $partners = Partner::where('status', 'enable')->get();
+        $section_visibility = ManageSection::where('page_name', 'home_three')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('web-development.index', compact('seo_setting', 'partners'));
+        return view('web-development.index', compact('seo_setting', 'partners', 'section_visibility'));
     }
 
     public function seoOptimization()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
         $partners = Partner::where('status', 'enable')->get();
+        $section_visibility = ManageSection::where('page_name', 'home_four')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('seo-optimization.index', compact('seo_setting', 'partners'));
+        return view('seo-optimization.index', compact('seo_setting', 'partners', 'section_visibility'));
     }
 
     public function adFilms()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
+        $section_visibility = ManageSection::where('page_name', 'home_five')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('ad-films.index', compact('seo_setting'));
+        return view('ad-films.index', compact('seo_setting', 'section_visibility'));
     }
 
     public function whatsappApi()
     {
         $seo_setting = SeoSetting::where('id', 1)->first();
+        $section_visibility = ManageSection::where('page_name', 'home_six')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('whatsapp-api.index', compact('seo_setting'));
+        return view('whatsapp-api.index', compact('seo_setting', 'section_visibility'));
     }
 
 

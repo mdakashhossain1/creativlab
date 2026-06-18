@@ -281,13 +281,11 @@
         <div id="smooth-content">
             <div>
                 <main>
-                    @include('ad-films._hero_section')
-                    @include('ad-films._features_section')
-                    @include('ad-films._solutions_section')
-                    @include('ad-films._projects_section')
-                    @include('ad-films._process_section')
-                    @include('ad-films._stats_section')
-                    @include('ad-films._cta_banner_section')
+                    @foreach ($section_visibility?->sortBy('serial_number') ?? [] as $visibility)
+                        @if ($visibility->component_name != null)
+                            @include('ad-films.' . $visibility->component_name)
+                        @endif
+                    @endforeach
                 </main>
 
                 <footer>

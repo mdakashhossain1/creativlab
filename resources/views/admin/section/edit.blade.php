@@ -1,11 +1,11 @@
 @extends('admin.master_layout')
 @section('title')
-    <title>{{ __('Section Visibility') }}</title>
+    <title>{{ __('Section Visibility') }} — {{ $pageLabel }}</title>
 @endsection
 
 @section('body-header')
-    <h3 class="crancy-header__title m-0">{{ __('Section Visibility') }}</h3>
-    <p class="crancy-header__text">{{ __('Section Visibility') }} >> {{ __('Section Visibility') }}</p>
+    <h3 class="crancy-header__title m-0">{{ $pageLabel }}</h3>
+    <p class="crancy-header__text">{{ __('Section Management') }} >> {{ $pageLabel }}</p>
 @endsection
 
 @section('body-content')
@@ -29,7 +29,7 @@
                                                 <div class="row align-items-center">
                                                     <div class="col-md-6">
                                                         <div class="crancy__item-form--group mg-top-form-20">
-                                                            <label class="crancy__item-label">{{ __('Section Postition') }}
+                                                            <label class="crancy__item-label">{{ __('Section Position') }}
                                                                 * </label>
                                                             <input class="crancy__item-input" type="number"
                                                                 name="position[]" id="name"

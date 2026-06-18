@@ -1,15 +1,13 @@
 @extends('admin.master_layout')
 @section('title')
-    <title>{{ __('Frontend Section') }}</title>
+    <title>{{ __('Frontend Management') }}</title>
 @endsection
 
 @section('body-header')
-    <h3 class="crancy-header__title m-0">{{ __('Frontend Section') }}</h3>
-    <p class="crancy-header__text">{{ __('Manage Content') }} >> {{ __('Frontend Section') }}</p>
+    <h3 class="crancy-header__title m-0">{{ __('Frontend Management') }}</h3>
+    <p class="crancy-header__text">{{ __('Frontend Management') }} >> {{ __('Frontend Management') }}</p>
 @endsection
-@php
 
-@endphp
 @section('body-content')
     <section class="crancy-adashboard crancy-show">
         <div class="container container__bscreen">
