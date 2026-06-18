@@ -174,7 +174,7 @@
                                                                     {{ __('and upload') }}
                                                                 </h4>
                                                                 @if ($imageKey === 'hero_image')
-                                                                    <p style="font-size:12px;color:#888;margin-top:4px;">{{ __('Recommended size: 497 x 671px (WebP)') }}</p>
+                                                                    <p style="font-size:12px;color:#888;margin-top:4px;">{{ __('Recommended size: 497 x 671px (PNG)') }}</p>
                                                                 @endif
                                                             </label>
                                                         </div>

@@ -4,6 +4,10 @@
     .wd-float      { animation: wdFloat  4.5s ease-in-out infinite; }
     .wd-float-rev  { animation: wdFloatR 5.5s ease-in-out infinite reverse; }
     .wd-float-slow { animation: wdFloat  7s   ease-in-out infinite; }
+    @keyframes popIn { 0%{opacity:0;transform:scale(0)} 70%{opacity:1;transform:scale(1.1)} 100%{opacity:1;transform:scale(1)} }
+    .pop-card { animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; transform-origin: center; }
+    .pop-d1{animation-delay:.1s} .pop-d2{animation-delay:.25s} .pop-d3{animation-delay:.4s}
+    .pop-d4{animation-delay:.55s} .pop-d5{animation-delay:.7s} .pop-d6{animation-delay:.85s}
 
     .wd-hero-img { max-width: 115%; width: 115%; height: auto; display: block; }
 
@@ -60,12 +64,12 @@
             </div>
 
             {{-- RIGHT: hero image --}}
-            <div class="image-area relative h-full pointer-events-auto" data-aos="fade-left">
+            <div class="image-area relative h-full pointer-events-auto">
                 <div class="xl:absolute relative 2xl:w-[752px] lg:w-[600px] w-full left-0 top-0 h-full">
 
                     {{-- floating pills — positioned relative to the full-height wrapper --}}
                     <div class="absolute xl:left-0 left-0 xl:top-8 top-2 z-30 wd-float-rev md:flex hidden">
-                        <div class="flex items-center gap-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-common border border-purple/10">
+                        <div class="flex items-center gap-2 bg-white rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common border border-purple/10 pop-card pop-d1">
                             <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="#794AFF" stroke-width="1.8"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="#794AFF" stroke-width="1.8"/></svg>
                             </div>
@@ -74,7 +78,7 @@
                     </div>
 
                     <div class="absolute xl:-left-8 left-2 xl:top-[38%] top-[35%] z-30 wd-float md:flex hidden">
-                        <div class="flex items-center gap-2 bg-[#EC4899] rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="flex items-center gap-2 bg-[#EC4899] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d2">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="2" y="4" width="13" height="11" rx="1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -87,7 +91,7 @@
                     </div>
 
                     <div class="absolute xl:-left-4 left-0 xl:top-[68%] top-[65%] z-30 wd-float-slow md:flex hidden">
-                        <div class="flex items-center gap-2 bg-[#3B82F6] rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="flex items-center gap-2 bg-[#3B82F6] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d3">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -99,7 +103,7 @@
                     </div>
 
                     <div class="absolute xl:-right-2 right-0 xl:top-1/3 top-1/4 z-30 wd-float md:flex hidden">
-                        <div class="flex items-center gap-2 bg-orange rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="flex items-center gap-2 bg-orange rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d4">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </div>
@@ -108,7 +112,7 @@
                     </div>
 
                     <div class="absolute xl:-right-4 right-0 xl:bottom-1/3 bottom-1/4 z-30 wd-float-slow md:flex hidden">
-                        <div class="flex items-center gap-2 bg-purple rounded-full pl-2 pr-4 py-2 shadow-purple">
+                        <div class="flex items-center gap-2 bg-purple rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-purple pop-card pop-d5">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                             </div>
@@ -117,7 +121,7 @@
                     </div>
 
                     <div class="absolute xl:right-8 right-4 xl:bottom-10 bottom-4 z-30 wd-float-rev md:flex hidden">
-                        <div class="flex items-center gap-2 bg-[#F43F5E] rounded-full pl-2 pr-4 py-2 shadow-common">
+                        <div class="flex items-center gap-2 bg-[#F43F5E] rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d6">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="white"/></svg>
                             </div>

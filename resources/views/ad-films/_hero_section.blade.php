@@ -4,6 +4,10 @@
     .af-float      { animation: afFloat  4.5s ease-in-out infinite; }
     .af-float-rev  { animation: afFloatR 5.5s ease-in-out infinite reverse; }
     .af-float-slow { animation: afFloat  7s   ease-in-out infinite; }
+    @keyframes popIn { 0%{opacity:0;transform:scale(0)} 70%{opacity:1;transform:scale(1.1)} 100%{opacity:1;transform:scale(1)} }
+    .pop-card { animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; transform-origin: center; }
+    .pop-d1{animation-delay:.1s} .pop-d2{animation-delay:.25s} .pop-d3{animation-delay:.4s}
+    .pop-d4{animation-delay:.55s} .pop-d5{animation-delay:.7s} .pop-d6{animation-delay:.85s}
 </style>
 
 <section id="home-one-hero">
@@ -64,7 +68,7 @@
 
                                 {{-- floating pills — hidden on mobile, show md+ --}}
                                 <div class="absolute xl:right-0 right-0 xl:-top-8 -top-8 z-30 af-float-rev md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-purple rounded-full pl-2 pr-4 py-2 shadow-purple">
+                                    <div class="flex items-center gap-2 bg-purple rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-purple pop-card pop-d1">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
@@ -73,7 +77,7 @@
                                 </div>
 
                                 <div class="absolute xl:-left-16 -left-4 xl:top-1/3 top-1/4 z-30 af-float md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-[#BA4AFF] rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-[#BA4AFF] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d2">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="white" stroke-width="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                                         </div>
@@ -82,7 +86,7 @@
                                 </div>
 
                                 <div class="absolute xl:-left-12 -left-2 xl:bottom-8 bottom-4 z-30 af-float-slow md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-blue-sass rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-blue-sass rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d3">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
@@ -91,7 +95,7 @@
                                 </div>
 
                                 <div class="absolute xl:-right-16 -right-4 xl:top-6 top-4 z-30 af-float-slow md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-orange rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-orange rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d4">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
                                         </div>
@@ -100,7 +104,7 @@
                                 </div>
 
                                 <div class="absolute xl:-right-20 -right-4 xl:top-1/2 top-1/2 z-30 af-float-rev md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-common border border-purple/10">
+                                    <div class="flex items-center gap-2 bg-white rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common border border-purple/10 pop-card pop-d5">
                                         <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" stroke="#794AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13" r="4" stroke="#794AFF" stroke-width="2"/></svg>
                                         </div>
@@ -109,7 +113,7 @@
                                 </div>
 
                                 <div class="absolute xl:-right-14 -right-2 xl:bottom-12 bottom-6 z-30 af-float md:flex hidden">
-                                    <div class="flex items-center gap-2 bg-[#F43F5E] rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-[#F43F5E] rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d6">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" fill="white"/></svg>
                                         </div>

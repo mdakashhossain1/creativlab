@@ -4,6 +4,9 @@
     .wa-float      { animation: waFloat  4.5s ease-in-out infinite; }
     .wa-float-rev  { animation: waFloatR 5.5s ease-in-out infinite reverse; }
     .wa-float-slow { animation: waFloat  7s   ease-in-out infinite; }
+    @keyframes popIn { 0%{opacity:0;transform:scale(0)} 70%{opacity:1;transform:scale(1.1)} 100%{opacity:1;transform:scale(1)} }
+    .pop-card { animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; transform-origin: center; }
+    .pop-d1{animation-delay:.1s} .pop-d2{animation-delay:.25s} .pop-d3{animation-delay:.4s}
 
     /* Partner badges card custom responsive styles */
     .partner-badges-card {
@@ -280,7 +283,7 @@
 
                                 {{-- Bulk Msg — top right edge of phone --}}
                                 <div class="absolute md:block hidden z-30 wa-float-rev" style="right: -55px; top: 12%;">
-                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d1">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
@@ -290,7 +293,7 @@
 
                                 {{-- AI Chat BOT — left middle edge of phone --}}
                                 <div class="absolute md:block hidden z-30 wa-float" style="left: -65px; top: 45%;">
-                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d2">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="11" width="18" height="10" rx="2" stroke="white" stroke-width="2"/><circle cx="12" cy="5" r="2" stroke="white" stroke-width="2"/><path d="M12 7v4M8 16h.01M16 16h.01" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                                         </div>
@@ -300,7 +303,7 @@
 
                                 {{-- AI Automation — bottom right edge of phone --}}
                                 <div class="absolute md:block hidden z-30 wa-float-slow" style="right: -65px; bottom: 18%;">
-                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full pl-2 pr-4 py-2 shadow-common">
+                                    <div class="flex items-center gap-2 bg-[#25D366] rounded-full rounded-bl-none pl-2 pr-4 py-2 shadow-common pop-card pop-d3">
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l-.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="white" stroke-width="2"/></svg>
                                         </div>
