@@ -9,6 +9,7 @@ use App\Helper\EmailHelper;
 
 use Illuminate\Http\Request;
 use App\Mail\OrderSuccessfully;
+use App\Mail\DigitalProductDelivery;
 use App\Models\RazorpayPayment;
 use App\Models\InstamojoPayment;
 use App\Http\Controllers\Controller;
@@ -447,11 +448,81 @@ class EcommercePaymentController extends Controller
             $orderDetail->price = $price;
             $orderDetail->save();
         }
+
+        if ($payment_status === Status::APPROVED) {
+            $this->dispatchDigitalDelivery($order, $user);
+        }
+
         Session::forget('cupon_code');
         Session::forget('type');
         Session::forget('discount_amount');
 
         Cart::where('user_id', $user->id)->delete();
         return $order;
+    }
+
+    private function dispatchDigitalDelivery(Order $order, $user): void
+    {
+        $digitalItems = OrderDetail::with('singleProduct')
+            ->where('order_id', $order->id)
+            ->whereHas('singleProduct', fn($q) => $q->where('is_digital', true))
+            ->get();
+
+        if ($digitalItems->isEmpty()) {
+            return;
+        }
+
+        foreach ($digitalItems as $item) {
+            $item->update(['download_token' => hash('sha256', Str::random(40))]);
+        }
+
+        $digitalItems = $digitalItems->fresh('singleProduct');
+
+        try {
+            EmailHelper::mail_setup();
+
+            $template = \Modules\EmailSetting\App\Models\EmailTemplate::find(7);
+            if (!$template) {
+                return;
+            }
+
+            $downloadLinksHtml = $this->buildDownloadLinksHtml($digitalItems);
+
+            $subject = str_replace('{{order_id}}', $order->order_id, $template->subject);
+
+            $message = $template->description;
+            $message = str_replace('{{name}}',           $user->name,                  $message);
+            $message = str_replace('{{order_id}}',       $order->order_id,             $message);
+            $message = str_replace('{{amount}}',         currency($order->total),       $message);
+            $message = str_replace('{{payment_method}}', $order->payment_method,        $message);
+            $message = str_replace('{{download_links}}', $downloadLinksHtml,            $message);
+            $message = str_replace('{{dashboard_url}}',  url('/user/downloads'),        $message);
+
+            Mail::to($user->email)->send(new DigitalProductDelivery($message, $subject));
+        } catch (\Exception $e) {
+            \Log::error('Digital delivery mail error: ' . $e->getMessage());
+        }
+    }
+
+    private function buildDownloadLinksHtml($digitalItems): string
+    {
+        $html  = '<table style="width:100%;border-collapse:collapse;">';
+        $html .= '<thead><tr style="background:#f4f4f4;">';
+        $html .= '<th style="padding:8px 12px;text-align:left;border:1px solid #e0e0e0;">Product</th>';
+        $html .= '<th style="padding:8px 12px;text-align:center;border:1px solid #e0e0e0;">Download</th>';
+        $html .= '</tr></thead><tbody>';
+
+        foreach ($digitalItems as $item) {
+            $productName = $item->singleProduct->translate->name ?? $item->singleProduct->slug ?? 'Product';
+            $downloadUrl = url('/user/downloads/' . $item->download_token);
+            $html .= '<tr>';
+            $html .= '<td style="padding:10px 12px;border:1px solid #e0e0e0;">' . e($productName) . '</td>';
+            $html .= '<td style="padding:10px 12px;text-align:center;border:1px solid #e0e0e0;">';
+            $html .= '<a href="' . $downloadUrl . '" style="display:inline-block;padding:8px 18px;background:#794AFF;color:#fff;text-decoration:none;border-radius:5px;font-size:13px;font-weight:600;">Download</a>';
+            $html .= '</td></tr>';
+        }
+
+        $html .= '</tbody></table>';
+        return $html;
     }
 }

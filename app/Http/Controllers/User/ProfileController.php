@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordChangeRequest;
 use Modules\Ecommerce\Entities\Order;
+use Modules\Ecommerce\Entities\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -241,6 +242,33 @@ class ProfileController extends Controller
             'order' => $order,
             'user' => $user,
         ]);
+    }
+
+    public function downloads(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+        $perPage = $request->input('per_page', 10);
+
+        $downloads = OrderDetail::with(['singleProduct.translate', 'order'])
+            ->whereNotNull('download_token')
+            ->whereHas('order', fn($q) => $q->where('user_id', $user->id))
+            ->latest()
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
+
+        return view('user.downloads', compact('downloads'));
+    }
+
+    public function serveDownload(string $token)
+    {
+        $user = Auth::guard('web')->user();
+
+        $item = OrderDetail::with('singleProduct')
+            ->where('download_token', $token)
+            ->whereHas('order', fn($q) => $q->where('user_id', $user->id))
+            ->firstOrFail();
+
+        return redirect()->away($item->singleProduct->download_url);
     }
 
     public function account_delete(){

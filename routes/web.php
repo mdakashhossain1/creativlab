@@ -132,6 +132,9 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
             Route::get('/order/details/{order_id}', [UserProfileController::class, 'order_show'])->name('order_show');
             Route::get('/transactions/history', [UserProfileController::class, 'transactions'])->name('transactions');
 
+            Route::get('/downloads', [UserProfileController::class, 'downloads'])->name('downloads');
+            Route::get('/downloads/{token}', [UserProfileController::class, 'serveDownload'])->name('download.serve');
+
             Route::post('wishlist-set', [WishlistController::class, 'setWishlist']);
         });
 

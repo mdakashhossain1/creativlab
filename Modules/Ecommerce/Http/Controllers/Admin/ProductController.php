@@ -48,6 +48,8 @@ class ProductController extends Controller
            'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
            'seo_title' => 'nullable|string|max:255',
            'seo_description' => 'nullable|string|max:500',
+           'is_digital' => 'nullable|boolean',
+           'download_url' => 'required_if:is_digital,1|nullable|url|max:2000',
        ]);
 
         // Check if we are creating a new product or updating an existing one
@@ -59,6 +61,8 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->status = Status::ENABLE;
+        $product->is_digital = $request->boolean('is_digital');
+        $product->download_url = $request->boolean('is_digital') ? $request->download_url : null;
 
         // Handle image upload and watermarking
         if ($request->hasFile('thumbnail_image')) {
@@ -141,6 +145,8 @@ class ProductController extends Controller
                 $product->brand_id = $request->brand_id;
                 $product->tags = $request->tags;
                 $product->status = Status::ENABLE;
+                $product->is_digital = $request->boolean('is_digital');
+                $product->download_url = $request->boolean('is_digital') ? $request->download_url : null;
 
                 // Handle image upload and watermarking
                 if ($request->hasFile('thumbnail_image')) {

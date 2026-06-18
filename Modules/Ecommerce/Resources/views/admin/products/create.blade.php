@@ -218,6 +218,35 @@
                                                 </div>
                                             </div>
 
+                                            {{-- Digital Product --}}
+                                            <hr style="margin: 24px 0; border-color: #e5e7eb;">
+                                            <h4 class="crancy-product-card__title">{{ __('Digital Product') }}</h4>
+
+                                            <div class="row">
+                                                <div class="col-12 mg-top-form-20">
+                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                                        <input class="form-check-input" type="checkbox" name="is_digital"
+                                                               id="is_digital" value="1"
+                                                               {{ old('is_digital', isset($product) ? $product->is_digital : false) ? 'checked' : '' }}
+                                                               style="width:44px; height:22px; cursor:pointer;">
+                                                        <label class="form-check-label crancy__item-label mb-0" for="is_digital">
+                                                            {{ __('This is a digital / downloadable product') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mg-top-form-20" id="downloadUrlField" style="{{ old('is_digital', isset($product) ? $product->is_digital : false) ? '' : 'display:none;' }}">
+                                                    <div class="crancy__item-form--group">
+                                                        <label class="crancy__item-label">{{ __('Download URL') }} <span class="text-danger">*</span></label>
+                                                        <input class="crancy__item-input" type="url" name="download_url"
+                                                               id="download_url"
+                                                               placeholder="https://... (direct link to zip, PDF, or any file)"
+                                                               value="{{ old('download_url', isset($product) ? $product->download_url : '') }}">
+                                                        <small class="text-muted d-block mt-1">
+                                                            {{ __('Paste the direct file link. Buyers never see this URL — they receive a secure token link instead.') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <button class="crancy-btn mg-top-25" type="submit">
                                                 {{ isset($product) ? __('Update Data') : __('Save Data') }}
@@ -297,5 +326,10 @@
             }
             reader.readAsDataURL(event.target.files[0]);
         };
+
+        document.getElementById('is_digital').addEventListener('change', function () {
+            document.getElementById('downloadUrlField').style.display = this.checked ? 'block' : 'none';
+            document.getElementById('download_url').required = this.checked;
+        });
     </script>
 @endpush

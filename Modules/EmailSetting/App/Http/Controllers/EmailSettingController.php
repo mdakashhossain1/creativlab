@@ -73,8 +73,11 @@ class EmailSettingController extends Controller
         }
         elseif($template_item->id == 6){
             return view('emailsetting::subscription_purchase', ['template_item' => $template_item]);
-        }
-        else{
+        }elseif($template_item->id == 7){
+            return view('emailsetting::digital_product_delivery', ['template_item' => $template_item]);
+        }elseif($template_item->id == 8){
+            return view('emailsetting::client_project_invoice', ['template_item' => $template_item]);
+        }else{
             abort(404);
         }
 

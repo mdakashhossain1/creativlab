@@ -97,6 +97,16 @@
                     </span>
                     <span class="text-16 flex-1 text-nowrap"> {{ __('Subscription History') }} </span>
                 </a>
+                <a href="{{ route('user.downloads') }}"
+                    class="{{ request()->routeIs('user.downloads') || request()->routeIs('user.download.serve') ? 'xl:bg-buisness-gray text-main-black ' : 'xl:bg-transparent text-paragraph' }} xl:hover:bg-buisness-gray font-normal group hover:text-main-black  xl:px-30 rounded-[10px] py-2.5 text-14 xl:text-16 transition-all duration-300 flex items-center gap-1 xl:gap-4 scroll-section snap-start w-full">
+                    <span class="text-black group-hover:text-main-black">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3V15M12 15L8 11M12 15L16 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 17V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="text-16 flex-1 text-nowrap"> {{ __('My Downloads') }} </span>
+                </a>
                 <a href="{{ route('user.transactions') }}"
                     class="{{ request()->routeIs('user.transactions') ? 'xl:bg-buisness-gray text-main-black ' : 'xl:bg-transparent text-paragraph' }} xl:hover:bg-buisness-gray font-normal group hover:text-main-black  xl:px-30 rounded-[10px] py-2.5 text-14 xl:text-16 transition-all duration-300 flex items-center gap-1 xl:gap-4 scroll-section snap-start w-full">
                     <span class="text-black group-hover:text-main-black">

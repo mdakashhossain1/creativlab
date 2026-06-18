@@ -179,15 +179,72 @@ class ClientProjectController extends Controller
         $installment->save();
 
         try {
-            EmailHelper::mail_setup();
+            $installment->loadMissing('project.installments', 'project.user');
             $project = $installment->project;
             $user    = $project->user;
-            Mail::to($user->email)->send(new ClientProjectInvoice($installment, $project, $user));
+
+            $template = \Modules\EmailSetting\App\Models\EmailTemplate::find(8);
+            if ($template) {
+                $breakdownHtml = $this->buildPaymentBreakdownHtml($installment, $project);
+
+                $subject = str_replace(
+                    ['{{invoice_number}}', '{{project_name}}'],
+                    [$installment->invoice_number, $project->name],
+                    $template->subject
+                );
+
+                $message = $template->description;
+                $message = str_replace('{{name}}',             $user->name,                                              $message);
+                $message = str_replace('{{email}}',            $user->email,                                             $message);
+                $message = str_replace('{{invoice_number}}',   $installment->invoice_number,                             $message);
+                $message = str_replace('{{paid_date}}',        optional($installment->paid_at)->format('d M Y') ?? now()->format('d M Y'), $message);
+                $message = str_replace('{{project_name}}',     $project->name,                                           $message);
+                $message = str_replace('{{project_title}}',    $project->title ?? $project->name,                        $message);
+                $message = str_replace('{{installment_info}}', 'Payment ' . $installment->installment_number . ' of ' . $project->installments->count(), $message);
+                $message = str_replace('{{payment_method}}',   $installment->payment_method ?? '—',                      $message);
+                $message = str_replace('{{transaction_id}}',   $installment->transaction_id ?? '—',                      $message);
+                $message = str_replace('{{base_amount}}',      number_format($installment->base_amount, 2),               $message);
+                $message = str_replace('{{gst_amount}}',       number_format($installment->gst_amount ?? 0, 2),           $message);
+                $message = str_replace('{{total_amount}}',     number_format($installment->total_amount, 2),              $message);
+                $message = str_replace('{{payment_breakdown}}', $breakdownHtml,                                           $message);
+
+                EmailHelper::mail_setup();
+                Mail::to($user->email)->send(new ClientProjectInvoice($message, $subject));
+            }
         } catch (\Exception $e) {
             Log::error('ClientProject invoice mail error: ' . $e->getMessage());
         }
 
         return redirect()->back()
             ->with(['messege' => trans('Installment approved and invoice sent'), 'alert-type' => 'success']);
+    }
+
+    private function buildPaymentBreakdownHtml(ClientProjectInstallment $installment, ClientProject $project): string
+    {
+        $html  = '<table style="width:100%;border-collapse:collapse;">';
+        $html .= '<thead><tr style="background:#f4f4f4;">';
+        $html .= '<th style="padding:8px 12px;text-align:left;border:1px solid #e0e0e0;">Description</th>';
+        $html .= '<th style="padding:8px 12px;text-align:right;border:1px solid #e0e0e0;">Amount</th>';
+        $html .= '</tr></thead><tbody>';
+
+        $html .= '<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;">Base Amount</td>';
+        $html .= '<td style="padding:8px 12px;text-align:right;border:1px solid #e0e0e0;">' . number_format($installment->base_amount, 2) . '</td></tr>';
+
+        if (!empty($installment->gst_amount) && $installment->gst_amount > 0) {
+            $html .= '<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;">GST (' . $project->gst_percent . '%)</td>';
+            $html .= '<td style="padding:8px 12px;text-align:right;border:1px solid #e0e0e0;">' . number_format($installment->gst_amount, 2) . '</td></tr>';
+        }
+
+        if (!empty($installment->transaction_id)) {
+            $html .= '<tr><td style="padding:8px 12px;border:1px solid #e0e0e0;">Transaction ID</td>';
+            $html .= '<td style="padding:8px 12px;text-align:right;border:1px solid #e0e0e0;">' . e($installment->transaction_id) . '</td></tr>';
+        }
+
+        $html .= '<tr style="font-weight:700;color:#794AFF;">';
+        $html .= '<td style="padding:10px 12px;border:1px solid #e0e0e0;">Total Paid</td>';
+        $html .= '<td style="padding:10px 12px;text-align:right;border:1px solid #e0e0e0;">' . number_format($installment->total_amount, 2) . '</td></tr>';
+
+        $html .= '</tbody></table>';
+        return $html;
     }
 }

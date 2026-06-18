@@ -43,20 +43,20 @@ class MenuServiceProvider extends ServiceProvider
         Blade::component('menu::components.menu-item', 'menu-item');
 
         // Register menu helper function
-        if (!function_exists('render_menu')) {
+        if (!function_exists(__NAMESPACE__ . '\render_menu')) {
             function render_menu($menuId, $class = 'nav-links') {
                 $menu = Menu::find($menuId);
                 if (!$menu) return '';
-                
+
                 return view('menu::components.menu', compact('menu', 'class'))->render();
             }
         }
 
-        if (!function_exists('render_mobile_menu')) {
+        if (!function_exists(__NAMESPACE__ . '\render_mobile_menu')) {
             function render_mobile_menu($menuId) {
                 $menu = Menu::find($menuId);
                 if (!$menu) return '';
-                
+
                 return view('menu::components.mobile-menu', compact('menu'))->render();
             }
         }
