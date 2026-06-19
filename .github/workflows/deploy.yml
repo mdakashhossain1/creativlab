@@ -16,6 +16,16 @@ jobs:
       - name: Install lftp
         run: sudo apt-get install -y lftp
 
+      - name: Clear public_html before deploy
+        run: |
+          lftp -c "
+          set sftp:auto-confirm yes;
+          set net:max-retries 3;
+          open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }};
+          glob -a rm -rf /domains/creativlab.in/public_html/*;
+          bye;
+          "
+
       - name: Deploy via SFTP
         run: |
           lftp -c "
@@ -23,7 +33,7 @@ jobs:
           set net:max-retries 3;
           set net:reconnect-interval-base 5;
           open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }};
-          mirror --reverse --delete --verbose \
+          mirror --reverse --verbose \
             --exclude-glob .git \
             --exclude-glob .github \
             --exclude-glob node_modules/ \
