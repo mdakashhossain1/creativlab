@@ -31,6 +31,6 @@ jobs:
             --exclude-glob .env.* \
             --exclude-glob storage/logs/ \
             --exclude-glob storage/framework/cache/ \
-            . /domains/creativlab.in/public_html/;
+            . /home/u663255439/domains/creativlab.in/public_html/;
           bye;
           "
