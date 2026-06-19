@@ -77,6 +77,12 @@ return [
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
             'neon_endpoint' => env('DB_NEON_ENDPOINT', ''),
+            // Reuse one TCP connection per PHP worker instead of opening a new one each request.
+            // The DbReconnect middleware handles stale connections transparently.
+            'options' => [
+                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_TIMEOUT    => 10,
+            ],
         ],
 
         'sqlsrv' => [

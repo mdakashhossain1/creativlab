@@ -30,6 +30,9 @@
     <!-- Preloader -->
     @include('components.preloder')
 
+    <!-- Shimmer skeleton (shows while page assets load, hides on window.load) -->
+    @include('components.shimmer')
+
     <!--Todo: web-Menu start  -->
     <div class="flex justify-center relative z-50">
         <div class="header-wrapper w-full fixed left-0 top-0 z-20 xl:block hidden h1-header-sticky h1-header-sticky-qs">

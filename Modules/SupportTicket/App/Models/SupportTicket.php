@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 
 class SupportTicket extends Model
 {
@@ -70,22 +71,22 @@ class SupportTicket extends Model
      */
     public static function getTotalUnseenMessagesForAdmin(): int
     {
-        return SupportTicket::whereHas('ticket_messages', function($query) {
+        return Cache::remember('support_unseen_admin', 60, function () {
+            return SupportTicket::whereHas('ticket_messages', function ($query) {
                 $query->where('send_by', 'user')->where('is_seen', 0);
-            })
-            ->count();
+            })->count();
+        });
     }
 
-    /**
-     * Get total count of tickets with unseen messages for user
-     */
     public static function getTotalUnseenMessagesForUser($userId): int
     {
-        return SupportTicket::where('user_id', $userId)
-            ->where('user_type', 'user')
-            ->whereHas('ticket_messages', function($query) {
-                $query->where('send_by', 'admin')->where('is_seen', 0);
-            })
-            ->count();
+        if (!$userId) return 0;
+        return Cache::remember("support_unseen_user_{$userId}", 30, function () use ($userId) {
+            return SupportTicket::where('user_id', $userId)
+                ->where('user_type', 'user')
+                ->whereHas('ticket_messages', function ($query) {
+                    $query->where('send_by', 'admin')->where('is_seen', 0);
+                })->count();
+        });
     }
 }
