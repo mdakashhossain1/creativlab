@@ -13,20 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
+
       - name: Deploy via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          protocol: ftps
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
-          server-dir: /domains/creativlab.in/public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            .env
-            .env.*
-            **/storage/logs/**
-            **/storage/framework/cache/**
+        run: |
+          lftp -c "
+          set sftp:auto-confirm yes;
+          set net:max-retries 3;
+          set net:reconnect-interval-base 5;
+          open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }};
+          mirror --reverse --delete --verbose \
+            --exclude-glob .git \
+            --exclude-glob .github \
+            --exclude-glob node_modules/ \
+            --exclude-glob .env \
+            --exclude-glob .env.* \
+            --exclude-glob storage/logs/ \
+            --exclude-glob storage/framework/cache/ \
+            . /domains/creativlab.in/public_html/;
+          bye;
+          "
