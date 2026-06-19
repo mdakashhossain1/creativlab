@@ -16,7 +16,7 @@ jobs:
       - name: Install lftp
         run: sudo apt-get install -y lftp
 
-      - name: Deploy via SFTP (push changes only, never delete)
+      - name: Deploy
         run: |
           lftp -c "
           set sftp:auto-confirm yes;
@@ -29,9 +29,6 @@ jobs:
             --exclude-glob node_modules/ \
             --exclude-glob .env \
             --exclude-glob .env.* \
-            --exclude-glob storage/ \
-            --exclude-glob public/uploads/ \
-            --exclude-glob uploads/ \
             . /home/u663255439/domains/creativlab.in/public_html/;
           bye;
           "
