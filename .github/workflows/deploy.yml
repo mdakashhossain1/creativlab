@@ -21,8 +21,10 @@ jobs:
           lftp -c "
           set sftp:auto-confirm yes;
           set net:max-retries 3;
+          set cmd:fail-exit no;
           open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }};
           glob -a rm -rf /domains/creativlab.in/public_html/*;
+          set cmd:fail-exit yes;
           bye;
           "
 
