@@ -37,54 +37,18 @@
     <div class="theme-container mx-auto">
 
         <div class="flex flex-col items-center mb-14 md:mb-20" data-aos="fade-up">
-            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR PROCESS</span>
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">{{ getTranslatedValue($af_process, 'section_label') ?: 'OUR PROCESS' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                How We Create <span class="text-purple">Impactful Ad Films</span>
+                {!! getTranslatedValue($af_process, 'section_title') ?: 'How We Create <span class="text-purple">Impactful Ad Films</span>' !!}
             </h2>
         </div>
 
         @php
             $steps = [
-                [
-                    'num'        => '01',
-                    'badge_bg'   => '#794AFF',
-                    'icon_bg'    => 'rgba(121,74,255,0.12)',
-                    'icon_color' => '#794AFF',
-                    'conn'       => 'af-conn-1',
-                    'icon'       => '<circle cx="11" cy="11" r="8" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"/>',
-                    'title'      => 'Discover & Plan',
-                    'desc'       => 'We understand your brand, audience & goals to plan the perfect concept.',
-                ],
-                [
-                    'num'        => '02',
-                    'badge_bg'   => '#BA4AFF',
-                    'icon_bg'    => 'rgba(186,74,255,0.12)',
-                    'icon_color' => '#BA4AFF',
-                    'conn'       => 'af-conn-2',
-                    'icon'       => '<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-                    'title'      => 'Script & Concept',
-                    'desc'       => 'We craft a creative script and visual concept that tells your story.',
-                ],
-                [
-                    'num'        => '03',
-                    'badge_bg'   => '#FF7E40',
-                    'icon_bg'    => 'rgba(255,126,64,0.12)',
-                    'icon_color' => '#FF7E40',
-                    'conn'       => 'af-conn-3',
-                    'icon'       => '<rect x="2" y="2" width="20" height="20" rx="2.18" stroke-width="1.8"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke-width="1.8" stroke-linecap="round"/>',
-                    'title'      => 'Shoot & Produce',
-                    'desc'       => 'Professional shooting with cinematic techniques and creative direction.',
-                ],
-                [
-                    'num'        => '04',
-                    'badge_bg'   => '#0EA5E9',
-                    'icon_bg'    => 'rgba(14,165,233,0.12)',
-                    'icon_color' => '#0EA5E9',
-                    'conn'       => '',
-                    'icon'       => '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-                    'title'      => 'Edit & Deliver',
-                    'desc'       => 'We edit, enhance and deliver a film that creates impact and converts.',
-                ],
+                ['num'=>'01','badge_bg'=>'#794AFF','icon_bg'=>'rgba(121,74,255,0.12)','icon_color'=>'#794AFF','conn'=>'af-conn-1','icon'=>'<circle cx="11" cy="11" r="8" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"/>','title'=>getTranslatedValue($af_process,'step_1_title')?:'Discover &amp; Plan','desc'=>getTranslatedValue($af_process,'step_1_desc')?:'We understand your brand, audience & goals to plan the perfect concept.'],
+                ['num'=>'02','badge_bg'=>'#BA4AFF','icon_bg'=>'rgba(186,74,255,0.12)','icon_color'=>'#BA4AFF','conn'=>'af-conn-2','icon'=>'<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>','title'=>getTranslatedValue($af_process,'step_2_title')?:'Script &amp; Concept','desc'=>getTranslatedValue($af_process,'step_2_desc')?:'We craft a creative script and visual concept that tells your story.'],
+                ['num'=>'03','badge_bg'=>'#FF7E40','icon_bg'=>'rgba(255,126,64,0.12)','icon_color'=>'#FF7E40','conn'=>'af-conn-3','icon'=>'<rect x="2" y="2" width="20" height="20" rx="2.18" stroke-width="1.8"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke-width="1.8" stroke-linecap="round"/>','title'=>getTranslatedValue($af_process,'step_3_title')?:'Shoot &amp; Produce','desc'=>getTranslatedValue($af_process,'step_3_desc')?:'Professional shooting with cinematic techniques and creative direction.'],
+                ['num'=>'04','badge_bg'=>'#0EA5E9','icon_bg'=>'rgba(14,165,233,0.12)','icon_color'=>'#0EA5E9','conn'=>'','icon'=>'<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>','title'=>getTranslatedValue($af_process,'step_4_title')?:'Edit &amp; Deliver','desc'=>getTranslatedValue($af_process,'step_4_desc')?:'We edit, enhance and deliver a film that creates impact and converts.'],
             ];
         @endphp
 

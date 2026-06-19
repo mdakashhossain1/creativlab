@@ -200,38 +200,21 @@
 
         {{-- heading --}}
         <div class="flex flex-col items-center mb-14 md:mb-16">
-            <span class="text-[#25D366] text-sm font-semibold tracking-wide mb-2 uppercase">Our work process</span>
+            <span class="text-[#25D366] text-sm font-semibold tracking-wide mb-2 uppercase">{{ getTranslatedValue($wa_process, 'section_label') ?: 'Our work process' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                Simple Steps, <span class="text-purple">Powerful Result</span>
+                {!! getTranslatedValue($wa_process, 'section_title') ?: 'Simple Steps, <span class="text-purple">Powerful Result</span>' !!}
             </h2>
         </div>
 
         @php
+            $waStepImgs     = ['whatsapp-api/idea.png','whatsapp-api/gear.png','whatsapp-api/campaign.png','whatsapp-api/diagram 1.png'];
+            $waStepDefTitles= ['Understanding','Setup & Automation','Campaign & Engagement','Optimize & Grow'];
+            $waStepDefDescs = ['We understand your business, audience, and communication goals to create the right automation strategy.','We set up the WhatsApp API, chatbot flows, campaigns, and automation systems for your business.','We help you run campaigns, automate customer interactions, and improve engagement efficiently.','We analyze performance, optimize workflows, and scale your WhatsApp communication system for better results.'];
             $steps = [
-                [
-                    'num'  => '01',
-                    'title'=> 'Understanding',
-                    'desc' => 'We understand your business, audience, and communication goals to create the right automation strategy.',
-                    'img'  => 'whatsapp-api/idea.png',
-                ],
-                [
-                    'num'  => '02',
-                    'title'=> 'Setup & Automation',
-                    'desc' => 'We set up the WhatsApp API, chatbot flows, campaigns, and automation systems for your business.',
-                    'img'  => 'whatsapp-api/gear.png',
-                ],
-                [
-                    'num'  => '03',
-                    'title'=> 'Campaign & Engagement',
-                    'desc' => 'We help you run campaigns, automate customer interactions, and improve engagement efficiently.',
-                    'img'  => 'whatsapp-api/campaign.png',
-                ],
-                [
-                    'num'  => '04',
-                    'title'=> 'Optimize & Grow',
-                    'desc' => 'We analyze performance, optimize workflows, and scale your WhatsApp communication system for better results.',
-                    'img'  => 'whatsapp-api/diagram 1.png',
-                ],
+                ['num'=>'01','title'=>getTranslatedValue($wa_process,'step_1_title')?:$waStepDefTitles[0],'desc'=>getTranslatedValue($wa_process,'step_1_desc')?:$waStepDefDescs[0],'img'=>$waStepImgs[0]],
+                ['num'=>'02','title'=>getTranslatedValue($wa_process,'step_2_title')?:$waStepDefTitles[1],'desc'=>getTranslatedValue($wa_process,'step_2_desc')?:$waStepDefDescs[1],'img'=>$waStepImgs[1]],
+                ['num'=>'03','title'=>getTranslatedValue($wa_process,'step_3_title')?:$waStepDefTitles[2],'desc'=>getTranslatedValue($wa_process,'step_3_desc')?:$waStepDefDescs[2],'img'=>$waStepImgs[2]],
+                ['num'=>'04','title'=>getTranslatedValue($wa_process,'step_4_title')?:$waStepDefTitles[3],'desc'=>getTranslatedValue($wa_process,'step_4_desc')?:$waStepDefDescs[3],'img'=>$waStepImgs[3]],
             ];
 
             /*

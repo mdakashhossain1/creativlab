@@ -193,33 +193,33 @@
                 <div class="inline-flex items-center gap-2.5 bg-white border border-[#25D366]/25 rounded-full px-5 py-2.5 mb-6 shadow-sm">
                     <img src="{{ asset('frontend/assets/images/whatsapp-api/whatapp.png') }}"
                          alt="WhatsApp" class="size-7 object-contain flex-shrink-0">
-                    <span class="text-[#128C7E] text-sm font-semibold tracking-wide">Official WhatsApp Business API</span>
+                    <span class="text-[#128C7E] text-sm font-semibold tracking-wide">{{ getTranslatedValue($wa_hero, 'badge_text') ?: 'Official WhatsApp Business API' }}</span>
                 </div>
 
                 <h1 class="text-main-black mb-[35px] custom-heading md:text-left" style="font-weight: 400 !important;">
-                    Official <span>WhatsApp API</span> Solutions For <span>Businesses</span>
+                    {!! getTranslatedValue($wa_hero, 'heading') ?: 'Official <span>WhatsApp API</span> Solutions For <span>Businesses</span>' !!}
                 </h1>
 
                 <div class="px-6 py-[14px] bg-white border-l-2 wa-desc-container mb-[35px] lg:w-full md:w-[500px]">
                     <p class="text-ptwo wa-desc-text text-paragraph">
-                        Automate conversations, engage customers, and grow your business with powerful WhatsApp automation solutions.
+                        {{ getTranslatedValue($wa_hero, 'description') ?: 'Automate conversations, engage customers, and grow your business with powerful WhatsApp automation solutions.' }}
                     </p>
                 </div>
 
                 <div class="flex space-x-[30px] items-center mb-[35px]">
-                    <a href="{{ route('contact-us') }}">
+                    <a href="{{ getTranslatedValue($wa_hero, 'cta_button_1_url') ?: route('contact-us') }}">
                         <div class="home-two-btn-bg py-3 group bg-[#25D366] border-[#25D366] btn-green-whatsapp">
                             <span class="text-base text-white group-hover:text-[#25D366] transition-all duration-300 font-semibold font-inter relative z-10">
-                                Get Started
+                                {{ getTranslatedValue($wa_hero, 'cta_button_1') ?: 'Get Started' }}
                             </span>
                             <span>
                                 {{ get_svg('home_cta_white') }}
                             </span>
                         </div>
                     </a>
-                    <a href="{{ route('contact-us') }}">
+                    <a href="{{ getTranslatedValue($wa_hero, 'cta_button_2_url') ?: route('contact-us') }}">
                         <div class="flex items-center gap-2 group btn-book-meeting-group">
-                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['Book_Meeting'] before:absolute before:left-0 before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">Book Meeting</p>
+                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black relative">{{ getTranslatedValue($wa_hero, 'cta_button_2') ?: 'Book Meeting' }}</p>
                             <span>
                                 {{ get_svg('arrow2') }}
                             </span>
@@ -232,7 +232,7 @@
 
                     {{-- Left 45% --}}
                     <div class="partner-card-left">
-                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Official Partner of</p>
+                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">{{ getTranslatedValue($wa_hero, 'partner_badge_label_1') ?: 'Official Partner of' }}</p>
                         <img src="{{ asset('frontend/assets/images/whatsapp-api/aisensy.png') }}"
                              alt="AiSensy" style="height:24px;width:auto;max-width:110px;object-fit:contain;object-position:left;">
                     </div>
@@ -242,7 +242,7 @@
 
                     {{-- Right 55% --}}
                     <div class="partner-card-right">
-                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">Powered By</p>
+                        <p class="partner-label-text" style="font-size:11px;font-weight:400;color:#6B7280;margin:0;line-height:1;">{{ getTranslatedValue($wa_hero, 'partner_badge_label_2') ?: 'Powered By' }}</p>
                         <div class="partner-card-row">
 
                             {{-- WhatsApp --}}
@@ -287,7 +287,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">Bulk Msg</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($wa_hero, 'pill_1') ?: 'Bulk Msg' }}</span>
                                     </div>
                                 </div>
 
@@ -297,7 +297,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="11" width="18" height="10" rx="2" stroke="white" stroke-width="2"/><circle cx="12" cy="5" r="2" stroke="white" stroke-width="2"/><path d="M12 7v4M8 16h.01M16 16h.01" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">AI Chat BOT</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($wa_hero, 'pill_2') ?: 'AI Chat BOT' }}</span>
                                     </div>
                                 </div>
 
@@ -307,7 +307,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l-.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="white" stroke-width="2"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">AI Automation</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($wa_hero, 'pill_3') ?: 'AI Automation' }}</span>
                                     </div>
                                 </div>
                             </div>

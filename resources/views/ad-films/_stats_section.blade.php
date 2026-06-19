@@ -8,22 +8,10 @@
             <div class="relative z-10 grid xl:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-6 md:gap-0 md:divide-x divide-white/20">
                 @php
                     $stats = [
-                        [
-                            'icon' => '<rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="1.6"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
-                            'value' => '300+', 'label' => 'Ad Films Created',
-                        ],
-                        [
-                            'icon' => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
-                            'value' => '150+', 'label' => 'Brands Served',
-                        ],
-                        [
-                            'icon' => '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>',
-                            'value' => '50M+', 'label' => 'Views Generated',
-                        ],
-                        [
-                            'icon' => '<path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 4L12 14.01l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
-                            'value' => '95%', 'label' => 'Client Satisfaction',
-                        ],
+                        ['icon'=>'<rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="1.6"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>','value'=>getTranslatedValue($af_stats,'stat_1_value')?:'300+','label'=>getTranslatedValue($af_stats,'stat_1_label')?:'Ad Films Created'],
+                        ['icon'=>'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>','value'=>getTranslatedValue($af_stats,'stat_2_value')?:'150+','label'=>getTranslatedValue($af_stats,'stat_2_label')?:'Brands Served'],
+                        ['icon'=>'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>','value'=>getTranslatedValue($af_stats,'stat_3_value')?:'50M+','label'=>getTranslatedValue($af_stats,'stat_3_label')?:'Views Generated'],
+                        ['icon'=>'<path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 4L12 14.01l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>','value'=>getTranslatedValue($af_stats,'stat_4_value')?:'95%','label'=>getTranslatedValue($af_stats,'stat_4_label')?:'Client Satisfaction'],
                     ];
                 @endphp
 

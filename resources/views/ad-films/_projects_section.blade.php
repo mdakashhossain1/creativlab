@@ -25,9 +25,9 @@
 <section class="w-full bg-white md:py-[100px] py-16">
     <div class="theme-container mx-auto">
         <div class="flex flex-col items-center mb-10 md:mb-14" data-aos="fade-up">
-            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR WORK</span>
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">{{ getTranslatedValue($af_projects, 'section_label') ?: 'OUR WORK' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                Recent <span class="text-purple">Ad Film</span> Projects
+                {!! getTranslatedValue($af_projects, 'section_title') ?: 'Recent <span class="text-purple">Ad Film</span> Projects' !!}
             </h2>
         </div>
 
@@ -35,36 +35,34 @@
             <div class="af-projects-swiper swiper w-full">
                 <div class="swiper-wrapper">
                     @php
-                        $projects = [
-                            ['img' => 'frontend/assets/images/projects/1.webp', 'title' => 'Glowverse Skincare',  'tag' => 'Brand Film'],
-                            ['img' => 'frontend/assets/images/projects/2.webp', 'title' => 'UrbanBite Bites',     'tag' => 'Product Ad Film'],
-                            ['img' => 'frontend/assets/images/projects/3.webp', 'title' => 'TasteBud Restaurant', 'tag' => 'Promotional Film'],
-                            ['img' => 'frontend/assets/images/projects/4.webp', 'title' => 'BuildCraft Cement',   'tag' => 'Commercial Film'],
-                            ['img' => 'frontend/assets/images/projects/5.webp', 'title' => 'EduSmart Learning',   'tag' => 'Brand Film'],
-                            ['img' => 'frontend/assets/images/projects/6.webp', 'title' => 'NovaTech Gadgets',    'tag' => 'Product Ad Film'],
-                            ['img' => 'frontend/assets/images/projects/7.webp', 'title' => 'GreenLeaf Organics',  'tag' => 'Brand Film'],
-                            ['img' => 'frontend/assets/images/projects/8.webp', 'title' => 'FitZone Gym',         'tag' => 'Promotional Film'],
-                        ];
+                        $afProjImgs       = $af_projects?->data_values['images'] ?? [];
+                        $afProjDefTitles  = ['Glowverse Skincare','UrbanBite Bites','TasteBud Restaurant','BuildCraft Cement','EduSmart Learning','NovaTech Gadgets','GreenLeaf Organics','FitZone Gym'];
+                        $afProjDefTags    = ['Brand Film','Product Ad Film','Promotional Film','Commercial Film','Brand Film','Product Ad Film','Brand Film','Promotional Film'];
                     @endphp
 
-                    @foreach($projects as $p)
+                    @for($i = 1; $i <= 8; $i++)
+                    @php
+                        $imgSrc = $afProjImgs["project_{$i}_image"] ?? "frontend/assets/images/projects/{$i}.webp";
+                        $pTitle = getTranslatedValue($af_projects, "project_{$i}_title") ?: $afProjDefTitles[$i - 1];
+                        $pTag   = getTranslatedValue($af_projects, "project_{$i}_tag")   ?: $afProjDefTags[$i - 1];
+                    @endphp
                     <div class="swiper-slide">
                         <div class="af-proj-card">
                             <div class="af-img-wrap">
-                                <img src="{{ asset($p['img']) }}" alt="{{ $p['title'] }}" />
+                                <img src="{{ asset($imgSrc) }}" alt="{{ $pTitle }}" />
                                 <div class="af-img-overlay"></div>
-                                <span class="absolute top-3 left-3 text-[10px] font-bold text-white bg-purple/80 backdrop-blur-sm px-3 py-1 rounded-full uppercase tracking-wide">{{ $p['tag'] }}</span>
+                                <span class="absolute top-3 left-3 text-[10px] font-bold text-white bg-purple/80 backdrop-blur-sm px-3 py-1 rounded-full uppercase tracking-wide">{{ $pTag }}</span>
                                 <button class="af-play-btn">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#794AFF" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
                                 </button>
                             </div>
                             <div class="p-5">
-                                <p class="font-bold text-main-black text-base mb-1">{{ $p['title'] }}</p>
-                                <p class="text-purple text-xs font-semibold">{{ $p['tag'] }}</p>
+                                <p class="font-bold text-main-black text-base mb-1">{{ $pTitle }}</p>
+                                <p class="text-purple text-xs font-semibold">{{ $pTag }}</p>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    @endfor
                 </div>
 
                 <div class="swiper-pagination"></div>

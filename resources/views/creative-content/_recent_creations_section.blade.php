@@ -36,14 +36,13 @@
 <section class="w-full bg-white md:py-[100px] py-16">
     <div class="theme-container mx-auto">
         <div class="flex flex-col items-center mb-10 md:mb-14" data-aos="fade-up">
-            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR CREATIVE WORKS</span>
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">{{ getTranslatedValue($cc_recent_creations, 'section_label') ?: 'OUR CREATIVE WORKS' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                Some <span class="text-purple">Recent</span> Creations
+                {!! getTranslatedValue($cc_recent_creations, 'section_title') ?: 'Some <span class="text-purple">Recent</span> Creations' !!}
             </h2>
         </div>
 
         <div class="relative">
-            {{-- prev button --}}
             <div class="cc-proj-nav" style="left: -22px;">
                 <button class="cc-proj-nav-btn cc-proj-prev" aria-label="Previous">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +51,6 @@
                 </button>
             </div>
 
-            {{-- next button --}}
             <div class="cc-proj-nav" style="right: -22px;">
                 <button class="cc-proj-nav-btn cc-proj-next" aria-label="Next">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,34 +62,33 @@
             <div class="cc-works-swiper swiper w-full">
                 <div class="swiper-wrapper">
                     @php
-                        $creations = [
-                            ['img' => 'frontend/assets/images/projects/1.webp', 'label' => 'Product Ad Design',  'tag' => 'Ad Creative'],
-                            ['img' => 'frontend/assets/images/projects/2.webp', 'label' => 'Social Media Post',  'tag' => 'Graphic Design'],
-                            ['img' => 'frontend/assets/images/projects/3.webp', 'label' => 'Reel Editing',       'tag' => 'Video'],
-                            ['img' => 'frontend/assets/images/projects/4.webp', 'label' => 'Brand Poster',       'tag' => 'Brand Design'],
-                            ['img' => 'frontend/assets/images/projects/5.webp', 'label' => 'Commercial Video',   'tag' => 'Motion'],
-                            ['img' => 'frontend/assets/images/projects/6.webp', 'label' => 'Thumbnail Design',   'tag' => 'YouTube'],
-                            ['img' => 'frontend/assets/images/projects/7.webp', 'label' => 'Campaign Creative',  'tag' => 'Campaign'],
-                            ['img' => 'frontend/assets/images/projects/8.webp', 'label' => 'Motion Graphic',     'tag' => 'Animation'],
-                            ['img' => 'frontend/assets/images/projects/9.webp', 'label' => 'Event Poster',       'tag' => 'Print Design'],
-                        ];
+                        $creationImgs   = $cc_recent_creations?->data_values['images'] ?? [];
+                        $defaultImgs    = array_map(fn($n) => "frontend/assets/images/projects/{$n}.webp", range(1, 9));
+                        $defaultLabels  = ['Product Ad Design','Social Media Post','Reel Editing','Brand Poster','Commercial Video','Thumbnail Design','Campaign Creative','Motion Graphic','Event Poster'];
+                        $defaultTags    = ['Ad Creative','Graphic Design','Video','Brand Design','Motion','YouTube','Campaign','Animation','Print Design'];
                     @endphp
 
-                    @foreach($creations as $c)
+                    @for($i = 1; $i <= 9; $i++)
+                    @php
+                        $imgKey = "creation_{$i}";
+                        $imgSrc = $creationImgs[$imgKey] ?? $defaultImgs[$i - 1];
+                        $label  = $defaultLabels[$i - 1];
+                        $tag    = $defaultTags[$i - 1];
+                    @endphp
                     <div class="swiper-slide">
                         <div class="cc-work-card">
                             <div class="cc-img-wrap">
-                                <img src="{{ asset($c['img']) }}" alt="{{ $c['label'] }}" />
+                                <img src="{{ asset($imgSrc) }}" alt="{{ $label }}" />
                                 <span class="absolute top-3 left-3 text-[10px] font-bold text-white bg-purple/80 backdrop-blur-sm px-3 py-1 rounded-full uppercase tracking-wide">
-                                    {{ $c['tag'] }}
+                                    {{ $tag }}
                                 </span>
                             </div>
                             <div class="cc-label">
-                                <p class="font-bold text-main-black text-sm">{{ $c['label'] }}</p>
+                                <p class="font-bold text-main-black text-sm">{{ $label }}</p>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    @endfor
                 </div>
 
                 <div class="swiper-pagination"></div>

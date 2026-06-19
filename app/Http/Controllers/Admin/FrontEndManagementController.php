@@ -13,11 +13,44 @@ class FrontEndManagementController extends Controller
     {
         $jsonUrl = resource_path('views/admin/settings.json');
         $all_sections = json_decode(file_get_contents($jsonUrl), true);
-        ksort($all_sections);
 
-        $sections = array_filter($all_sections, fn($key) => str_starts_with($key, 'template_1_'), ARRAY_FILTER_USE_KEY);
+        $groupDefinitions = [
+            'Digital Marketing'  => fn($k) => str_starts_with($k, 'template_1_'),
+            'Creative Content'   => fn($k) => str_starts_with($k, 'creative_content_'),
+            'Web Development'    => fn($k) => str_starts_with($k, 'web_dev_'),
+            'SEO Optimization'   => fn($k) => str_starts_with($k, 'seo_'),
+            'Ad Films'           => fn($k) => str_starts_with($k, 'ad_films_'),
+            'WhatsApp API'       => fn($k) => str_starts_with($k, 'whatsapp_'),
+            'About Us Page'      => fn($k) => str_starts_with($k, 'about_'),
+            'Services Page'      => fn($k) => str_starts_with($k, 'service_'),
+            'FAQs Page'          => fn($k) => str_starts_with($k, 'faqs_'),
+            'Team Page'          => fn($k) => str_starts_with($k, 'team_'),
+            'Blog Page'          => fn($k) => str_starts_with($k, 'blog_'),
+            'Legacy Themes'      => fn($k) => str_starts_with($k, 'template_3_') || str_starts_with($k, 'themplate_3_') || str_starts_with($k, 'template_5_') || in_array($k, ['about_company', 'explore_services', 'our_cool_features', 'what_we_do', 'home_4_cta_section']),
+        ];
 
-        return view('admin.frontend-management.index', compact('sections'));
+        $groupedSections = [];
+        $ungrouped = [];
+
+        foreach ($all_sections as $key => $section) {
+            $placed = false;
+            foreach ($groupDefinitions as $groupName => $matcher) {
+                if ($matcher($key)) {
+                    $groupedSections[$groupName][$key] = $section;
+                    $placed = true;
+                    break;
+                }
+            }
+            if (!$placed) {
+                $ungrouped[$key] = $section;
+            }
+        }
+
+        if (!empty($ungrouped)) {
+            $groupedSections['Other'] = $ungrouped;
+        }
+
+        return view('admin.frontend-management.index', compact('groupedSections'));
     }
 
     public function section($key)

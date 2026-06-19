@@ -30,32 +30,32 @@
                         <span class="animate-ping absolute inline-flex size-2 rounded-full bg-purple opacity-75"></span>
                         <span class="relative inline-flex size-2 rounded-full bg-purple"></span>
                     </span>
-                    <span class="text-purple text-sm font-semibold tracking-wide">Web Development Agency</span>
+                    <span class="text-purple text-sm font-semibold tracking-wide">{{ getTranslatedValue($wd_hero, 'badge_text') ?: 'Web Development Agency' }}</span>
                 </div>
 
                 <h1 class="text-4xl md:text-65 text-main-black mb-[35px] pointer-events-auto custom-heading md:text-left" style="font-weight: 400 !important;">
-                    We Build <span>Modern</span> Websites That Drive Results
+                    {!! getTranslatedValue($wd_hero, 'heading') ?: 'We Build <span>Modern</span> Websites That Drive Results' !!}
                 </h1>
 
                 <div class="px-6 py-[14px] bg-white border-l-2 border-blue-sass mb-[35px] xl:w-full md:w-[500px]">
                     <p class="text-ptwo text-paragraph">
-                        We design and develop high-performance websites that are fast, responsive, visually engaging, and built to grow your business online.
+                        {{ getTranslatedValue($wd_hero, 'description') ?: 'We design and develop high-performance websites that are fast, responsive, visually engaging, and built to grow your business online.' }}
                     </p>
                 </div>
 
                 <div class="flex space-x-[30px] items-center pointer-events-auto">
-                    <a href="{{ route('contact-us') }}">
+                    <a href="{{ getTranslatedValue($wd_hero, 'cta_button_1_url') ?: route('contact-us') }}">
                         <div class="home-two-btn-bg py-3 group bg-purple border-purple">
                             <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
-                                Start Your Project
+                                {{ getTranslatedValue($wd_hero, 'cta_button_1') ?: 'Start Your Project' }}
                             </span>
                             <span>{{ get_svg('home_cta_white') }}</span>
                         </div>
                     </a>
-                    <a href="{{ route('services') }}">
+                    <a href="{{ getTranslatedValue($wd_hero, 'cta_button_2_url') ?: route('services') }}">
                         <div class="flex items-center gap-2 group">
-                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['View_Portfolio'] before:absolute before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">
-                                View Portfolio
+                            <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black relative">
+                                {{ getTranslatedValue($wd_hero, 'cta_button_2') ?: 'View Portfolio' }}
                             </p>
                             <span>{{ get_svg('arrow2') }}</span>
                         </div>
@@ -63,42 +63,39 @@
                 </div>
             </div>
 
-            {{-- RIGHT: hero image --}}
+            {{-- RIGHT: hero image with floating pills --}}
             <div class="image-area relative h-full pointer-events-auto">
                 <div class="xl:absolute relative 2xl:w-[752px] lg:w-[600px] w-full left-0 top-0 h-full">
 
-                    {{-- floating pills — positioned relative to the full-height wrapper --}}
+                    @php
+                        $pillDefaults = ['UI/UX Design','Responsive Design','E-Commerce','Custom Website','SEO Friendly','Fast Performance'];
+                        $pillColors   = ['bg-white text-main-black border border-purple/10','bg-[#EC4899] text-white','bg-[#3B82F6] text-white','bg-orange text-white','bg-purple text-white','bg-[#F43F5E] text-white'];
+                    @endphp
+
                     <div class="absolute xl:left-0 left-0 xl:top-8 top-2 z-30 wd-float-rev md:flex hidden">
-                        <div class="flex items-center gap-2 bg-white rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common border border-purple/10 pop-card pop-d1">
+                        <div class="flex items-center gap-2 {{ $pillColors[0] }} rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d1">
                             <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="#794AFF" stroke-width="1.8"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="#794AFF" stroke-width="1.8"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-main-black">UI/UX Design</span>
+                            <span class="text-xs font-bold">{{ getTranslatedValue($wd_hero, 'pill_1') ?: $pillDefaults[0] }}</span>
                         </div>
                     </div>
 
                     <div class="absolute xl:-left-8 left-2 xl:top-[38%] top-[35%] z-30 wd-float md:flex hidden">
                         <div class="flex items-center gap-2 bg-[#EC4899] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d2">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="2" y="4" width="13" height="11" rx="1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <rect x="11" y="9" width="6" height="10" rx="1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M6 15h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="13" height="11" rx="1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="11" y="9" width="6" height="10" rx="1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 15h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-white">Responsive Design</span>
+                            <span class="text-xs font-bold text-white">{{ getTranslatedValue($wd_hero, 'pill_2') ?: $pillDefaults[1] }}</span>
                         </div>
                     </div>
 
                     <div class="absolute xl:-left-4 left-0 xl:top-[68%] top-[65%] z-30 wd-float-slow md:flex hidden">
                         <div class="flex items-center gap-2 bg-[#3B82F6] rounded-full rounded-br-none pl-2 pr-4 py-2 shadow-common pop-card pop-d3">
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 6h18M16 10a4 4 0 01-8 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-white">E-Commerce</span>
+                            <span class="text-xs font-bold text-white">{{ getTranslatedValue($wd_hero, 'pill_3') ?: $pillDefaults[2] }}</span>
                         </div>
                     </div>
 
@@ -107,7 +104,7 @@
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-white">Custom Website</span>
+                            <span class="text-xs font-bold text-white">{{ getTranslatedValue($wd_hero, 'pill_4') ?: $pillDefaults[3] }}</span>
                         </div>
                     </div>
 
@@ -116,7 +113,7 @@
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-white">SEO Friendly</span>
+                            <span class="text-xs font-bold text-white">{{ getTranslatedValue($wd_hero, 'pill_5') ?: $pillDefaults[4] }}</span>
                         </div>
                     </div>
 
@@ -125,11 +122,10 @@
                             <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="white"/></svg>
                             </div>
-                            <span class="text-xs font-bold text-white">Fast Performance</span>
+                            <span class="text-xs font-bold text-white">{{ getTranslatedValue($wd_hero, 'pill_6') ?: $pillDefaults[5] }}</span>
                         </div>
                     </div>
 
-                    {{-- image anchored to bottom --}}
                     <div class="xl:absolute relative left-0 bottom-0 w-full z-10">
                         <div class="flex justify-center">
                             <img src="{{ asset('frontend/assets/images/web-delopmnet/hero-section.webp') }}"
@@ -142,7 +138,6 @@
             </div>
 
         </div>
-
     </div>
 </div>
 </section>

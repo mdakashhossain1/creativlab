@@ -30,42 +30,33 @@
             <div data-aos="fade-left">
                 <span class="inline-flex items-center gap-2 text-purple text-xs font-bold uppercase tracking-[0.2em] bg-[#EDE8FF] px-4 py-2 rounded-full mb-5">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z" fill="#794AFF"/></svg>
-                    Ad Film Production
+                    {{ getTranslatedValue($af_features, 'badge_text') ?: 'Ad Film Production' }}
                 </span>
 
                 <h2 class="xl:text-[44px] md:text-[36px] text-[26px] font-bold text-main-black leading-[1.12] mb-5">
-                    Telling Your Brand<br>
-                    Story Through<br>
-                    <span class="text-purple">Powerful Visuals</span>
+                    {!! getTranslatedValue($af_features, 'heading') ?: 'Telling Your Brand<br>Story Through<br><span class="text-purple">Powerful Visuals</span>' !!}
                 </h2>
 
                 <p class="text-paragraph text-base leading-7 mb-8 xl:max-w-[460px]">
-                    We combine creativity, strategy, and high-end production to craft ad films that leave a lasting impression and drive real business results.
+                    {{ getTranslatedValue($af_features, 'description') ?: 'We combine creativity, strategy, and high-end production to craft ad films that leave a lasting impression and drive real business results.' }}
                 </p>
 
+                @php $afFeatDefaults = ['Compelling storytelling','Cinematic quality','Strong brand impact','Better audience engagement']; @endphp
                 <div class="grid sm:grid-cols-2 gap-4 mb-9">
-                    @php
-                        $features = [
-                            'Compelling storytelling',
-                            'Cinematic quality',
-                            'Strong brand impact',
-                            'Better audience engagement',
-                        ];
-                    @endphp
-                    @foreach($features as $f)
+                    @for($i = 1; $i <= 4; $i++)
                     <div class="flex items-center gap-3">
                         <div class="size-6 rounded-full bg-purple flex-shrink-0 flex items-center justify-center">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
-                        <p class="font-semibold text-main-black text-sm">{{ $f }}</p>
+                        <p class="font-semibold text-main-black text-sm">{{ getTranslatedValue($af_features, "feature_{$i}") ?: $afFeatDefaults[$i - 1] }}</p>
                     </div>
-                    @endforeach
+                    @endfor
                 </div>
 
-                <a href="{{ route('services') }}">
+                <a href="{{ getTranslatedValue($af_features, 'cta_button_url') ?: route('services') }}">
                     <div class="home-two-btn-bg py-3 group bg-purple border-purple">
                         <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
-                            Learn More
+                            {{ getTranslatedValue($af_features, 'cta_button') ?: 'Learn More' }}
                         </span>
                         <span>{{ get_svg('home_cta_white') }}</span>
                     </div>

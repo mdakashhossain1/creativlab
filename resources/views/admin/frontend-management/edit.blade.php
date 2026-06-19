@@ -119,7 +119,7 @@
                                                 echo '<input type="text" name="' .
                                                     $fieldName .
                                                     '" class="crancy__item-input" value="' .
-                                                    html_decode($fieldValue ?? '') .
+                                                    htmlspecialchars(html_decode($fieldValue ?? ''), ENT_QUOTES, 'UTF-8') .
                                                     '">';
                                                 echo '</div>';
                                             }

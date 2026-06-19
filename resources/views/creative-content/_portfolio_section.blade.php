@@ -11,41 +11,41 @@
 <section class="w-full bg-[#F4F1FF] md:py-[100px] py-16">
     <div class="theme-container mx-auto">
         <div class="flex flex-col items-center mb-12 md:mb-16">
-            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR WORK</span>
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">{{ getTranslatedValue($cc_portfolio, 'section_label') ?: 'OUR WORK' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                Creative <span class="text-purple">Portfolio</span>
+                {!! getTranslatedValue($cc_portfolio, 'section_title') ?: 'Creative <span class="text-purple">Portfolio</span>' !!}
             </h2>
         </div>
 
         <div class="cc-portfolio-swiper swiper w-full pb-12">
             <div class="swiper-wrapper">
                 @php
-                    $portfolio = [
-                        ['img' => 'frontend/assets/images/projects/1.webp', 'title' => 'Brand Reel Campaign',     'tag' => 'Reels & Video'],
-                        ['img' => 'frontend/assets/images/projects/2.webp', 'title' => 'Foodie Social Media',     'tag' => 'Graphic Design'],
-                        ['img' => 'frontend/assets/images/projects/3.webp', 'title' => 'Startup Brand Launch',    'tag' => 'Brand Identity'],
-                        ['img' => 'frontend/assets/images/projects/4.webp', 'title' => 'Wellness Motion Series',  'tag' => 'Motion Graphics'],
-                        ['img' => 'frontend/assets/images/projects/5.webp', 'title' => 'Travel Reels Package',    'tag' => 'Content Strategy'],
-                        ['img' => 'frontend/assets/images/projects/6.webp', 'title' => 'Fitness Campaign',        'tag' => 'Campaign Creatives'],
-                        ['img' => 'frontend/assets/images/projects/7.webp', 'title' => 'Organic Brand Story',     'tag' => 'Social Media'],
-                        ['img' => 'frontend/assets/images/projects/8.webp', 'title' => 'Urban Style Identity',    'tag' => 'UI/UX Creatives'],
-                    ];
+                    $portImages  = $cc_portfolio?->data_values['images'] ?? [];
+                    $defaultImgs = array_map(fn($n) => "frontend/assets/images/projects/{$n}.webp", range(1, 8));
+                    $defaultTitles = ['Brand Reel Campaign','Foodie Social Media','Startup Brand Launch','Wellness Motion Series','Travel Reels Package','Fitness Campaign','Organic Brand Story','Urban Style Identity'];
+                    $defaultTags   = ['Reels & Video','Graphic Design','Brand Identity','Motion Graphics','Content Strategy','Campaign Creatives','Social Media','UI/UX Creatives'];
                 @endphp
 
-                @foreach($portfolio as $p)
+                @for($i = 1; $i <= 8; $i++)
+                @php
+                    $imgKey = "item_{$i}_image";
+                    $imgSrc = $portImages[$imgKey] ?? $defaultImgs[$i - 1];
+                    $title  = getTranslatedValue($cc_portfolio, "item_{$i}_title") ?: $defaultTitles[$i - 1];
+                    $tag    = getTranslatedValue($cc_portfolio, "item_{$i}_tag")   ?: $defaultTags[$i - 1];
+                @endphp
                 <div class="swiper-slide">
                     <div class="cc-port-card">
-                        <img src="{{ asset($p['img']) }}" alt="{{ $p['title'] }}" />
+                        <img src="{{ asset($imgSrc) }}" alt="{{ $title }}" />
                         <div class="cc-port-overlay"></div>
                         <div class="cc-port-label">
                             <span class="inline-block text-[10px] font-semibold text-white/70 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full mb-2">
-                                {{ $p['tag'] }}
+                                {{ $tag }}
                             </span>
-                            <p class="text-white font-bold text-base leading-tight">{{ $p['title'] }}</p>
+                            <p class="text-white font-bold text-base leading-tight">{{ $title }}</p>
                         </div>
                     </div>
                 </div>
-                @endforeach
+                @endfor
             </div>
             <div class="swiper-pagination mt-8"></div>
         </div>

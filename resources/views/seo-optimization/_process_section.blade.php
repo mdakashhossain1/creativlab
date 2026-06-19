@@ -37,54 +37,18 @@
     <div class="theme-container mx-auto">
 
         <div class="flex flex-col items-center mb-14 md:mb-20" data-aos="fade-up">
-            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">OUR PROCESS</span>
+            <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-3">{{ getTranslatedValue($seo_process, 'section_label') ?: 'OUR PROCESS' }}</span>
             <h2 class="md:text-48 text-34 font-bold text-main-black text-center">
-                Our Proven <span class="text-purple">SEO Process</span>
+                {!! getTranslatedValue($seo_process, 'section_title') ?: 'Our Proven <span class="text-purple">SEO Process</span>' !!}
             </h2>
         </div>
 
         @php
             $steps = [
-                [
-                    'num'        => '01',
-                    'badge_bg'   => '#794AFF',
-                    'icon_bg'    => 'rgba(121,74,255,0.12)',
-                    'icon_color' => '#794AFF',
-                    'conn'       => 'seo-conn-1',
-                    'icon'       => '<circle cx="11" cy="11" r="8" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"/>',
-                    'title'      => 'Research & Analysis',
-                    'desc'       => 'We analyze your website, competitors and keywords to find the best opportunities.',
-                ],
-                [
-                    'num'        => '02',
-                    'badge_bg'   => '#3B82F6',
-                    'icon_bg'    => 'rgba(59,130,246,0.12)',
-                    'icon_color' => '#3B82F6',
-                    'conn'       => 'seo-conn-2',
-                    'icon'       => '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M9 13h6M9 17h4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-                    'title'      => 'Strategy Planning',
-                    'desc'       => 'We create a custom SEO strategy tailored specifically for your business goals.',
-                ],
-                [
-                    'num'        => '03',
-                    'badge_bg'   => '#EC4899',
-                    'icon_bg'    => 'rgba(236,72,153,0.12)',
-                    'icon_color' => '#EC4899',
-                    'conn'       => 'seo-conn-3',
-                    'icon'       => '<path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-                    'title'      => 'Optimization & Implementation',
-                    'desc'       => 'We optimise your website and implement proven SEO techniques.',
-                ],
-                [
-                    'num'        => '04',
-                    'badge_bg'   => '#0EA5E9',
-                    'icon_bg'    => 'rgba(14,165,233,0.12)',
-                    'icon_color' => '#0EA5E9',
-                    'conn'       => '',
-                    'icon'       => '<path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-                    'title'      => 'Tracking & Growth',
-                    'desc'       => 'We monitor results and continuously improve your rankings and traffic.',
-                ],
+                ['num'=>'01','badge_bg'=>'#794AFF','icon_bg'=>'rgba(121,74,255,0.12)','icon_color'=>'#794AFF','conn'=>'seo-conn-1','icon'=>'<circle cx="11" cy="11" r="8" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"/>','title'=>getTranslatedValue($seo_process,'step_1_title')?:'Research &amp; Analysis','desc'=>getTranslatedValue($seo_process,'step_1_desc')?:'We analyze your website, competitors and keywords to find the best opportunities.'],
+                ['num'=>'02','badge_bg'=>'#3B82F6','icon_bg'=>'rgba(59,130,246,0.12)','icon_color'=>'#3B82F6','conn'=>'seo-conn-2','icon'=>'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M9 13h6M9 17h4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>','title'=>getTranslatedValue($seo_process,'step_2_title')?:'Strategy Planning','desc'=>getTranslatedValue($seo_process,'step_2_desc')?:'We create a custom SEO strategy tailored specifically for your business goals.'],
+                ['num'=>'03','badge_bg'=>'#EC4899','icon_bg'=>'rgba(236,72,153,0.12)','icon_color'=>'#EC4899','conn'=>'seo-conn-3','icon'=>'<path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>','title'=>getTranslatedValue($seo_process,'step_3_title')?:'Optimization &amp; Implementation','desc'=>getTranslatedValue($seo_process,'step_3_desc')?:'We optimise your website and implement proven SEO techniques.'],
+                ['num'=>'04','badge_bg'=>'#0EA5E9','icon_bg'=>'rgba(14,165,233,0.12)','icon_color'=>'#0EA5E9','conn'=>'','icon'=>'<path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>','title'=>getTranslatedValue($seo_process,'step_4_title')?:'Tracking &amp; Growth','desc'=>getTranslatedValue($seo_process,'step_4_desc')?:'We monitor results and continuously improve your rankings and traffic.'],
             ];
         @endphp
 

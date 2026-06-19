@@ -724,15 +724,9 @@
                                "name":  "CTA Section - (Home 4)",
                                "content":  {
                                                "images":  {
-                                                              "cta_image":  {
-                                                                                "size":  "1500x800"
-                                                                            },
-                                                              "cta_shape_one":  {
-                                                                                    "size":  "1500x800"
-                                                                                },
-                                                              "cta_shape_two":  {
-                                                                                    "size":  "1500x800"
-                                                                                }
+                                                              "cta_image":  { "size":  "1500x800" },
+                                                              "cta_shape_one":  { "size":  "1500x800" },
+                                                              "cta_shape_two":  { "size":  "1500x800" }
                                                           },
                                                "sub_title":  "text",
                                                "title":  "text",
@@ -740,5 +734,812 @@
                                                "button_text":  "text",
                                                "button_url":  "url"
                                            }
-                           }
+                           },
+
+    "creative_content_hero": {
+        "builder": true,
+        "name": "Hero Section - (Creative Content)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "cta_button_1": "text",
+            "cta_button_1_url": "url",
+            "cta_button_2": "text",
+            "cta_button_2_url": "url",
+            "trust_text": "text",
+            "trust_subtext": "text",
+            "stat_1_label": "text",
+            "stat_1_value": "text",
+            "stat_2_label": "text",
+            "stat_2_value": "text",
+            "stat_3_label": "text",
+            "stat_3_value": "text",
+            "stat_4_label": "text",
+            "stat_4_value": "text"
+        }
+    },
+    "creative_content_partner": {
+        "builder": true,
+        "name": "Partner Section - (Creative Content)",
+        "content": {
+            "partner_text": "text",
+            "images": {
+                "partner_logo_1": { "size": "120x40" },
+                "partner_logo_2": { "size": "120x40" },
+                "partner_logo_3": { "size": "120x40" },
+                "partner_logo_4": { "size": "120x40" },
+                "partner_logo_5": { "size": "120x40" }
+            }
+        }
+    },
+    "creative_content_features": {
+        "builder": true,
+        "name": "Features Section - (Creative Content)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "feature_1_title": "text",
+            "feature_1_desc": "text",
+            "feature_2_title": "text",
+            "feature_2_desc": "text",
+            "feature_3_title": "text",
+            "feature_3_desc": "text",
+            "feature_4_title": "text",
+            "feature_4_desc": "text",
+            "cta_link_text": "text",
+            "cta_link_url": "url",
+            "images": {
+                "features_image": { "size": "570x500" }
+            }
+        }
+    },
+    "creative_content_solutions": {
+        "builder": true,
+        "name": "Content Solutions Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "solution_1_title": "text",
+            "solution_1_desc": "text",
+            "solution_2_title": "text",
+            "solution_2_desc": "text",
+            "solution_3_title": "text",
+            "solution_3_desc": "text",
+            "solution_4_title": "text",
+            "solution_4_desc": "text",
+            "solution_5_title": "text",
+            "solution_5_desc": "text",
+            "solution_6_title": "text",
+            "solution_6_desc": "text",
+            "solution_7_title": "text",
+            "solution_7_desc": "text",
+            "solution_8_title": "text",
+            "solution_8_desc": "text"
+        }
+    },
+    "creative_content_recent_creations": {
+        "builder": true,
+        "name": "Recent Creations Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "images": {
+                "creation_1": { "size": "400x300" },
+                "creation_2": { "size": "400x300" },
+                "creation_3": { "size": "400x300" },
+                "creation_4": { "size": "400x300" },
+                "creation_5": { "size": "400x300" },
+                "creation_6": { "size": "400x300" },
+                "creation_7": { "size": "400x300" },
+                "creation_8": { "size": "400x300" },
+                "creation_9": { "size": "400x300" }
+            }
+        }
+    },
+    "creative_content_process": {
+        "builder": true,
+        "name": "Process Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "creative_content_how_we_create": {
+        "builder": true,
+        "name": "How We Create Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "creative_content_stats": {
+        "builder": true,
+        "name": "Stats Section - (Creative Content)",
+        "content": {
+            "stat_1_value": "text",
+            "stat_1_label": "text",
+            "stat_2_value": "text",
+            "stat_2_label": "text",
+            "stat_3_value": "text",
+            "stat_3_label": "text",
+            "stat_4_value": "text",
+            "stat_4_label": "text"
+        }
+    },
+    "creative_content_services": {
+        "builder": true,
+        "name": "Services Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "section_desc": "text",
+            "service_1_title": "text",
+            "service_1_desc": "text",
+            "service_2_title": "text",
+            "service_2_desc": "text",
+            "service_3_title": "text",
+            "service_3_desc": "text",
+            "service_4_title": "text",
+            "service_4_desc": "text",
+            "service_5_title": "text",
+            "service_5_desc": "text",
+            "service_6_title": "text",
+            "service_6_desc": "text",
+            "service_7_title": "text",
+            "service_7_desc": "text",
+            "service_8_title": "text",
+            "service_8_desc": "text"
+        }
+    },
+    "creative_content_portfolio": {
+        "builder": true,
+        "name": "Portfolio Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "item_1_title": "text",
+            "item_1_tag": "text",
+            "item_2_title": "text",
+            "item_2_tag": "text",
+            "item_3_title": "text",
+            "item_3_tag": "text",
+            "item_4_title": "text",
+            "item_4_tag": "text",
+            "item_5_title": "text",
+            "item_5_tag": "text",
+            "item_6_title": "text",
+            "item_6_tag": "text",
+            "item_7_title": "text",
+            "item_7_tag": "text",
+            "item_8_title": "text",
+            "item_8_tag": "text",
+            "images": {
+                "item_1_image": { "size": "400x300" },
+                "item_2_image": { "size": "400x300" },
+                "item_3_image": { "size": "400x300" },
+                "item_4_image": { "size": "400x300" },
+                "item_5_image": { "size": "400x300" },
+                "item_6_image": { "size": "400x300" },
+                "item_7_image": { "size": "400x300" },
+                "item_8_image": { "size": "400x300" }
+            }
+        }
+    },
+    "creative_content_cta": {
+        "builder": true,
+        "name": "CTA Banner Section - (Creative Content)",
+        "content": {
+            "section_label": "text",
+            "heading": "text",
+            "description": "text",
+            "button_1_text": "text",
+            "button_1_url": "url",
+            "button_2_text": "text",
+            "button_2_url": "url",
+            "card_1_label": "text",
+            "card_1_value": "text",
+            "card_2_label": "text",
+            "card_2_value": "text"
+        }
+    },
+
+    "web_dev_hero": {
+        "builder": true,
+        "name": "Hero Section - (Web Development)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "cta_button_1": "text",
+            "cta_button_1_url": "url",
+            "cta_button_2": "text",
+            "cta_button_2_url": "url",
+            "pill_1": "text",
+            "pill_2": "text",
+            "pill_3": "text",
+            "pill_4": "text",
+            "pill_5": "text",
+            "pill_6": "text"
+        }
+    },
+    "web_dev_partner": {
+        "builder": true,
+        "name": "Partner Section - (Web Development)",
+        "content": {
+            "partner_text": "text",
+            "images": {
+                "partner_logo_1": { "size": "120x40" },
+                "partner_logo_2": { "size": "120x40" },
+                "partner_logo_3": { "size": "120x40" },
+                "partner_logo_4": { "size": "120x40" },
+                "partner_logo_5": { "size": "120x40" }
+            }
+        }
+    },
+    "web_dev_features": {
+        "builder": true,
+        "name": "Features Section - (Web Development)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "feature_1_title": "text",
+            "feature_1_desc": "text",
+            "feature_2_title": "text",
+            "feature_2_desc": "text",
+            "feature_3_title": "text",
+            "feature_3_desc": "text",
+            "feature_4_title": "text",
+            "feature_4_desc": "text",
+            "cta_link_text": "text",
+            "cta_link_url": "url",
+            "images": {
+                "features_image": { "size": "570x500" }
+            }
+        }
+    },
+    "web_dev_solutions": {
+        "builder": true,
+        "name": "Solutions Section - (Web Development)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "solution_1_title": "text",
+            "solution_1_desc": "text",
+            "solution_2_title": "text",
+            "solution_2_desc": "text",
+            "solution_3_title": "text",
+            "solution_3_desc": "text",
+            "solution_4_title": "text",
+            "solution_4_desc": "text",
+            "solution_5_title": "text",
+            "solution_5_desc": "text",
+            "solution_6_title": "text",
+            "solution_6_desc": "text",
+            "solution_7_title": "text",
+            "solution_7_desc": "text",
+            "solution_8_title": "text",
+            "solution_8_desc": "text"
+        }
+    },
+    "web_dev_recent_projects": {
+        "builder": true,
+        "name": "Recent Projects Section - (Web Development)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "project_1_title": "text",
+            "project_1_tag_1": "text",
+            "project_1_tag_2": "text",
+            "project_2_title": "text",
+            "project_2_tag_1": "text",
+            "project_2_tag_2": "text",
+            "project_3_title": "text",
+            "project_3_tag_1": "text",
+            "project_3_tag_2": "text",
+            "project_4_title": "text",
+            "project_4_tag_1": "text",
+            "project_4_tag_2": "text",
+            "project_5_title": "text",
+            "project_5_tag_1": "text",
+            "project_5_tag_2": "text",
+            "project_6_title": "text",
+            "project_6_tag_1": "text",
+            "project_6_tag_2": "text",
+            "project_7_title": "text",
+            "project_7_tag_1": "text",
+            "project_7_tag_2": "text",
+            "project_8_title": "text",
+            "project_8_tag_1": "text",
+            "project_8_tag_2": "text",
+            "images": {
+                "project_1_image": { "size": "400x300" },
+                "project_2_image": { "size": "400x300" },
+                "project_3_image": { "size": "400x300" },
+                "project_4_image": { "size": "400x300" },
+                "project_5_image": { "size": "400x300" },
+                "project_6_image": { "size": "400x300" },
+                "project_7_image": { "size": "400x300" },
+                "project_8_image": { "size": "400x300" }
+            }
+        }
+    },
+    "web_dev_process": {
+        "builder": true,
+        "name": "Process Section - (Web Development)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "web_dev_stats": {
+        "builder": true,
+        "name": "Stats Section - (Web Development)",
+        "content": {
+            "stat_1_value": "text",
+            "stat_1_label": "text",
+            "stat_2_value": "text",
+            "stat_2_label": "text",
+            "stat_3_value": "text",
+            "stat_3_label": "text",
+            "stat_4_value": "text",
+            "stat_4_label": "text"
+        }
+    },
+    "web_dev_cta": {
+        "builder": true,
+        "name": "CTA Banner Section - (Web Development)",
+        "content": {
+            "section_label": "text",
+            "heading": "text",
+            "description": "text",
+            "button_1_text": "text",
+            "button_1_url": "url",
+            "button_2_text": "text",
+            "button_2_url": "url",
+            "card_1_label": "text",
+            "card_1_value": "text",
+            "card_2_label": "text",
+            "card_2_value": "text"
+        }
+    },
+
+    "seo_hero": {
+        "builder": true,
+        "name": "Hero Section - (SEO Optimization)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "cta_button_1": "text",
+            "cta_button_1_url": "url",
+            "cta_button_2": "text",
+            "cta_button_2_url": "url",
+            "pill_1": "text",
+            "pill_2": "text",
+            "pill_3": "text",
+            "pill_4": "text",
+            "pill_5": "text",
+            "pill_6": "text"
+        }
+    },
+    "seo_partner": {
+        "builder": true,
+        "name": "Partner Section - (SEO Optimization)",
+        "content": {
+            "partner_text": "text",
+            "images": {
+                "partner_logo_1": { "size": "120x40" },
+                "partner_logo_2": { "size": "120x40" },
+                "partner_logo_3": { "size": "120x40" },
+                "partner_logo_4": { "size": "120x40" },
+                "partner_logo_5": { "size": "120x40" }
+            }
+        }
+    },
+    "seo_features": {
+        "builder": true,
+        "name": "Features Section - (SEO Optimization)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "feature_1": "text",
+            "feature_2": "text",
+            "feature_3": "text",
+            "feature_4": "text",
+            "cta_button": "text",
+            "cta_button_url": "url",
+            "images": {
+                "features_image": { "size": "570x500" }
+            }
+        }
+    },
+    "seo_solutions": {
+        "builder": true,
+        "name": "Solutions Section - (SEO Optimization)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "solution_1_title": "text",
+            "solution_1_desc": "text",
+            "solution_2_title": "text",
+            "solution_2_desc": "text",
+            "solution_3_title": "text",
+            "solution_3_desc": "text",
+            "solution_4_title": "text",
+            "solution_4_desc": "text",
+            "solution_5_title": "text",
+            "solution_5_desc": "text",
+            "solution_6_title": "text",
+            "solution_6_desc": "text",
+            "solution_7_title": "text",
+            "solution_7_desc": "text",
+            "solution_8_title": "text",
+            "solution_8_desc": "text"
+        }
+    },
+    "seo_results": {
+        "builder": true,
+        "name": "Results Section - (SEO Optimization)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "result_1_title": "text",
+            "result_1_tag": "text",
+            "result_1_stat1_value": "text",
+            "result_1_stat1_label": "text",
+            "result_1_stat2_value": "text",
+            "result_1_stat2_label": "text",
+            "result_2_title": "text",
+            "result_2_tag": "text",
+            "result_2_stat1_value": "text",
+            "result_2_stat1_label": "text",
+            "result_2_stat2_value": "text",
+            "result_2_stat2_label": "text",
+            "result_3_title": "text",
+            "result_3_tag": "text",
+            "result_3_stat1_value": "text",
+            "result_3_stat1_label": "text",
+            "result_3_stat2_value": "text",
+            "result_3_stat2_label": "text",
+            "result_4_title": "text",
+            "result_4_tag": "text",
+            "result_4_stat1_value": "text",
+            "result_4_stat1_label": "text",
+            "result_4_stat2_value": "text",
+            "result_4_stat2_label": "text",
+            "result_5_title": "text",
+            "result_5_tag": "text",
+            "result_5_stat1_value": "text",
+            "result_5_stat1_label": "text",
+            "result_5_stat2_value": "text",
+            "result_5_stat2_label": "text",
+            "result_6_title": "text",
+            "result_6_tag": "text",
+            "result_6_stat1_value": "text",
+            "result_6_stat1_label": "text",
+            "result_6_stat2_value": "text",
+            "result_6_stat2_label": "text",
+            "result_7_title": "text",
+            "result_7_tag": "text",
+            "result_7_stat1_value": "text",
+            "result_7_stat1_label": "text",
+            "result_7_stat2_value": "text",
+            "result_7_stat2_label": "text",
+            "result_8_title": "text",
+            "result_8_tag": "text",
+            "result_8_stat1_value": "text",
+            "result_8_stat1_label": "text",
+            "result_8_stat2_value": "text",
+            "result_8_stat2_label": "text",
+            "images": {
+                "result_1_image": { "size": "400x280" },
+                "result_2_image": { "size": "400x280" },
+                "result_3_image": { "size": "400x280" },
+                "result_4_image": { "size": "400x280" },
+                "result_5_image": { "size": "400x280" },
+                "result_6_image": { "size": "400x280" },
+                "result_7_image": { "size": "400x280" },
+                "result_8_image": { "size": "400x280" }
+            }
+        }
+    },
+    "seo_process": {
+        "builder": true,
+        "name": "Process Section - (SEO Optimization)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "seo_stats": {
+        "builder": true,
+        "name": "Stats Section - (SEO Optimization)",
+        "content": {
+            "stat_1_value": "text",
+            "stat_1_label": "text",
+            "stat_2_value": "text",
+            "stat_2_label": "text",
+            "stat_3_value": "text",
+            "stat_3_label": "text",
+            "stat_4_value": "text",
+            "stat_4_label": "text"
+        }
+    },
+    "seo_cta": {
+        "builder": true,
+        "name": "CTA Banner Section - (SEO Optimization)",
+        "content": {
+            "section_label": "text",
+            "heading": "text",
+            "description": "text",
+            "button_1_text": "text",
+            "button_1_url": "url",
+            "button_2_text": "text",
+            "button_2_url": "url"
+        }
+    },
+
+    "ad_films_hero": {
+        "builder": true,
+        "name": "Hero Section - (Ad Films)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "cta_button_1": "text",
+            "cta_button_1_url": "url",
+            "cta_button_2": "text",
+            "cta_button_2_url": "url",
+            "pill_1": "text",
+            "pill_2": "text",
+            "pill_3": "text",
+            "pill_4": "text",
+            "pill_5": "text",
+            "pill_6": "text"
+        }
+    },
+    "ad_films_features": {
+        "builder": true,
+        "name": "Features Section - (Ad Films)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "feature_1": "text",
+            "feature_2": "text",
+            "feature_3": "text",
+            "feature_4": "text",
+            "floating_badge_1": "text",
+            "floating_badge_2": "text",
+            "cta_button": "text",
+            "cta_button_url": "url",
+            "images": {
+                "features_image": { "size": "570x500" }
+            }
+        }
+    },
+    "ad_films_solutions": {
+        "builder": true,
+        "name": "Solutions Section - (Ad Films)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "solution_1_title": "text",
+            "solution_1_desc": "text",
+            "solution_2_title": "text",
+            "solution_2_desc": "text",
+            "solution_3_title": "text",
+            "solution_3_desc": "text",
+            "solution_4_title": "text",
+            "solution_4_desc": "text",
+            "solution_5_title": "text",
+            "solution_5_desc": "text",
+            "solution_6_title": "text",
+            "solution_6_desc": "text",
+            "solution_7_title": "text",
+            "solution_7_desc": "text",
+            "solution_8_title": "text",
+            "solution_8_desc": "text"
+        }
+    },
+    "ad_films_projects": {
+        "builder": true,
+        "name": "Projects Section - (Ad Films)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "project_1_title": "text",
+            "project_1_tag": "text",
+            "project_2_title": "text",
+            "project_2_tag": "text",
+            "project_3_title": "text",
+            "project_3_tag": "text",
+            "project_4_title": "text",
+            "project_4_tag": "text",
+            "project_5_title": "text",
+            "project_5_tag": "text",
+            "project_6_title": "text",
+            "project_6_tag": "text",
+            "project_7_title": "text",
+            "project_7_tag": "text",
+            "project_8_title": "text",
+            "project_8_tag": "text",
+            "images": {
+                "project_1_image": { "size": "400x280" },
+                "project_2_image": { "size": "400x280" },
+                "project_3_image": { "size": "400x280" },
+                "project_4_image": { "size": "400x280" },
+                "project_5_image": { "size": "400x280" },
+                "project_6_image": { "size": "400x280" },
+                "project_7_image": { "size": "400x280" },
+                "project_8_image": { "size": "400x280" }
+            }
+        }
+    },
+    "ad_films_process": {
+        "builder": true,
+        "name": "Process Section - (Ad Films)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "ad_films_stats": {
+        "builder": true,
+        "name": "Stats Section - (Ad Films)",
+        "content": {
+            "stat_1_value": "text",
+            "stat_1_label": "text",
+            "stat_2_value": "text",
+            "stat_2_label": "text",
+            "stat_3_value": "text",
+            "stat_3_label": "text",
+            "stat_4_value": "text",
+            "stat_4_label": "text"
+        }
+    },
+    "ad_films_cta": {
+        "builder": true,
+        "name": "CTA Banner Section - (Ad Films)",
+        "content": {
+            "section_label": "text",
+            "heading": "text",
+            "description": "text",
+            "button_1_text": "text",
+            "button_1_url": "url",
+            "button_2_text": "text",
+            "button_2_url": "url",
+            "floating_card_label": "text",
+            "floating_card_value": "text"
+        }
+    },
+
+    "whatsapp_hero": {
+        "builder": true,
+        "name": "Hero Section - (WhatsApp API)",
+        "content": {
+            "badge_text": "text",
+            "heading": "text",
+            "description": "text",
+            "cta_button_1": "text",
+            "cta_button_1_url": "url",
+            "cta_button_2": "text",
+            "cta_button_2_url": "url",
+            "pill_1": "text",
+            "pill_2": "text",
+            "pill_3": "text",
+            "partner_badge_label_1": "text",
+            "partner_badge_logo_1": "text",
+            "partner_badge_label_2": "text"
+        }
+    },
+    "whatsapp_services": {
+        "builder": true,
+        "name": "Services Section - (WhatsApp API)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "service_1_title": "text",
+            "service_1_desc": "text",
+            "service_2_title": "text",
+            "service_2_desc": "text",
+            "service_3_title": "text",
+            "service_3_desc": "text",
+            "service_4_title": "text",
+            "service_4_desc": "text",
+            "service_5_title": "text",
+            "service_5_desc": "text",
+            "service_6_title": "text",
+            "service_6_desc": "text"
+        }
+    },
+    "whatsapp_why_work": {
+        "builder": true,
+        "name": "Why Work With Us Section - (WhatsApp API)",
+        "content": {
+            "section_title": "text",
+            "point_1_title": "text",
+            "point_1_desc": "text",
+            "point_2_title": "text",
+            "point_2_desc": "text",
+            "point_3_title": "text",
+            "point_3_desc": "text",
+            "point_4_title": "text",
+            "point_4_desc": "text"
+        }
+    },
+    "whatsapp_process": {
+        "builder": true,
+        "name": "Process Section - (WhatsApp API)",
+        "content": {
+            "section_label": "text",
+            "section_title": "text",
+            "step_1_title": "text",
+            "step_1_desc": "text",
+            "step_2_title": "text",
+            "step_2_desc": "text",
+            "step_3_title": "text",
+            "step_3_desc": "text",
+            "step_4_title": "text",
+            "step_4_desc": "text"
+        }
+    },
+    "whatsapp_cta": {
+        "builder": true,
+        "name": "CTA Banner Section - (WhatsApp API)",
+        "content": {
+            "heading": "text",
+            "description": "text",
+            "badge_1": "text",
+            "badge_2": "text",
+            "card_title": "text",
+            "card_desc": "text",
+            "card_button": "text",
+            "card_button_url": "url"
+        }
+    }
 }

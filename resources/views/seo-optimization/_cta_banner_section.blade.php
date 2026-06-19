@@ -22,24 +22,24 @@
 
                 {{-- Left: text --}}
                 <div class="md:max-w-[480px] w-full md:py-16 text-center md:text-left" data-aos="fade-right">
-                    <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-4 block">GET STARTED TODAY</span>
+                    <span class="text-purple text-xs font-bold uppercase tracking-[0.2em] mb-4 block">{{ getTranslatedValue($seo_cta, 'section_label') ?: 'GET STARTED TODAY' }}</span>
                     <h2 class="xl:text-[48px] md:text-[38px] text-[28px] font-bold text-main-black leading-tight mb-4">
-                        Ready to Rank Higher &amp;<br><span class="text-purple">Grow Your Business?</span>
+                        {!! getTranslatedValue($seo_cta, 'heading') ?: 'Ready to Rank Higher &amp;<br><span class="text-purple">Grow Your Business?</span>' !!}
                     </h2>
                     <p class="text-paragraph text-base leading-7 mb-8">
-                        Let's build an SEO strategy that brings more traffic, leads and long-term growth.
+                        {{ getTranslatedValue($seo_cta, 'description') ?: "Let's build an SEO strategy that brings more traffic, leads and long-term growth." }}
                     </p>
                     <div class="flex flex-wrap gap-4 md:justify-start justify-center">
-                        <a href="{{ route('contact-us') }}"
+                        <a href="{{ getTranslatedValue($seo_cta, 'button_1_url') ?: route('contact-us') }}"
                            class="inline-flex items-center gap-2.5 bg-purple text-white font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full hover:bg-main-black transition-all duration-300 shadow-purple">
-                            Get Free SEO Audit
+                            {{ getTranslatedValue($seo_cta, 'button_1_text') ?: 'Get Free SEO Audit' }}
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
-                        <a href="{{ route('services') }}"
+                        <a href="{{ getTranslatedValue($seo_cta, 'button_2_url') ?: route('services') }}"
                            class="inline-flex items-center gap-2 text-main-black font-semibold text-sm hover:text-purple transition-colors duration-300 px-2">
-                            View Services
+                            {{ getTranslatedValue($seo_cta, 'button_2_text') ?: 'View Services' }}
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>

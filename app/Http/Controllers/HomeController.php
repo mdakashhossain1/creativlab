@@ -68,7 +68,23 @@ class HomeController extends Controller
         $partners = Partner::where('status', 'enable')->get();
         $section_visibility = ManageSection::where('page_name', 'home_two')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('creative-content.index', compact('seo_setting', 'partners', 'section_visibility'));
+        $cc_hero            = getContent('creative_content_hero.content', true);
+        $cc_features        = getContent('creative_content_features.content', true);
+        $cc_solutions       = getContent('creative_content_solutions.content', true);
+        $cc_recent_creations = getContent('creative_content_recent_creations.content', true);
+        $cc_process         = getContent('creative_content_process.content', true);
+        $cc_how_we_create   = getContent('creative_content_how_we_create.content', true);
+        $cc_stats           = getContent('creative_content_stats.content', true);
+        $cc_services        = getContent('creative_content_services.content', true);
+        $cc_portfolio       = getContent('creative_content_portfolio.content', true);
+        $cc_cta             = getContent('creative_content_cta.content', true);
+
+        return view('creative-content.index', compact(
+            'seo_setting', 'partners', 'section_visibility',
+            'cc_hero', 'cc_features', 'cc_solutions', 'cc_recent_creations',
+            'cc_process', 'cc_how_we_create', 'cc_stats', 'cc_services',
+            'cc_portfolio', 'cc_cta'
+        ));
     }
 
     public function webDevelopment()
@@ -77,7 +93,19 @@ class HomeController extends Controller
         $partners = Partner::where('status', 'enable')->get();
         $section_visibility = ManageSection::where('page_name', 'home_three')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('web-development.index', compact('seo_setting', 'partners', 'section_visibility'));
+        $wd_hero            = getContent('web_dev_hero.content', true);
+        $wd_features        = getContent('web_dev_features.content', true);
+        $wd_solutions       = getContent('web_dev_solutions.content', true);
+        $wd_recent_projects = getContent('web_dev_recent_projects.content', true);
+        $wd_process         = getContent('web_dev_process.content', true);
+        $wd_stats           = getContent('web_dev_stats.content', true);
+        $wd_cta             = getContent('web_dev_cta.content', true);
+
+        return view('web-development.index', compact(
+            'seo_setting', 'partners', 'section_visibility',
+            'wd_hero', 'wd_features', 'wd_solutions', 'wd_recent_projects',
+            'wd_process', 'wd_stats', 'wd_cta'
+        ));
     }
 
     public function seoOptimization()
@@ -86,7 +114,19 @@ class HomeController extends Controller
         $partners = Partner::where('status', 'enable')->get();
         $section_visibility = ManageSection::where('page_name', 'home_four')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('seo-optimization.index', compact('seo_setting', 'partners', 'section_visibility'));
+        $seo_hero     = getContent('seo_hero.content', true);
+        $seo_features = getContent('seo_features.content', true);
+        $seo_solutions = getContent('seo_solutions.content', true);
+        $seo_results  = getContent('seo_results.content', true);
+        $seo_process  = getContent('seo_process.content', true);
+        $seo_stats    = getContent('seo_stats.content', true);
+        $seo_cta      = getContent('seo_cta.content', true);
+
+        return view('seo-optimization.index', compact(
+            'seo_setting', 'partners', 'section_visibility',
+            'seo_hero', 'seo_features', 'seo_solutions', 'seo_results',
+            'seo_process', 'seo_stats', 'seo_cta'
+        ));
     }
 
     public function adFilms()
@@ -94,7 +134,19 @@ class HomeController extends Controller
         $seo_setting = SeoSetting::where('id', 1)->first();
         $section_visibility = ManageSection::where('page_name', 'home_five')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('ad-films.index', compact('seo_setting', 'section_visibility'));
+        $af_hero      = getContent('ad_films_hero.content', true);
+        $af_features  = getContent('ad_films_features.content', true);
+        $af_solutions = getContent('ad_films_solutions.content', true);
+        $af_projects  = getContent('ad_films_projects.content', true);
+        $af_process   = getContent('ad_films_process.content', true);
+        $af_stats     = getContent('ad_films_stats.content', true);
+        $af_cta       = getContent('ad_films_cta.content', true);
+
+        return view('ad-films.index', compact(
+            'seo_setting', 'section_visibility',
+            'af_hero', 'af_features', 'af_solutions', 'af_projects',
+            'af_process', 'af_stats', 'af_cta'
+        ));
     }
 
     public function whatsappApi()
@@ -102,7 +154,16 @@ class HomeController extends Controller
         $seo_setting = SeoSetting::where('id', 1)->first();
         $section_visibility = ManageSection::where('page_name', 'home_six')->where('status', 1)->orderBy('serial_number')->get();
 
-        return view('whatsapp-api.index', compact('seo_setting', 'section_visibility'));
+        $wa_hero      = getContent('whatsapp_hero.content', true);
+        $wa_services  = getContent('whatsapp_services.content', true);
+        $wa_why_work  = getContent('whatsapp_why_work.content', true);
+        $wa_process   = getContent('whatsapp_process.content', true);
+        $wa_cta       = getContent('whatsapp_cta.content', true);
+
+        return view('whatsapp-api.index', compact(
+            'seo_setting', 'section_visibility',
+            'wa_hero', 'wa_services', 'wa_why_work', 'wa_process', 'wa_cta'
+        ));
     }
 
 

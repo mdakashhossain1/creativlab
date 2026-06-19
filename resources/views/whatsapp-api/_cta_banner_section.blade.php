@@ -88,13 +88,11 @@
                     <div class="min-w-0">
                         <h2 class="wa-cta-heading font-bold text-white mb-3"
                             style="font-size:28px; line-height:1.25;">
-                            Ready to <span style="color:#7DFFB0;">Automate</span><br>
-                            Customer Communication?
+                            {!! getTranslatedValue($wa_cta, 'heading') ?: 'Ready to <span style="color:#7DFFB0;">Automate</span><br>Customer Communication?' !!}
                         </h2>
                         <p class="wa-cta-desc mb-5"
                            style="color:rgba(255,255,255,0.78); font-size:13px; line-height:1.65;">
-                            Let us help you build a smart WhatsApp Automation system that
-                            improves engagement, support &amp; sales
+                            {{ getTranslatedValue($wa_cta, 'description') ?: 'Let us help you build a smart WhatsApp Automation system that improves engagement, support & sales' }}
                         </p>
                         {{-- Badges --}}
                         <div class="wa-cta-badges" style="display:flex; flex-direction:row; flex-wrap:nowrap; gap:10px;">
@@ -106,7 +104,7 @@
                                     <path d="M23 6l-9.5 9.5-5-5L1 18" stroke="#7DFFB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M17 6h6v6" stroke="#7DFFB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span style="color:#fff; font-size:11px; font-weight:600;">More Engagement</span>
+                                <span style="color:#fff; font-size:11px; font-weight:600;">{{ getTranslatedValue($wa_cta, 'badge_1') ?: 'More Engagement' }}</span>
                             </div>
                             <div class="wa-cta-badge" style="display:inline-flex; align-items:center; gap:6px;
                                         background:rgba(255,255,255,0.13);
@@ -116,7 +114,7 @@
                                     <path d="M23 6l-9.5 9.5-5-5L1 18" stroke="#7DFFB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M17 6h6v6" stroke="#7DFFB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span style="color:#fff; font-size:11px; font-weight:600;">Higher Conversion</span>
+                                <span style="color:#fff; font-size:11px; font-weight:600;">{{ getTranslatedValue($wa_cta, 'badge_2') ?: 'Higher Conversion' }}</span>
                             </div>
                         </div>
                     </div>
@@ -138,13 +136,13 @@
                                 box-shadow:0 12px 32px -10px rgba(0,0,0,0.22);">
                         <h3 class="wa-cta-card-title font-bold text-gray-900 mb-2"
                             style="font-size:18px; line-height:1.3;">
-                            Book your free consultation
+                            {{ getTranslatedValue($wa_cta, 'card_title') ?: 'Book your free consultation' }}
                         </h3>
                         <p class="wa-cta-card-desc mb-5"
                            style="color:#6B7280; font-size:13px; line-height:1.6;">
-                            Let's Discuss how we can help your Business grow with WhatsApp
+                            {{ getTranslatedValue($wa_cta, 'card_desc') ?: "Let's Discuss how we can help your Business grow with WhatsApp" }}
                         </p>
-                        <a href="{{ route('contact-us') }}"
+                        <a href="{{ getTranslatedValue($wa_cta, 'card_button_url') ?: route('contact-us') }}"
                            class="wa-cta-btn"
                            style="display:flex; align-items:center; justify-content:space-between;
                                   gap:12px; background:#25D366; color:#fff; font-weight:700;
@@ -152,7 +150,7 @@
                                   text-decoration:none; transition:opacity 0.3s;"
                            onmouseover="this.style.opacity='0.9'"
                            onmouseout="this.style.opacity='1'">
-                            <span>Book free consultation</span>
+                            <span>{{ getTranslatedValue($wa_cta, 'card_button') ?: 'Book free consultation' }}</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M5 12H19M19 12L13 6M19 12L13 18"
                                       stroke="white" stroke-width="2.5"

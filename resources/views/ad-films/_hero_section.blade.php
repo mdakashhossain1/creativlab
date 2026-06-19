@@ -21,32 +21,32 @@
                 <div class="article-area pointer-events-auto">
                     <div class="inline-flex md:px-6 px-3 py-2.5 md:py-[14px] bg-white space-x-2.5 items-center rounded-full shadow-style-one mb-5">
                         <span>{{ get_svg('star') }}</span>
-                        <span class="md:text-20 text-sm text-purple font-semibold">Ad Films Production House</span>
+                        <span class="md:text-20 text-sm text-purple font-semibold">{{ getTranslatedValue($af_hero, 'badge_text') ?: 'Ad Films Production House' }}</span>
                     </div>
 
                     <h1 class="text-4xl md:text-65 text-main-black mb-[35px] custom-heading md:text-left" style="font-weight:400 !important;">
-                        We Create <span>Ad Films</span> That <span>Inspire</span> &amp; Drive Action
+                        {!! getTranslatedValue($af_hero, 'heading') ?: 'We Create <span>Ad Films</span> That <span>Inspire</span> &amp; Drive Action' !!}
                     </h1>
 
                     <div class="px-6 py-[14px] bg-white border-l-2 border-blue-sass mb-[35px] xl:w-full md:w-[500px]">
                         <p class="text-ptwo text-paragraph">
-                            Powerful storytelling. Cinematic visuals. Strategic messaging. We create ad films that connect, influence and convert.
+                            {{ getTranslatedValue($af_hero, 'description') ?: 'Powerful storytelling. Cinematic visuals. Strategic messaging. We create ad films that connect, influence and convert.' }}
                         </p>
                     </div>
 
                     <div class="flex space-x-[30px] items-center">
-                        <a href="{{ route('contact-us') }}">
+                        <a href="{{ getTranslatedValue($af_hero, 'cta_button_1_url') ?: route('contact-us') }}">
                             <div class="home-two-btn-bg py-3 group bg-purple border-purple">
                                 <span class="text-base text-white group-hover:text-purple transition-all duration-300 font-semibold font-inter relative z-10">
-                                    Start Your Project
+                                    {{ getTranslatedValue($af_hero, 'cta_button_1') ?: 'Start Your Project' }}
                                 </span>
                                 <span>{{ get_svg('home_cta_white') }}</span>
                             </div>
                         </a>
-                        <a href="{{ route('services') }}">
+                        <a href="{{ getTranslatedValue($af_hero, 'cta_button_2_url') ?: route('services') }}">
                             <div class="flex items-center gap-2 group">
-                                <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black before:block before:pb-[1px] before:border-purple before:font-medium before:text-purple before:leading-5 before:font-inter before:border-b before:content-['Our_Services'] before:absolute before:-bottom-[1px] before:transition-all before:duration-300 before:w-0 hover:before:w-full before:overflow-hidden before:h-[21px] relative">
-                                    Our Services
+                                <p class="mb-[1px] font-medium text-main-black leading-5 font-inter border-b border-main-black relative">
+                                    {{ getTranslatedValue($af_hero, 'cta_button_2') ?: 'Our Services' }}
                                 </p>
                                 <span>{{ get_svg('arrow2') }}</span>
                             </div>
@@ -72,7 +72,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">Creative Concept</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($af_hero, 'pill_1') ?: 'Creative Concept' }}</span>
                                     </div>
                                 </div>
 
@@ -81,7 +81,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="white" stroke-width="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">Cinematic Production</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($af_hero, 'pill_2') ?: 'Cinematic Production' }}</span>
                                     </div>
                                 </div>
 
@@ -90,7 +90,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">Brand Storytelling</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($af_hero, 'pill_3') ?: 'Brand Storytelling' }}</span>
                                     </div>
                                 </div>
 
@@ -99,7 +99,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">High-Quality Output</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($af_hero, 'pill_4') ?: 'High-Quality Output' }}</span>
                                     </div>
                                 </div>
 
@@ -108,7 +108,7 @@
                                         <div class="size-7 rounded-full bg-[#EDE8FF] flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" stroke="#794AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13" r="4" stroke="#794AFF" stroke-width="2"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-main-black">Product Shoot</span>
+                                        <span class="text-xs font-bold text-main-black">{{ getTranslatedValue($af_hero, 'pill_5') ?: 'Product Shoot' }}</span>
                                     </div>
                                 </div>
 
@@ -117,7 +117,7 @@
                                         <div class="size-7 rounded-full bg-white/25 flex items-center justify-center">
                                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" fill="white"/></svg>
                                         </div>
-                                        <span class="text-xs font-bold text-white">Emotional Connect</span>
+                                        <span class="text-xs font-bold text-white">{{ getTranslatedValue($af_hero, 'pill_6') ?: 'Emotional Connect' }}</span>
                                     </div>
                                 </div>
                             </div>
