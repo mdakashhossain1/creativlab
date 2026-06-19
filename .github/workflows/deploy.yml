@@ -23,14 +23,15 @@ jobs:
           set net:max-retries 3;
           set net:reconnect-interval-base 5;
           open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }};
-          mirror --reverse --verbose \
+          mirror --reverse --delete --verbose \
             --exclude-glob .git/ \
             --exclude-glob .github/ \
             --exclude-glob node_modules/ \
             --exclude-glob .env \
             --exclude-glob .env.* \
-            --exclude-glob storage/logs/ \
-            --exclude-glob storage/framework/cache/ \
+            --exclude-glob storage/ \
+            --exclude-glob public/uploads/ \
+            --exclude-glob uploads/ \
             . /home/u663255439/domains/creativlab.in/public_html/;
           bye;
           "
