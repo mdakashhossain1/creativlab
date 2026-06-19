@@ -6,19 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('frontends', function (Blueprint $table) {
-            $table->longText('data_translations')->nullable();
-        });
+        if (!Schema::hasColumn('frontends', 'data_translations')) {
+            Schema::table('frontends', function (Blueprint $table) {
+                $table->longText('data_translations')->nullable();
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('frontends', function (Blueprint $table) {

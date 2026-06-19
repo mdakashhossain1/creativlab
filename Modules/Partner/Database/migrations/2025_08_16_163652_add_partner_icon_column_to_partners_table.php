@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('partners', function (Blueprint $table) {
-            $table->string('home_three_icon')->nullable()->after('logo');
-            $table->string('home_four_icon')->nullable()->after('home_three_icon');
-            $table->string('home_six_icon')->nullable()->after('home_four_icon');
+            if (!Schema::hasColumn('partners', 'home_three_icon')) {
+                $table->string('home_three_icon')->nullable()->after('logo');
+            }
+            if (!Schema::hasColumn('partners', 'home_four_icon')) {
+                $table->string('home_four_icon')->nullable()->after('home_three_icon');
+            }
+            if (!Schema::hasColumn('partners', 'home_six_icon')) {
+                $table->string('home_six_icon')->nullable()->after('home_four_icon');
+            }
         });
     }
 

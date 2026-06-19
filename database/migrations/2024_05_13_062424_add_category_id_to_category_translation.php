@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('category_translations', function (Blueprint $table) {
-            $table->integer('category_id');
-        });
+        if (!Schema::hasColumn('category_translations', 'category_id')) {
+            Schema::table('category_translations', function (Blueprint $table) {
+                $table->integer('category_id');
+            });
+        }
     }
 
     /**

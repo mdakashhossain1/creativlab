@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('listings', function (Blueprint $table) {
-            $table->unsignedBigInteger('sub_category_id')->default(0)->after('id');
-        });
+        if (!Schema::hasColumn('listings', 'sub_category_id')) {
+            Schema::table('listings', function (Blueprint $table) {
+                $table->unsignedBigInteger('sub_category_id')->default(0)->after('id');
+            });
+        }
     }
 
     /**
