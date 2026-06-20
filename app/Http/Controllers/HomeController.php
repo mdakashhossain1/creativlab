@@ -594,6 +594,11 @@ class HomeController extends Controller
         return view('project_detail', ['project' => $project, 'previousProject' => $previousProject, 'nextProject' => $nextProject, 'cta_content' => $cta_content, 'author' => $author]);
     }
 
+    public function projects(Request $request)
+    {
+        return $this->portfolio($request);
+    }
+
     public function download_file($file)
     {
         $filepath = public_path() . "/uploads/custom-images/" . $file;
