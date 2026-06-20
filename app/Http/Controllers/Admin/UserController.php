@@ -10,6 +10,7 @@ use Modules\Ecommerce\Entities\Cart;
 use Modules\Ecommerce\Entities\Order;
 use Modules\Ecommerce\Entities\OrderDetail;
 use Modules\Ecommerce\Entities\ProductReview;
+use App\Constants\Status;
 use Modules\Wishlist\App\Models\Wishlist;
 
 class UserController extends Controller
@@ -43,7 +44,7 @@ class UserController extends Controller
 
         $total_order = Order::where('user_id', $user->id)->count();
 
-        $success_order = Order::where('order_status', 'complete')->where('user_id', $user->id)->count();
+        $success_order = Order::where('order_status', Status::COMPLETED)->where('user_id', $user->id)->count();
 
 
         $orders = Order::with('order_detail')->where('user_id', $user->id)->latest()->get();
