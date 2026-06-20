@@ -60,6 +60,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admi
     Route::resource('client-projects', ClientProjectController::class);
     Route::post('client-projects/{id}/toggle-status', [ClientProjectController::class, 'toggleStatus'])->name('client-projects.toggle-status');
     Route::post('client-projects/installment/{id}/approve', [ClientProjectController::class, 'approveInstallment'])->name('client-projects.installment.approve');
+    Route::post('client-projects/installment/{id}/mark-paid', [ClientProjectController::class, 'markAsPaid'])->name('client-projects.installment.mark-paid');
 });
 
 // User client project routes

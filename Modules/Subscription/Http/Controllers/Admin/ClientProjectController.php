@@ -204,6 +204,66 @@ class ClientProjectController extends Controller
             ->with(['messege' => trans('Project status updated'), 'alert-type' => 'success']);
     }
 
+    public function markAsPaid(Request $request, $id)
+    {
+        $request->validate([
+            'payment_method' => 'required|in:Cash,Bank_Payment,Cheque,Other',
+            'transaction_id' => 'nullable|string|max:255',
+        ]);
+
+        $installment = ClientProjectInstallment::with('project.user')->findOrFail($id);
+
+        if ($installment->status === 'paid') {
+            return redirect()->back()
+                ->with(['messege' => trans('This installment is already paid'), 'alert-type' => 'error']);
+        }
+
+        $installment->status         = 'paid';
+        $installment->paid_at        = now();
+        $installment->payment_method = $request->payment_method;
+        $installment->transaction_id = $request->transaction_id ?? null;
+        $installment->invoice_number = 'INV-' . strtoupper(uniqid());
+        $installment->save();
+
+        try {
+            $installment->loadMissing('project.installments', 'project.user');
+            $project = $installment->project;
+            $user    = $project->user;
+
+            $template = \Modules\EmailSetting\App\Models\EmailTemplate::find(8);
+            if ($template) {
+                $breakdownHtml = $this->buildPaymentBreakdownHtml($installment, $project);
+                $subject = str_replace(
+                    ['{{invoice_number}}', '{{project_name}}'],
+                    [$installment->invoice_number, $project->name],
+                    $template->subject
+                );
+                $message = $template->description;
+                $message = str_replace('{{name}}',             $user->name,                                                               $message);
+                $message = str_replace('{{email}}',            $user->email,                                                              $message);
+                $message = str_replace('{{invoice_number}}',   $installment->invoice_number,                                              $message);
+                $message = str_replace('{{paid_date}}',        optional($installment->paid_at)->format('d M Y') ?? now()->format('d M Y'),$message);
+                $message = str_replace('{{project_name}}',     $project->name,                                                            $message);
+                $message = str_replace('{{project_title}}',    $project->title ?? $project->name,                                         $message);
+                $message = str_replace('{{installment_info}}', 'Payment ' . $installment->installment_number . ' of ' . $project->installments->count(), $message);
+                $message = str_replace('{{payment_method}}',   $installment->payment_method,                                              $message);
+                $message = str_replace('{{transaction_id}}',   $installment->transaction_id ?? '—',                                       $message);
+                $message = str_replace('{{base_amount}}',      number_format($installment->base_amount, 2),                               $message);
+                $message = str_replace('{{gst_amount}}',       number_format($installment->gst_amount ?? 0, 2),                           $message);
+                $message = str_replace('{{total_amount}}',     number_format($installment->total_amount, 2),                              $message);
+                $message = str_replace('{{payment_breakdown}}', $breakdownHtml,                                                            $message);
+
+                EmailHelper::mail_setup();
+                Mail::to($user->email)->send(new ClientProjectInvoice($message, $subject));
+            }
+        } catch (\Exception $e) {
+            Log::error('ClientProject mark-paid mail error: ' . $e->getMessage());
+        }
+
+        return redirect()->back()
+            ->with(['messege' => trans('Installment marked as paid and invoice sent'), 'alert-type' => 'success']);
+    }
+
     public function approveInstallment($id)
     {
         $installment = ClientProjectInstallment::with('project.user')->findOrFail($id);

@@ -114,22 +114,13 @@
                                                     <td class="crancy-table__data-2">{{ $installment->paid_at?->format('d M Y H:i') ?? '—' }}</td>
                                                     <td class="crancy-table__data-2">{{ $installment->invoice_number ?? '—' }}</td>
                                                     <td class="crancy-table__data-2">
-                                                        @if ($installment->status === 'pending' && $installment->payment_method === 'Bank_Payment')
-                                                            <form action="{{ route('admin.client-projects.installment.approve', $installment->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                <button type="submit" class="crancy-btn">
-                                                                    <i class="fas fa-check"></i> {{ __('Approve') }}
-                                                                </button>
-                                                            </form>
-                                                        @elseif ($installment->status === 'pending')
-                                                            <form action="{{ route('admin.client-projects.installment.approve', $installment->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                <button type="submit" class="crancy-btn">
-                                                                    <i class="fas fa-check"></i> {{ __('Mark Paid') }}
-                                                                </button>
-                                                            </form>
+                                                        @if ($installment->status !== 'paid')
+                                                            <button type="button" class="crancy-btn"
+                                                                onclick="openMarkPaidModal({{ $installment->id }}, '{{ addslashes($installment->payment_method) }}')">
+                                                                <i class="fas fa-money-bill-wave"></i> {{ __('Mark as Paid') }}
+                                                            </button>
                                                         @else
-                                                            <span class="text-muted">—</span>
+                                                            <span class="badge bg-success"><i class="fas fa-check"></i> {{ __('Paid') }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -145,4 +136,113 @@
             </div>
         </div>
     </section>
+
+    {{-- Mark as Paid Modal --}}
+    <div class="modal fade" id="markPaidModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius:12px;border:none;">
+                <form id="markPaidForm" method="POST" action="">
+                    @csrf
+                    <div class="modal-header" style="border-bottom:1px solid #f0f0f0;padding:20px 24px;">
+                        <h5 class="modal-title" style="font-weight:700;font-size:18px;">
+                            <i class="fas fa-money-bill-wave text-success me-2"></i>
+                            {{ __('Mark Installment as Paid') }}
+                        </h5>
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="padding:24px;">
+
+                        {{-- Payment Method --}}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold mb-2" style="font-size:14px;">
+                                {{ __('Payment Method') }} <span class="text-danger">*</span>
+                            </label>
+                            <div class="d-flex flex-wrap gap-2" id="paymentMethodOptions">
+                                @foreach(['Cash' => 'fas fa-money-bill-alt', 'Bank_Payment' => 'fas fa-university', 'Cheque' => 'fas fa-file-invoice', 'Other' => 'fas fa-ellipsis-h'] as $value => $icon)
+                                    <label class="payment-method-option" style="cursor:pointer;">
+                                        <input type="radio" name="payment_method" value="{{ $value }}" class="d-none payment-method-radio" {{ $value === 'Cash' ? 'checked' : '' }}>
+                                        <span class="d-flex align-items-center gap-2 px-3 py-2 rounded border method-label {{ $value === 'Cash' ? 'selected-method' : '' }}"
+                                              style="font-size:14px;font-weight:500;transition:all .2s;border-color:#dee2e6;">
+                                            <i class="{{ $icon }}"></i>
+                                            {{ $value === 'Bank_Payment' ? __('Bank Transfer') : __($value) }}
+                                        </span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Transaction Reference --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold mb-2" style="font-size:14px;">
+                                {{ __('Transaction / Reference No.') }}
+                                <span class="text-muted fw-normal">({{ __('optional') }})</span>
+                            </label>
+                            <input type="text" name="transaction_id" class="form-control"
+                                   placeholder="{{ __('e.g. receipt no., cheque no., or leave blank for cash') }}"
+                                   style="border-radius:8px;font-size:14px;">
+                        </div>
+
+                        {{-- Info note --}}
+                        <div class="d-flex align-items-start gap-2 p-3 rounded" style="background:#f0fdf4;border:1px solid #bbf7d0;">
+                            <i class="fas fa-info-circle text-success mt-1"></i>
+                            <p class="mb-0" style="font-size:13px;color:#166534;">
+                                {{ __('An invoice email will be sent to the client automatically after marking as paid.') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:1px solid #f0f0f0;padding:16px 24px;">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;font-weight:500;">
+                            {{ __('Cancel') }}
+                        </button>
+                        <button type="submit" class="crancy-btn" style="border-radius:8px;">
+                            <i class="fas fa-check me-1"></i> {{ __('Confirm Payment') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .selected-method { background:#794AFF !important; color:#fff !important; border-color:#794AFF !important; }
+        .payment-method-option:hover .method-label:not(.selected-method) { border-color:#794AFF; color:#794AFF; }
+    </style>
+
+    <script>
+        "use strict";
+        function openMarkPaidModal(installmentId, existingMethod) {
+            var baseUrl = "{{ url('admin/client-projects/installment') }}";
+            document.getElementById('markPaidForm').action = baseUrl + '/' + installmentId + '/mark-paid';
+
+            // Pre-select existing method if any
+            var radios = document.querySelectorAll('.payment-method-radio');
+            radios.forEach(function(r) {
+                var label = r.nextElementSibling;
+                if (r.value === existingMethod) {
+                    r.checked = true;
+                    label.classList.add('selected-method');
+                } else {
+                    label.classList.remove('selected-method');
+                }
+            });
+
+            // Default to Cash if nothing matches
+            var anyChecked = Array.from(radios).some(r => r.checked && r.value === existingMethod);
+            if (!anyChecked || !existingMethod) {
+                radios[0].checked = true;
+                radios[0].nextElementSibling.classList.add('selected-method');
+            }
+
+            var modal = new bootstrap.Modal(document.getElementById('markPaidModal'));
+            modal.show();
+        }
+
+        // Visual toggle for payment method selection
+        document.querySelectorAll('.payment-method-radio').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.method-label').forEach(function(l) { l.classList.remove('selected-method'); });
+                radio.nextElementSibling.classList.add('selected-method');
+            });
+        });
+    </script>
 @endsection
