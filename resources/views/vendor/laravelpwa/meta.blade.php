@@ -1,22 +1,20 @@
 <script type="text/javascript">
-    // Intercept and mock tawk.to performance logging to prevent CORS errors on localhost
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-            let url = '';
-            if (args[0]) {
-                if (typeof args[0] === 'string') {
-                    url = args[0];
-                } else if (args[0].url) {
-                    url = args[0].url;
-                }
+    // Silently intercept tawk.to performance logging to suppress CORS errors
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        let url = '';
+        if (args[0]) {
+            if (typeof args[0] === 'string') {
+                url = args[0];
+            } else if (args[0].url) {
+                url = args[0].url;
             }
-            if (url.includes('tawk.to/log-performance')) {
-                return Promise.resolve(new Response(null, { status: 200 }));
-            }
-            return originalFetch.apply(this, args);
-        };
-    }
+        }
+        if (url.includes('tawk.to/log-performance')) {
+            return Promise.resolve(new Response(null, { status: 200 }));
+        }
+        return originalFetch.apply(this, args);
+    };
 </script>
 <!-- Web Application Manifest -->
 <link rel="manifest" href="{{ route('pwa.manifest') }}">
