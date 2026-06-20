@@ -15,7 +15,7 @@
 
                     <div class="dashboard-main w-full flex-1 max-w-[982px]">
                         <div class="p-6 rounded-[10px] bg-white" data-aos="fade-up">
-                            <h4 class="text-22 font-semibold mb-6">{{ __('My Client Projects') }}</h4>
+                            <h4 class="text-22 font-semibold mb-6">{{ __('My Projects') }}</h4>
 
                             @if ($projects->isEmpty())
                                 @include('user._no_order')

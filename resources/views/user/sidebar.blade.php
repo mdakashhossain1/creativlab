@@ -60,6 +60,16 @@
                     </span>
                     <span class="text-16 flex-1 text-nowrap"> {{ __('Dashboard') }} </span>
                 </a>
+                <a href="{{ route('user.client-projects.index') }}"
+                    class="{{ request()->routeIs('user.client-projects.*') ? 'xl:bg-buisness-gray text-main-black ' : 'xl:bg-transparent text-paragraph' }} xl:hover:bg-buisness-gray font-normal group hover:text-main-black xl:px-30 rounded-[10px] py-2.5 text-14 xl:text-16 transition-all duration-300 flex items-center gap-1 xl:gap-4 scroll-section snap-start w-full">
+                    <span class="text-black group-hover:text-main-black">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 7C3 5.34315 4.34315 4 6 4H10.5858C10.851 4 11.1054 4.10536 11.2929 4.29289L12.7071 5.70711C12.8946 5.89464 13.149 6 13.4142 6H18C19.6569 6 21 7.34315 21 9V17C21 18.6569 19.6569 20 18 20H6C4.34315 20 3 18.6569 3 17V7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 13H16M12 10V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span class="text-16 flex-1 text-nowrap">{{ __('My Projects') }}</span>
+                </a>
                 <a href="{{ route('user.wishlist.index') }}"
                     class="{{ request()->routeIs('user.wishlist.*') ? 'xl:bg-buisness-gray text-main-black ' : 'xl:bg-transparent text-paragraph' }} xl:hover:bg-buisness-gray font-normal group hover:text-main-black  xl:px-30 rounded-[10px] py-2.5 text-14 xl:text-16 transition-all duration-300 flex items-center gap-1 xl:gap-4 scroll-section snap-start w-full">
                     <span class="text-black group-hover:text-main-black">

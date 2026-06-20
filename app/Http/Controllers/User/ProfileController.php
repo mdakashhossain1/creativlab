@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordChangeRequest;
 use Modules\Ecommerce\Entities\Order;
+use Modules\Subscription\Entities\ClientProject;
 use Modules\Ecommerce\Entities\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,13 +39,22 @@ class ProfileController extends Controller
             ->latest()
             ->sum('total');
 
+        $project_count = ClientProject::where('user_id', $user->id)->where('status', 'active')->count();
+        $projects_dashboard = ClientProject::with('pendingInstallments')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
         return view('user.dashboard', [
-            'pending_orders' => $pending_orders,
-            'complete_orders' => $complete_orders,
-            'total' => $total,
-            'orders' => $orders,
-            'user' => $user,
-            'order_count' => $order_count,
+            'pending_orders'      => $pending_orders,
+            'complete_orders'     => $complete_orders,
+            'total'               => $total,
+            'orders'              => $orders,
+            'user'                => $user,
+            'order_count'         => $order_count,
+            'project_count'       => $project_count,
+            'projects_dashboard'  => $projects_dashboard,
         ]);
     }
 
