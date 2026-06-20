@@ -11,7 +11,7 @@ function initlineLottie(selector) {
             renderer: "svg",
             loop: true,
             autoplay: true,
-            path: "./assets/lottie/left_lines.json", // the path to the animation json
+            path: "/frontend/assets/lottie/left_lines.json",
         });
     }
 }
