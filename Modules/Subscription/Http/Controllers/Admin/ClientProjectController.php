@@ -102,8 +102,44 @@ class ClientProjectController extends Controller
             ]);
         }
 
+        $this->sendProjectCreatedEmail($project);
+
         return redirect()->route('admin.client-projects.index')
             ->with(['messege' => trans('Project created successfully'), 'alert-type' => 'success']);
+    }
+
+    private function sendProjectCreatedEmail(ClientProject $project): void
+    {
+        try {
+            $user     = $project->user;
+            $template = \Modules\EmailSetting\App\Models\EmailTemplate::find(9);
+
+            if (!$template || !$user) {
+                return;
+            }
+
+            $subject = str_replace(
+                ['{{project_name}}', '{{name}}'],
+                [$project->name, $user->name],
+                $template->subject
+            );
+
+            $message = $template->description;
+            $message = str_replace('{{name}}',          $user->name,                                                          $message);
+            $message = str_replace('{{email}}',         $user->email,                                                         $message);
+            $message = str_replace('{{project_name}}',  $project->name,                                                       $message);
+            $message = str_replace('{{project_title}}', $project->title ?? $project->name,                                    $message);
+            $message = str_replace('{{total_price}}',   number_format($project->total_price, 2),                              $message);
+            $message = str_replace('{{payment_type}}',  ucfirst($project->payment_type),                                      $message);
+            $message = str_replace('{{start_date}}',    $project->start_date ? \Carbon\Carbon::parse($project->start_date)->format('d M Y') : '—', $message);
+            $message = str_replace('{{end_date}}',      $project->end_date   ? \Carbon\Carbon::parse($project->end_date)->format('d M Y')   : '—', $message);
+            $message = str_replace('{{dashboard_url}}', route('user.client-projects.index'),                                  $message);
+
+            EmailHelper::mail_setup();
+            Mail::to($user->email)->send(new ClientProjectInvoice($message, $subject));
+        } catch (\Exception $e) {
+            Log::error('ClientProject created mail error: ' . $e->getMessage());
+        }
     }
 
     public function show($id)

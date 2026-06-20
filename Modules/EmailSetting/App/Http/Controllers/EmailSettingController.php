@@ -77,6 +77,8 @@ class EmailSettingController extends Controller
             return view('emailsetting::digital_product_delivery', ['template_item' => $template_item]);
         }elseif($template_item->id == 8){
             return view('emailsetting::client_project_invoice', ['template_item' => $template_item]);
+        }elseif($template_item->id == 9){
+            return view('emailsetting::client_project_created', ['template_item' => $template_item]);
         }else{
             abort(404);
         }
