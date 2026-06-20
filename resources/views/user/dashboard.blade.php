@@ -78,9 +78,7 @@
 
 
             @if($orders->isEmpty())
-                 <div class="display-none">
-
-                 </div>
+                @include('user._no_order')
             @else
                 @include('user._with_dashboard_order')
             @endif
