@@ -60,7 +60,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-[#E0E1E1]">
-                @foreach ($orders as $order)
+                @forelse ($orders as $order)
                     <tr class="bg-white transition-all">
                         <td class="px-30 py-3.5 text-start">
                             <div>
@@ -138,7 +138,17 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-30 py-16 text-center">
+                            <div class="flex flex-col items-center gap-4">
+                                @include('svg.error_image')
+                                <h3 class="text-22 font-semibold">{{ __('Order list empty') }}</h3>
+                                <p class="text-paragraph text-16">{{ __('You have not placed any orders yet.') }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

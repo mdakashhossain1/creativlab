@@ -77,11 +77,7 @@
             </div>
 
 
-            @if($orders->isEmpty())
-                @include('user._no_order')
-            @else
-                @include('user._with_dashboard_order')
-            @endif
+            @include('user._with_dashboard_order')
 
             </div>
           </div>
