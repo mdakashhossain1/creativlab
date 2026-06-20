@@ -45,6 +45,13 @@ class ClientProjectPaymentController extends Controller
 
         $this->sendInvoiceEmail($installment);
 
+        session()->flash('payment_success', [
+            'project_name'      => $orderData['project_name'],
+            'amount'            => $installment->total_amount,
+            'invoice_number'    => $installment->invoice_number,
+            'payment_method'    => $method,
+        ]);
+
         Session::forget('clientProjectOrderData');
     }
 
