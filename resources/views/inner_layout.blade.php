@@ -713,7 +713,7 @@
             "use strict";
             $(document).ready(function () {
 
-                const session_notify_message = @json(Session::get('message'));
+                const session_notify_message = @json(Session::get('messege') ?? Session::get('message'));
                 const demo_mode_message = @json(Session::get('demo_mode'));
 
                 if (session_notify_message != null) {
