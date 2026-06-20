@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Modules\GlobalSetting\App\Models\GlobalSetting;
@@ -18,12 +17,9 @@ class MaintenanceMode
     public function handle(Request $request, Closure $next): Response
     {
 
-        $maintenance_value = Cache::remember('maintenance_status', 300, function () {
-            $row = GlobalSetting::where('key', 'maintenance_status')->first();
-            return $row ? (int) $row->value : 0;
-        });
+        $maintenance_status = GlobalSetting::where('key', 'maintenance_status')->first();
 
-        if($maintenance_value == 1){
+        if($maintenance_status && $maintenance_status->value == 1){
             return response()->view('maintenance');
         }
 
