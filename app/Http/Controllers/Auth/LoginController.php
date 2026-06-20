@@ -333,15 +333,17 @@ class LoginController extends Controller
         if (!$user) {
 
             $user = User::create([
-                'name'     => $get_info->name,
-                'username'     => Str::slug($get_info->name).'-'.date('Ymdhis'),
-                'email'    => $get_info->email,
-                'provider' => $provider,
-                'provider_id' => $get_info->id,
-                'status' => 'enable',
-                'is_banned' => 'no',
-                'email_verified_at' => date('Y-m-d H:i:s'),
+                'name'             => $get_info->name,
+                'username'         => Str::slug($get_info->name).'-'.date('Ymdhis'),
+                'email'            => $get_info->email,
+                'password'         => bcrypt(Str::random(24)),
+                'provider'         => $provider,
+                'provider_id'      => $get_info->id,
+                'status'           => 'enable',
+                'is_banned'        => 'no',
+                'email_verified_at'=> date('Y-m-d H:i:s'),
                 'verification_token' => null,
+                'avatar'           => $get_info->avatar ?? null,
             ]);
 
         }
