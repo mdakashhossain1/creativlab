@@ -6,6 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
 <body>
-    {!! clean($mail_message) !!}
+    {!! $mail_message !!}
 </body>
 </html>
