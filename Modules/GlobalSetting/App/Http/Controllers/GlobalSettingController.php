@@ -500,15 +500,15 @@ class GlobalSettingController extends Controller
 
     public function social_login_update(SocialLoginRequest $request){
 
-        GlobalSetting::where('key', 'facebook_client_id')->update(['value' => $request->facebook_client_id]);
-        GlobalSetting::where('key', 'facebook_secret_id')->update(['value' => $request->facebook_secret_id]);
-        GlobalSetting::where('key', 'facebook_redirect_url')->update(['value' => $request->facebook_redirect_url]);
-        GlobalSetting::where('key', 'is_facebook')->update(['value' => $request->is_facebook ? 1 : 0]);
+        GlobalSetting::updateOrCreate(['key' => 'facebook_client_id'], ['value' => $request->facebook_client_id]);
+        GlobalSetting::updateOrCreate(['key' => 'facebook_secret_id'], ['value' => $request->facebook_secret_id]);
+        GlobalSetting::updateOrCreate(['key' => 'facebook_redirect_url'], ['value' => $request->facebook_redirect_url]);
+        GlobalSetting::updateOrCreate(['key' => 'is_facebook'], ['value' => $request->is_facebook ? 1 : 0]);
 
-        GlobalSetting::where('key', 'gmail_client_id')->update(['value' => $request->gmail_client_id]);
-        GlobalSetting::where('key', 'gmail_secret_id')->update(['value' => $request->gmail_secret_id]);
-        GlobalSetting::where('key', 'gmail_redirect_url')->update(['value' => $request->gmail_redirect_url]);
-        GlobalSetting::where('key', 'is_gmail')->update(['value' => $request->is_gmail ? 1 : 0]);
+        GlobalSetting::updateOrCreate(['key' => 'gmail_client_id'], ['value' => $request->gmail_client_id]);
+        GlobalSetting::updateOrCreate(['key' => 'gmail_secret_id'], ['value' => $request->gmail_secret_id]);
+        GlobalSetting::updateOrCreate(['key' => 'gmail_redirect_url'], ['value' => $request->gmail_redirect_url]);
+        GlobalSetting::updateOrCreate(['key' => 'is_gmail'], ['value' => $request->is_gmail ? 1 : 0]);
 
         $this->set_cache_setting();
 
