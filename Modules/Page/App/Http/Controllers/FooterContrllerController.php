@@ -4,6 +4,7 @@ namespace Modules\Page\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Modules\Page\App\Models\Footer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -67,6 +68,7 @@ class FooterContrllerController extends Controller
             $footer->email = $request->email;
             $footer->address = $request->address;
             $footer->save();
+            Cache::forget('view_footer');
 
         }
 
