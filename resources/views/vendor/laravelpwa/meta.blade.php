@@ -11,7 +11,10 @@
             }
         }
         if (url.includes('tawk.to/log-performance')) {
-            return Promise.resolve(new Response(null, { status: 200 }));
+            return Promise.resolve(new Response('{}', {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            }));
         }
         return originalFetch.apply(this, args);
     };
