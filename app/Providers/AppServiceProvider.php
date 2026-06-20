@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use View;
-use Cache;
 use Exception;
 use Throwable;
 use App\Models\Wishlist;
@@ -52,67 +51,38 @@ class AppServiceProvider extends ServiceProvider
     {
 
         try {
-            $setting = Cache::rememberForever('setting', function () {
-                $setting_data = GlobalSetting::get();
+            $setting_data = GlobalSetting::get();
+            $setting = array();
+            foreach ($setting_data as $data_item) {
+                $setting[$data_item->key] = $data_item->value;
+            }
+            $setting = (object) $setting;
 
-                $setting = array();
-
-                foreach ($setting_data as $data_item) {
-                    $setting[$data_item->key] = $data_item->value;
-                }
-
-                $setting = (object) $setting;
-
-                return $setting;
-            });
-
-
-            $timezone_setting = Cache::get('setting');
-
-            config(['app.timezone' => $timezone_setting->timezone]);
-            date_default_timezone_set($timezone_setting->timezone);
+            config(['app.timezone' => $setting->timezone]);
+            date_default_timezone_set($setting->timezone);
 
             View::composer('*', function ($view) {
 
-                $general_setting = Cache::get('setting');
+                $setting_data = GlobalSetting::get();
+                $setting_arr = array();
+                foreach ($setting_data as $data_item) {
+                    $setting_arr[$data_item->key] = $data_item->value;
+                }
+                $general_setting = (object) $setting_arr;
 
-                // Cache static/rarely-changing data for 30 minutes to avoid repeated Neon round-trips
-                $language_list = Cache::remember('view_language_list', 1800, fn() =>
-                    Language::where('status', 1)->get()
-                );
-                $currency_list = Cache::remember('view_currency_list', 1800, fn() =>
-                    Currency::where('status', 'active')->get()
-                );
-                $custom_pages = Cache::remember('view_custom_pages', 1800, fn() =>
-                    CustomPage::where('status', 1)->get()
-                );
-                $footer_categories = Cache::remember('view_footer_categories', 1800, fn() =>
-                    Category::where('status', 'enable')->latest()->take(7)->get()
-                );
-                $footer_blog_categories = Cache::remember('view_footer_blog_categories', 1800, fn() =>
-                    BlogCategory::where('status', 1)->latest()->take(7)->get()
-                );
-                $footer = Cache::remember('view_footer', 1800, fn() =>
-                    Footer::first()
-                );
-                $cta_content = Cache::remember('view_cta_content', 1800, fn() =>
-                    getContent('template_1_cta.content', true)
-                );
+                $language_list = Language::where('status', 1)->get();
+                $currency_list = Currency::where('status', 'active')->get();
+                $custom_pages = CustomPage::where('status', 1)->get();
+                $footer_categories = Category::where('status', 'enable')->latest()->take(7)->get();
+                $footer_blog_categories = BlogCategory::where('status', 1)->latest()->take(7)->get();
+                $footer = Footer::first();
+                $cta_content = getContent('template_1_cta.content', true);
 
-                // Cache menus (header + footer) with their items
-                $menu = Cache::remember('view_header_menu', 1800, fn() =>
-                    Menu::where('is_active', 1)->where('location', 'header')->orderBy('sort_order', 'asc')->first()
-                );
-                $menu_items = Cache::remember('view_header_menu_items', 1800, function () use ($menu) {
-                    return $menu ? $menu->allMenuItems()->where('is_active', 1)->get() : collect();
-                });
+                $menu = Menu::where('is_active', 1)->where('location', 'header')->orderBy('sort_order', 'asc')->first();
+                $menu_items = $menu ? $menu->allMenuItems()->where('is_active', 1)->get() : collect();
 
-                $footer_menu = Cache::remember('view_footer_menu', 1800, fn() =>
-                    Menu::where('is_active', 1)->where('location', 'footer')->orderBy('sort_order', 'asc')->first()
-                );
-                $footer_menus = Cache::remember('view_footer_menu_items', 1800, function () use ($footer_menu) {
-                    return $footer_menu ? $footer_menu->allMenuItems()->where('is_active', 1)->get() : collect();
-                });
+                $footer_menu = Menu::where('is_active', 1)->where('location', 'footer')->orderBy('sort_order', 'asc')->first();
+                $footer_menus = $footer_menu ? $footer_menu->allMenuItems()->where('is_active', 1)->get() : collect();
 
                 // User-specific — cannot be cached globally
                 if (Auth::guard('web')->check()) {

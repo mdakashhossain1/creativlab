@@ -19,7 +19,7 @@ use Modules\Brand\Entities\Brand;
 use App\Models\ProjectTranslation;
 use App\Http\Controllers\Controller;
 use Modules\Ecommerce\Entities\Cart;
-use Cache, Image, File, Str, Artisan;
+use Image, File, Str, Artisan;
 use Modules\Coupon\App\Models\Coupon;
 use Modules\Listing\Entities\Listing;
 use Modules\Category\Entities\Category;
@@ -603,19 +603,7 @@ class GlobalSettingController extends Controller
     }
 
     public function set_cache_setting(){
-        $setting_data = GlobalSetting::get();
-
-        $setting = array();
-
-        foreach($setting_data as $data_item){
-            $setting[$data_item->key] = $data_item->value;
-        }
-
-        $setting = (object) $setting;
-
-
-        Cache::put('setting', $setting);
-
+        // no-op: settings cache removed, data is read fresh from DB on every request
     }
 
         /**
