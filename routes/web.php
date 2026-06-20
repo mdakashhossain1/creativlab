@@ -211,3 +211,8 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['admin.reme
         Route::post('/openai/ask', [OpenAIController::class, 'ask'])->name('openai.ask');
     });
 });
+
+// OAuth callback routes — must live outside any prefix group to match the
+// redirect URIs registered in Google/Facebook console (/callback/google etc.)
+Route::get('/callback/google', [UserLoginController::class, 'google_callback']);
+Route::get('/callback/facebook', [UserLoginController::class, 'facebook_callback']);
