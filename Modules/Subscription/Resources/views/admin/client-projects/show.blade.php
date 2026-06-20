@@ -190,7 +190,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #f0f0f0;padding:16px 24px;">
+                    <div class="modal-footer" style="border-top:1px solid #f0f0f0;padding:16px 24px;display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:nowrap;">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;font-weight:500;">
                             {{ __('Cancel') }}
                         </button>
