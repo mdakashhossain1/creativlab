@@ -8,19 +8,6 @@
     // Get PWA icons from database
     $pwaIcons = Modules\GlobalSetting\App\Models\PwaIconSetting::getActiveIcons();
 
-    // Log PWA icon information for debugging
-    \Log::info('PWA Manifest - Icons Loaded', [
-        'total_icons' => $pwaIcons->count(),
-        'icons' => $pwaIcons->map(function($icon) {
-            return [
-                'size' => $icon->icon_size,
-                'path' => $icon->icon_path,
-                'type' => $icon->icon_type,
-                'purpose' => $icon->purpose,
-                'active' => $icon->is_active
-            ];
-        })->toArray()
-    ]);
 @endphp
 {
     "name": "{{ $settings->get('app_name')->value ?? config('app.name', 'My App') }}",
