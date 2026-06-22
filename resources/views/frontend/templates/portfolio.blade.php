@@ -449,6 +449,7 @@
 
     /* ── colour helpers ── */
     function hexToRgb(h) {
+        if (!h || typeof h !== 'string') return [0, 0, 0];
         return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
     }
     function lerpRgb(a, b, t) {
@@ -458,12 +459,13 @@
 
     /* returns the current blended aurora RGB for a given timestamp */
     function auroraColor(now) {
-        const total    = CYCLE_MS * AURORA_COLORS.length;
-        const elapsed  = (now - startTime) % total;
-        const rawIdx   = elapsed / CYCLE_MS;
-        const from     = Math.floor(rawIdx) % AURORA_COLORS.length;
-        const to       = (from + 1)         % AURORA_COLORS.length;
-        const frac     = easeInOut(rawIdx - Math.floor(rawIdx));
+        const total   = CYCLE_MS * AURORA_COLORS.length;
+        // clamp elapsed to always be positive — avoids NaN/negative index
+        const elapsed = Math.abs((now - startTime) % total);
+        const rawIdx  = elapsed / CYCLE_MS;
+        const from    = ((Math.floor(rawIdx) % AURORA_COLORS.length) + AURORA_COLORS.length) % AURORA_COLORS.length;
+        const to      = (from + 1) % AURORA_COLORS.length;
+        const frac    = easeInOut(rawIdx - Math.floor(rawIdx));
         return lerpRgb(hexToRgb(AURORA_COLORS[from]), hexToRgb(AURORA_COLORS[to]), frac);
     }
 
@@ -496,6 +498,8 @@
 
     /* ── main loop ── */
     function loop(now) {
+        // Guard: if now is invalid (tab was hidden/resumed), reset startTime
+        if (!now || isNaN(now)) { startTime = performance.now(); requestAnimationFrame(loop); return; }
         const rgb      = auroraColor(now);
         const colorStr = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
         const t        = now / 1000; // seconds for twinkle
