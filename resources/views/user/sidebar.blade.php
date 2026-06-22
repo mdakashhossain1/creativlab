@@ -20,7 +20,7 @@
                 @csrf
                 <div class="flex gap-5 items-center p-7 pb-0">
                     <div class="relative w-[66px] aspect-square">
-                        <img src="{{ asset($user->image) }}" alt="" class="rounded-full" id="user-img-preview" />
+                        <img src="{{ $user->image ? asset($user->image) : ($user->avatar ?? asset($general_setting->placeholder_image)) }}" alt="" class="rounded-full" id="user-img-preview" />
                         <label for="user-img"
                             class="absolute bottom-0 -right-1 text-white bg-main-black rounded-full p-2 cursor-pointer">
                             <svg width="11" height="11" viewBox="0 0 11 11" fill="none"

@@ -66,7 +66,7 @@
                                                     <label for="logo"
                                                         class="w-[240px] aspect-square flex justify-center items-center flex-col gap-3.5 border border-dashed border-primary-300 rounded-[10px] p-3 bg-primary-200 text-primary-400 cursor-pointer bg-white">
                                                         <div class="size-[120px] rounded-lg overflow-hidden">
-                                                            <img src="{{ $user->image ? asset($user->image) : asset($general_setting->placeholder_image) }}"
+                                                            <img src="{{ $user->image ? asset($user->image) : ($user->avatar ?? asset($general_setting->placeholder_image)) }}"
                                                                 alt="" class="w-full h-full">
                                                         </div>
                                                         <p class="text-base text-paragraph">{{ __('Select') }} <span
