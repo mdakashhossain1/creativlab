@@ -74,28 +74,49 @@
     <main>
 
         {{-- ===================== HERO ===================== --}}
-        <section class="pf-hero w-full xl:pt-[200px] pt-[140px] xl:pb-[90px] pb-16 relative overflow-hidden">
-            <div class="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-purple/20 blur-3xl pointer-events-none"></div>
-            <div class="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-[#BA4AFF]/15 blur-3xl pointer-events-none"></div>
-            <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 54px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 54px);"></div>
+        <section id="home-one-hero">
+        <div class="hero-one-section-wrapper w-full xl:h-[905px] overflow-hidden relative pf-hero">
+            {{-- DotGrid canvas — interactive dots, matches other page hero animations --}}
+            <canvas id="pf-dot-canvas" class="absolute inset-0 w-full h-full" style="z-index:1;"></canvas>
 
-            <div class="theme-container mx-auto relative z-10 text-center">
-                <h1 class="xl:text-[64px] md:text-[50px] text-[34px] font-bold text-white leading-[1.1] mb-7" data-aos="fade-up">
-                    Our <span class="pf-hero-highlight">Creative</span> Portfolio
-                </h1>
-                <p class="text-white/70 text-base md:text-lg leading-8 max-w-[640px] mx-auto" data-aos="fade-up" data-aos-delay="100">
-                    Explore some of our recent works in
-                    <span class="text-[#9D7BFF] font-semibold">Branding</span>,
-                    <span class="text-[#9D7BFF] font-semibold">Web Development</span>,
-                    <span class="text-[#9D7BFF] font-semibold">Ad Films</span>,
-                    <span class="text-[#9D7BFF] font-semibold">Creative Content</span>, and
-                    <span class="text-[#9D7BFF] font-semibold">Digital Marketing</span>.
-                </p>
+            {{-- Soft glow orbs --}}
+            <div class="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-purple/25 blur-3xl pointer-events-none" style="z-index:2;"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#BA4AFF]/15 blur-3xl pointer-events-none" style="z-index:2;"></div>
+
+            {{-- Content --}}
+            <div class="theme-container mx-auto h-full relative pointer-events-none" style="z-index:3;">
+                <div class="flex flex-col items-center justify-center xl:pt-[223px] pt-[130px] xl:pb-0 pb-10 h-full text-center">
+                    <div class="pointer-events-auto" data-aos="fade-up">
+                        <div class="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
+                            <span class="flex size-2 relative">
+                                <span class="animate-ping absolute inline-flex size-2 rounded-full bg-[#BA4AFF] opacity-75"></span>
+                                <span class="relative inline-flex size-2 rounded-full bg-[#BA4AFF]"></span>
+                            </span>
+                            <span class="text-white/90 text-sm font-semibold tracking-wide">Creative Portfolio</span>
+                        </div>
+                        <h1 class="xl:text-[64px] md:text-[50px] text-[34px] font-bold text-white leading-[1.1] mb-7">
+                            Our <span class="pf-hero-highlight">Creative</span> Portfolio
+                        </h1>
+                        <p class="text-white/70 text-base md:text-lg leading-8 max-w-[640px] mx-auto mb-10">
+                            Explore some of our recent works in
+                            <span class="text-[#9D7BFF] font-semibold">Branding</span>,
+                            <span class="text-[#9D7BFF] font-semibold">Web Development</span>,
+                            <span class="text-[#9D7BFF] font-semibold">Ad Films</span>,
+                            <span class="text-[#9D7BFF] font-semibold">Creative Content</span>, and
+                            <span class="text-[#9D7BFF] font-semibold">Digital Marketing</span>.
+                        </p>
+                        <a href="#portfolio-grid" class="inline-flex items-center gap-2.5 bg-purple text-white font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full hover:bg-[#BA4AFF] transition-all duration-300 shadow-purple">
+                            Browse Work
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
+        </div>
         </section>
 
         {{-- ===================== PORTFOLIO GRID ===================== --}}
-        <section class="w-full bg-white md:py-[90px] py-14">
+        <section class="w-full bg-white md:py-[90px] py-14" id="portfolio-grid">
             <div class="theme-container mx-auto">
                 <h2 class="md:text-40 text-28 font-bold text-main-black text-center mb-9" data-aos="fade-up">Browse our work</h2>
 
@@ -250,6 +271,145 @@
 
 @push('script_section')
 <script>
+/* ── DotGrid: vanilla JS port of the React DotGrid (error.txt) ── */
+(function () {
+    const canvas = document.getElementById('pf-dot-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const DOT     = 4;   // dot diameter px
+    const GAP     = 30;  // gap between dot centres
+    const CELL    = DOT + GAP;
+    const PROX    = 140; // colour-change radius
+    const PROX_SQ = PROX * PROX;
+    const SPEED_TRIGGER = 120; // px/s before scatter kicks in
+    const SHOCK_RADIUS  = 220;
+    const SHOCK_STR     = 9;
+    const STIFFNESS     = 0.10;  // spring return
+    const DAMPING       = 0.82;
+
+    // Base: faint purple; Active: vivid purple/pink on proximity
+    const BASE   = [121, 74, 255, 0.10];
+    const ACTIVE = [186, 74, 255, 0.90];
+
+    let dots = [];
+    let ptr  = { x: -9999, y: -9999, vx: 0, vy: 0, speed: 0, lx: 0, ly: 0, lt: 0 };
+    let raf;
+
+    function buildGrid() {
+        cancelAnimationFrame(raf);
+        const w = canvas.parentElement.clientWidth;
+        const h = canvas.parentElement.clientHeight;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width  = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width  = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.scale(dpr, dpr);
+
+        const cols  = Math.floor((w + GAP) / CELL);
+        const rows  = Math.floor((h + GAP) / CELL);
+        const gridW = CELL * cols - GAP;
+        const gridH = CELL * rows - GAP;
+        const sx    = (w - gridW) / 2 + DOT / 2;
+        const sy    = (h - gridH) / 2 + DOT / 2;
+
+        dots = [];
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                dots.push({ cx: sx + c * CELL, cy: sy + r * CELL, xo: 0, yo: 0, vx: 0, vy: 0 });
+            }
+        }
+        loop();
+    }
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (const d of dots) {
+            // spring physics
+            d.vx += -STIFFNESS * d.xo;
+            d.vy += -STIFFNESS * d.yo;
+            d.vx *= DAMPING;
+            d.vy *= DAMPING;
+            d.xo += d.vx;
+            d.yo += d.vy;
+            if (Math.abs(d.xo) < 0.02 && Math.abs(d.vx) < 0.02) { d.xo = 0; d.vx = 0; }
+            if (Math.abs(d.yo) < 0.02 && Math.abs(d.vy) < 0.02) { d.yo = 0; d.vy = 0; }
+
+            const ox = d.cx + d.xo;
+            const oy = d.cy + d.yo;
+            const dx = d.cx - ptr.x;
+            const dy = d.cy - ptr.y;
+            const dsq = dx * dx + dy * dy;
+            const t   = dsq <= PROX_SQ ? 1 - Math.sqrt(dsq) / PROX : 0;
+
+            ctx.beginPath();
+            ctx.arc(ox, oy, DOT / 2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${Math.round(lerp(BASE[0], ACTIVE[0], t))},${Math.round(lerp(BASE[1], ACTIVE[1], t))},${Math.round(lerp(BASE[2], ACTIVE[2], t))},${lerp(BASE[3], ACTIVE[3], t).toFixed(2)})`;
+            ctx.fill();
+        }
+
+        raf = requestAnimationFrame(loop);
+    }
+
+    /* ── Mouse tracking ── */
+    canvas.parentElement.addEventListener('mousemove', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        const now  = performance.now();
+        const dt   = ptr.lt ? now - ptr.lt : 16;
+        ptr.vx  = ((e.clientX - ptr.lx) / dt) * 1000;
+        ptr.vy  = ((e.clientY - ptr.ly) / dt) * 1000;
+        ptr.speed = Math.hypot(ptr.vx, ptr.vy);
+        ptr.lt = now; ptr.lx = e.clientX; ptr.ly = e.clientY;
+        ptr.x  = e.clientX - rect.left;
+        ptr.y  = e.clientY - rect.top;
+
+        // Scatter on fast move
+        if (ptr.speed > SPEED_TRIGGER) {
+            for (const d of dots) {
+                const dist = Math.hypot(d.cx - ptr.x, d.cy - ptr.y);
+                if (dist < PROX) {
+                    const s = (1 - dist / PROX) * 0.007;
+                    d.vx += ptr.vx * s;
+                    d.vy += ptr.vy * s;
+                }
+            }
+        }
+    }, { passive: true });
+
+    canvas.parentElement.addEventListener('mouseleave', function () {
+        ptr.x = -9999; ptr.y = -9999;
+    });
+
+    /* ── Click shockwave ── */
+    canvas.parentElement.addEventListener('click', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        const cx = e.clientX - rect.left;
+        const cy = e.clientY - rect.top;
+        for (const d of dots) {
+            const dist = Math.hypot(d.cx - cx, d.cy - cy);
+            if (dist < SHOCK_RADIUS) {
+                const falloff = 1 - dist / SHOCK_RADIUS;
+                const ang = Math.atan2(d.cy - cy, d.cx - cx);
+                d.vx += Math.cos(ang) * SHOCK_STR * falloff;
+                d.vy += Math.sin(ang) * SHOCK_STR * falloff;
+            }
+        }
+    });
+
+    buildGrid();
+
+    let resizeT;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeT);
+        resizeT = setTimeout(buildGrid, 200);
+    });
+})();
+
+/* ── Portfolio modal + filter ── */
 (function () {
     const modal      = document.getElementById('pf-media-modal');
     const modalInner = document.getElementById('pf-modal-inner');
