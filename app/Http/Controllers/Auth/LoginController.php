@@ -334,6 +334,7 @@ class LoginController extends Controller
                 'provider_id'      => $get_info->id,
                 'status'           => 'enable',
                 'is_banned'        => 'no',
+                'is_seller'        => 0,
                 'email_verified_at'=> date('Y-m-d H:i:s'),
                 'verification_token' => null,
                 'avatar'           => $get_info->avatar ?? null,

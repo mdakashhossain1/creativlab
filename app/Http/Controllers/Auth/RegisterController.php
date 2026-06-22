@@ -78,6 +78,7 @@ class RegisterController extends Controller
             'username' => Str::slug($request->name).'-'.date('Ymdhis'),
             'status' => 'enable',
             'is_banned' => 'no',
+            'is_seller' => 0,
             'password' => Hash::make($request->password),
             'verification_token' => Str::random(100),
         ]);
@@ -152,6 +153,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'is_seller' => 0,
             'password' => Hash::make($data['password']),
         ]);
     }
