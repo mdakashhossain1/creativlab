@@ -7,11 +7,34 @@
 
 @push('style_section')
 <style>
-    .pf-hero { background: radial-gradient(ellipse at 50% 0%, #2d1b6b 0%, #1a1432 45%, #0e0b20 100%); }
+    /* Aurora background is animated each frame by JS; #020617 is the dark base */
+    #pf-aurora-bg { background: #020617; }
     .pf-hero-highlight {
         display:inline-block; padding:2px 14px; border-radius:10px;
         background: linear-gradient(135deg,#794AFF 0%,#BA4AFF 100%); color:#fff;
     }
+    /* Gradient text on hero h1 */
+    .pf-hero-title {
+        background: linear-gradient(to bottom right, #ffffff 0%, #aaaaaa 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    /* Aurora CTA button — border + shadow driven by JS */
+    #pf-aurora-cta {
+        display:inline-flex; align-items:center; gap:10px;
+        padding:14px 32px; border-radius:50px;
+        background: rgba(2,6,23,0.15);
+        color:#fff; font-weight:700; font-size:14px;
+        letter-spacing:.08em; text-transform:uppercase;
+        transition: background .3s, transform .2s;
+        cursor:pointer; text-decoration:none;
+    }
+    #pf-aurora-cta:hover  { background: rgba(2,6,23,0.50); transform:scale(1.015); }
+    #pf-aurora-cta:active { transform:scale(0.985); }
+    #pf-aurora-cta .pf-cta-arrow {
+        transition: transform .25s;
+    }
+    #pf-aurora-cta:hover .pf-cta-arrow { transform: rotate(-45deg); }
     .pf-tab {
         padding:11px 26px; border-radius:50px; font-weight:600; font-size:14px;
         color:#6D6D6D; background:#fff; border:1px solid rgba(121,74,255,.15);
@@ -67,48 +90,111 @@
     #pf-modal-inner.portrait { max-width:420px; }
     #pf-modal-inner.portrait iframe,
     #pf-modal-inner.portrait video { aspect-ratio:9/16; }
+
+    /* ── Shimmer skeleton ── */
+    .pf-shimmer {
+        border-radius:16px; overflow:hidden;
+        background:#fff; box-shadow:0 4px 20px rgba(121,74,255,.08);
+    }
+    .pf-shimmer-thumb { aspect-ratio:4/3; }
+    .pf-shimmer-thumb,
+    .pf-shimmer-line {
+        background:linear-gradient(90deg,#f3f0ff 25%,#e4dcff 50%,#f3f0ff 75%);
+        background-size:200% 100%;
+        animation:pfShimmer 1.5s infinite linear;
+        border-radius:4px;
+    }
+    @keyframes pfShimmer {
+        0%   { background-position:200% 0; }
+        100% { background-position:-200% 0; }
+    }
+
+    /* ── Card reveal (load more batch) ── */
+    .pf-card-reveal {
+        animation:pfReveal .45s cubic-bezier(.22,.61,.36,1) both;
+    }
+    @keyframes pfReveal {
+        from { opacity:0; transform:translateY(20px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── Load more button ── */
+    #pf-load-more-wrap { text-align:center; margin-top:48px; }
+    #pf-count-bar {
+        display:inline-flex; align-items:center; gap:10px;
+        margin-bottom:18px; font-size:13px; color:#888; font-weight:500;
+    }
+    #pf-count-bar .pf-count-track {
+        width:120px; height:4px; background:#f0ecff; border-radius:99px; overflow:hidden;
+    }
+    #pf-count-bar .pf-count-fill {
+        height:100%; background:linear-gradient(90deg,#794AFF,#BA4AFF);
+        border-radius:99px; transition:width .4s ease;
+    }
+    #pf-load-more {
+        display:inline-flex; align-items:center; gap:10px;
+        padding:14px 38px; border-radius:50px; border:none;
+        background:linear-gradient(135deg,#794AFF 0%,#BA4AFF 100%);
+        color:#fff; font-weight:700; font-size:15px; cursor:pointer;
+        box-shadow:0 8px 24px rgba(121,74,255,.28);
+        transition:transform .2s, box-shadow .2s, opacity .2s;
+    }
+    #pf-load-more:hover  { transform:translateY(-3px); box-shadow:0 14px 36px rgba(121,74,255,.38); }
+    #pf-load-more:active { transform:translateY(0); }
+    #pf-load-more:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+    .pf-arrow-icon { animation:pfArrowBounce 1.3s ease-in-out infinite; }
+    @keyframes pfArrowBounce {
+        0%,100% { transform:translateY(0); }
+        50%      { transform:translateY(6px); }
+    }
 </style>
 @endpush
 
 @section('frontend_content')
     <main>
 
-        {{-- ===================== HERO ===================== --}}
+        {{-- ===================== HERO — Aurora + Starfield ===================== --}}
         <section id="home-one-hero">
-        <div class="hero-one-section-wrapper w-full xl:h-[905px] overflow-hidden relative pf-hero">
-            {{-- DotGrid canvas — interactive dots, matches other page hero animations --}}
-            <canvas id="pf-dot-canvas" class="absolute inset-0 w-full h-full" style="z-index:1;"></canvas>
+        <div class="hero-one-section-wrapper w-full xl:h-[905px] overflow-hidden relative" id="pf-aurora-bg">
 
-            {{-- Soft glow orbs --}}
-            <div class="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-purple/25 blur-3xl pointer-events-none" style="z-index:2;"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#BA4AFF]/15 blur-3xl pointer-events-none" style="z-index:2;"></div>
+            {{-- Stars canvas (fills entire hero, z-index 1) --}}
+            <canvas id="pf-aurora-canvas" class="absolute inset-0 w-full h-full" style="z-index:1;pointer-events:none;"></canvas>
 
             {{-- Content --}}
             <div class="theme-container mx-auto h-full relative pointer-events-none" style="z-index:3;">
                 <div class="flex flex-col items-center justify-center xl:pt-[223px] pt-[130px] xl:pb-0 pb-10 h-full text-center">
                     <div class="pointer-events-auto" data-aos="fade-up">
-                        <div class="inline-flex items-center gap-2 mb-6 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
-                            <span class="flex size-2 relative">
-                                <span class="animate-ping absolute inline-flex size-2 rounded-full bg-[#BA4AFF] opacity-75"></span>
-                                <span class="relative inline-flex size-2 rounded-full bg-[#BA4AFF]"></span>
-                            </span>
-                            <span class="text-white/90 text-sm font-semibold tracking-wide">Creative Portfolio</span>
-                        </div>
-                        <h1 class="xl:text-[64px] md:text-[50px] text-[34px] font-bold text-white leading-[1.1] mb-7">
+
+                        {{-- Badge --}}
+                        <span class="mb-6 inline-block rounded-full px-4 py-2 text-sm font-semibold text-white/80 tracking-wide"
+                              style="background:rgba(150,150,180,0.20);">
+                            Creative Portfolio
+                        </span>
+
+                        {{-- Title — white → grey gradient text matching Aurora Hero --}}
+                        <h1 class="pf-hero-title xl:text-[64px] md:text-[50px] text-[34px] font-bold leading-[1.1] mb-7 max-w-3xl mx-auto">
                             Our <span class="pf-hero-highlight">Creative</span> Portfolio
                         </h1>
-                        <p class="text-white/70 text-base md:text-lg leading-8 max-w-[640px] mx-auto mb-10">
-                            Explore some of our recent works in
-                            <span class="text-[#9D7BFF] font-semibold">Branding</span>,
-                            <span class="text-[#9D7BFF] font-semibold">Web Development</span>,
-                            <span class="text-[#9D7BFF] font-semibold">Ad Films</span>,
-                            <span class="text-[#9D7BFF] font-semibold">Creative Content</span>, and
-                            <span class="text-[#9D7BFF] font-semibold">Digital Marketing</span>.
+
+                        {{-- Description --}}
+                        <p class="text-white/60 text-base md:text-lg leading-8 max-w-[640px] mx-auto mb-10">
+                            Explore our recent works in
+                            <span class="text-white/90 font-semibold">Branding</span>,
+                            <span class="text-white/90 font-semibold">Web Development</span>,
+                            <span class="text-white/90 font-semibold">Ad Films</span>,
+                            <span class="text-white/90 font-semibold">Creative Content</span>, and
+                            <span class="text-white/90 font-semibold">Digital Marketing</span>.
                         </p>
-                        <a href="#portfolio-grid" class="inline-flex items-center gap-2.5 bg-purple text-white font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full hover:bg-[#BA4AFF] transition-all duration-300 shadow-purple">
+
+                        {{-- CTA — border + box-shadow animated by aurora JS --}}
+                        <a id="pf-aurora-cta" href="#portfolio-grid">
                             Browse Work
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                            <svg class="pf-cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M13 6l6 6-6 6"/>
+                            </svg>
                         </a>
+
                     </div>
                 </div>
             </div>
@@ -141,14 +227,14 @@
                 </div>
 
                 {{-- Grid --}}
-                <div class="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-6" id="portfolio-grid">
+                <div class="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-6" id="pf-grid-inner">
                     @foreach($allItems as $item)
                     @php
                         $thumb = $item->thumbnail
                             ?: ($item->type === 'image' ? $item->content_source : null);
                         $isVideo = in_array($item->type, ['video', 'bunny']);
                     @endphp
-                    <div class="pf-card portfolio-card" data-category="{{ $item->category_slug }}" data-aos="fade-up">
+                    <div class="pf-card portfolio-card" data-category="{{ $item->category_slug }}" style="display:none">
                         <div class="pf-thumb"
                              @if($isVideo)
                                  data-modal-type="{{ $item->type }}"
@@ -191,7 +277,40 @@
                     @endforeach
                 </div>
 
+                {{-- Shimmer skeleton grid (shown while loading next batch) --}}
+                <div class="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-6 mt-6" id="pf-shimmer-grid" style="display:none">
+                    @for($si = 0; $si < 8; $si++)
+                    <div class="pf-shimmer">
+                        <div class="pf-shimmer-thumb"></div>
+                        <div class="p-5">
+                            <div class="pf-shimmer-line mb-3" style="width:38%;height:10px"></div>
+                            <div class="pf-shimmer-line mb-2" style="width:72%;height:14px"></div>
+                            <div class="pf-shimmer-line mb-1.5" style="width:90%;height:10px"></div>
+                            <div class="pf-shimmer-line" style="width:65%;height:10px"></div>
+                        </div>
+                    </div>
+                    @endfor
+                </div>
+
+                {{-- Empty state --}}
                 <p id="pf-empty" class="hidden text-center text-paragraph py-12">No projects found in this category.</p>
+
+                {{-- Load more --}}
+                <div id="pf-load-more-wrap" style="display:none">
+                    <div id="pf-count-bar">
+                        <span id="pf-count-text">Showing 0 of 0</span>
+                        <div class="pf-count-track">
+                            <div class="pf-count-fill" id="pf-count-fill" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <button id="pf-load-more" type="button">
+                        <svg class="pf-arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12l7 7 7-7"/>
+                        </svg>
+                        Load More
+                    </button>
+                </div>
 
                 @else
                 {{-- No DB items yet — fallback message --}}
@@ -271,145 +390,125 @@
 
 @push('script_section')
 <script>
-/* ── DotGrid: vanilla JS port of the React DotGrid (error.txt) ── */
+/* ══════════════════════════════════════════════════════════════
+   Aurora Hero — vanilla JS port of AuroraHero (error.txt)
+   • Radial gradient background cycles through 4 colours (10s each)
+   • 2500-star canvas starfield with per-star twinkle + edge fade
+   • CTA button border & glow sync to the aurora colour live
+   ══════════════════════════════════════════════════════════════ */
 (function () {
-    const canvas = document.getElementById('pf-dot-canvas');
-    if (!canvas) return;
+    /* ── config (matches the React original) ── */
+    const AURORA_COLORS = ['#13FFAA', '#1E67C6', '#CE84CF', '#DD335C'];
+    const CYCLE_MS      = 10000;   // 10 s per colour — same as duration:10 in the original
+    const STAR_COUNT    = 2500;    // matches count={2500}
+    const STAR_SPEED    = 2;       // matches speed={2} — twinkle rate multiplier
 
+    const hero   = document.getElementById('pf-aurora-bg');
+    const canvas = document.getElementById('pf-aurora-canvas');
+    const cta    = document.getElementById('pf-aurora-cta');
+    if (!hero || !canvas) return;
     const ctx = canvas.getContext('2d');
-    const DOT     = 4;   // dot diameter px
-    const GAP     = 30;  // gap between dot centres
-    const CELL    = DOT + GAP;
-    const PROX    = 140; // colour-change radius
-    const PROX_SQ = PROX * PROX;
-    const SPEED_TRIGGER = 120; // px/s before scatter kicks in
-    const SHOCK_RADIUS  = 220;
-    const SHOCK_STR     = 9;
-    const STIFFNESS     = 0.10;  // spring return
-    const DAMPING       = 0.82;
 
-    // Base: faint purple; Active: vivid purple/pink on proximity
-    const BASE   = [121, 74, 255, 0.10];
-    const ACTIVE = [186, 74, 255, 0.90];
+    let stars     = [];
+    let startTime = performance.now();
+    let W = 0, H = 0;
 
-    let dots = [];
-    let ptr  = { x: -9999, y: -9999, vx: 0, vy: 0, speed: 0, lx: 0, ly: 0, lt: 0 };
-    let raf;
+    /* ── colour helpers ── */
+    function hexToRgb(h) {
+        return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+    }
+    function lerpRgb(a, b, t) {
+        return a.map((v,i) => Math.round(v + (b[i]-v)*t));
+    }
+    function easeInOut(t) { return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
 
-    function buildGrid() {
-        cancelAnimationFrame(raf);
-        const w = canvas.parentElement.clientWidth;
-        const h = canvas.parentElement.clientHeight;
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width  = w * dpr;
-        canvas.height = h * dpr;
-        canvas.style.width  = w + 'px';
-        canvas.style.height = h + 'px';
-        ctx.scale(dpr, dpr);
-
-        const cols  = Math.floor((w + GAP) / CELL);
-        const rows  = Math.floor((h + GAP) / CELL);
-        const gridW = CELL * cols - GAP;
-        const gridH = CELL * rows - GAP;
-        const sx    = (w - gridW) / 2 + DOT / 2;
-        const sy    = (h - gridH) / 2 + DOT / 2;
-
-        dots = [];
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                dots.push({ cx: sx + c * CELL, cy: sy + r * CELL, xo: 0, yo: 0, vx: 0, vy: 0 });
-            }
-        }
-        loop();
+    /* returns the current blended aurora RGB for a given timestamp */
+    function auroraColor(now) {
+        const total    = CYCLE_MS * AURORA_COLORS.length;
+        const elapsed  = (now - startTime) % total;
+        const rawIdx   = elapsed / CYCLE_MS;
+        const from     = Math.floor(rawIdx) % AURORA_COLORS.length;
+        const to       = (from + 1)         % AURORA_COLORS.length;
+        const frac     = easeInOut(rawIdx - Math.floor(rawIdx));
+        return lerpRgb(hexToRgb(AURORA_COLORS[from]), hexToRgb(AURORA_COLORS[to]), frac);
     }
 
-    function lerp(a, b, t) { return a + (b - a) * t; }
+    /* ── starfield ── */
+    function buildStars(w, h) {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x:            Math.random() * w,
+                y:            Math.random() * h,
+                r:            Math.random() * 1.3 + 0.2,           // 0.2–1.5 px
+                baseAlpha:    Math.random() * 0.55 + 0.25,          // 0.25–0.8
+                twinkleOff:   Math.random() * Math.PI * 2,
+                twinkleSpeed: (Math.random() * 0.6 + 0.2) * STAR_SPEED,
+            });
+        }
+    }
 
-    function loop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        W = hero.clientWidth;
+        H = hero.clientHeight;
+        canvas.width  = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        buildStars(W, H);
+    }
 
-        for (const d of dots) {
-            // spring physics
-            d.vx += -STIFFNESS * d.xo;
-            d.vy += -STIFFNESS * d.yo;
-            d.vx *= DAMPING;
-            d.vy *= DAMPING;
-            d.xo += d.vx;
-            d.yo += d.vy;
-            if (Math.abs(d.xo) < 0.02 && Math.abs(d.vx) < 0.02) { d.xo = 0; d.vx = 0; }
-            if (Math.abs(d.yo) < 0.02 && Math.abs(d.vy) < 0.02) { d.yo = 0; d.vy = 0; }
+    /* ── main loop ── */
+    function loop(now) {
+        const rgb      = auroraColor(now);
+        const colorStr = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+        const t        = now / 1000; // seconds for twinkle
 
-            const ox = d.cx + d.xo;
-            const oy = d.cy + d.yo;
-            const dx = d.cx - ptr.x;
-            const dy = d.cy - ptr.y;
-            const dsq = dx * dx + dy * dy;
-            const t   = dsq <= PROX_SQ ? 1 - Math.sqrt(dsq) / PROX : 0;
+        /* 1. Aurora gradient — matches the React template exactly:
+              radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color}) */
+        hero.style.backgroundImage =
+            `radial-gradient(125% 125% at 50% 0%, #020617 50%, ${colorStr})`;
+
+        /* 2. CTA button border + glow (mirrors motion.button style props) */
+        if (cta) {
+            cta.style.border    = `1px solid ${colorStr}`;
+            cta.style.boxShadow = `0px 4px 24px ${colorStr}`;
+        }
+
+        /* 3. Stars */
+        ctx.clearRect(0, 0, W, H);
+        const cx = W / 2, cy = H / 2;
+        const maxD = Math.hypot(cx, cy);
+
+        for (const s of stars) {
+            /* fade=true in the original: stars at the edge are more transparent */
+            const edgeFade = Math.max(0, 1 - Math.hypot(s.x-cx, s.y-cy) / maxD * 1.15);
+            const twinkle  = 0.55 + 0.45 * Math.sin(t * s.twinkleSpeed + s.twinkleOff);
+            const alpha    = s.baseAlpha * edgeFade * twinkle;
 
             ctx.beginPath();
-            ctx.arc(ox, oy, DOT / 2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${Math.round(lerp(BASE[0], ACTIVE[0], t))},${Math.round(lerp(BASE[1], ACTIVE[1], t))},${Math.round(lerp(BASE[2], ACTIVE[2], t))},${lerp(BASE[3], ACTIVE[3], t).toFixed(2)})`;
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
             ctx.fill();
         }
 
-        raf = requestAnimationFrame(loop);
+        requestAnimationFrame(loop);
     }
 
-    /* ── Mouse tracking ── */
-    canvas.parentElement.addEventListener('mousemove', function (e) {
-        const rect = canvas.getBoundingClientRect();
-        const now  = performance.now();
-        const dt   = ptr.lt ? now - ptr.lt : 16;
-        ptr.vx  = ((e.clientX - ptr.lx) / dt) * 1000;
-        ptr.vy  = ((e.clientY - ptr.ly) / dt) * 1000;
-        ptr.speed = Math.hypot(ptr.vx, ptr.vy);
-        ptr.lt = now; ptr.lx = e.clientX; ptr.ly = e.clientY;
-        ptr.x  = e.clientX - rect.left;
-        ptr.y  = e.clientY - rect.top;
-
-        // Scatter on fast move
-        if (ptr.speed > SPEED_TRIGGER) {
-            for (const d of dots) {
-                const dist = Math.hypot(d.cx - ptr.x, d.cy - ptr.y);
-                if (dist < PROX) {
-                    const s = (1 - dist / PROX) * 0.007;
-                    d.vx += ptr.vx * s;
-                    d.vy += ptr.vy * s;
-                }
-            }
-        }
-    }, { passive: true });
-
-    canvas.parentElement.addEventListener('mouseleave', function () {
-        ptr.x = -9999; ptr.y = -9999;
-    });
-
-    /* ── Click shockwave ── */
-    canvas.parentElement.addEventListener('click', function (e) {
-        const rect = canvas.getBoundingClientRect();
-        const cx = e.clientX - rect.left;
-        const cy = e.clientY - rect.top;
-        for (const d of dots) {
-            const dist = Math.hypot(d.cx - cx, d.cy - cy);
-            if (dist < SHOCK_RADIUS) {
-                const falloff = 1 - dist / SHOCK_RADIUS;
-                const ang = Math.atan2(d.cy - cy, d.cx - cx);
-                d.vx += Math.cos(ang) * SHOCK_STR * falloff;
-                d.vy += Math.sin(ang) * SHOCK_STR * falloff;
-            }
-        }
-    });
-
-    buildGrid();
+    /* ── init ── */
+    resizeCanvas();
+    requestAnimationFrame(loop);
 
     let resizeT;
-    window.addEventListener('resize', function () {
+    window.addEventListener('resize', () => {
         clearTimeout(resizeT);
-        resizeT = setTimeout(buildGrid, 200);
+        resizeT = setTimeout(resizeCanvas, 150);
     });
 })();
 
-/* ── Portfolio modal + filter ── */
+/* ── Modal ── */
 (function () {
     const modal      = document.getElementById('pf-media-modal');
     const modalInner = document.getElementById('pf-modal-inner');
@@ -418,12 +517,10 @@
     function openPfModal(thumb) {
         const type = thumb.dataset.modalType;
         const src  = thumb.dataset.modalSrc;
-
         modalInner.classList.remove('portrait');
         modalInner.innerHTML = '';
 
         if (type === 'bunny') {
-            // Bunny Stream iframe embed
             const iframe = document.createElement('iframe');
             iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=true&responsive=true';
             iframe.setAttribute('frameborder', '0');
@@ -439,13 +536,10 @@
             video.setAttribute('playsinline', '');
             modalInner.appendChild(video);
         } else {
-            // image lightbox
             const img = document.createElement('img');
-            img.src = src;
-            img.alt = '';
+            img.src = src; img.alt = '';
             modalInner.appendChild(img);
         }
-
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
@@ -453,43 +547,122 @@
     function closePfModal() {
         modal.classList.remove('open');
         document.body.style.overflow = '';
-        // Clear src to stop video/audio playback
         setTimeout(() => { modalInner.innerHTML = ''; }, 300);
     }
 
     closeBtn.addEventListener('click', closePfModal);
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) closePfModal();
-    });
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closePfModal();
-    });
-
-    // Expose for inline onclick
+    modal.addEventListener('click', e => { if (e.target === modal) closePfModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePfModal(); });
     window.openPfModal = openPfModal;
+})();
 
-    // Portfolio filter tabs
-    const tabs       = document.querySelectorAll('.pf-tab');
-    const cards      = Array.from(document.querySelectorAll('.portfolio-card'));
-    const emptyMsg   = document.getElementById('pf-empty');
+/* ── Filter + lazy-batch loader ── */
+(function () {
+    const BATCH       = 8;
+    const tabs        = document.querySelectorAll('.pf-tab');
+    const cards       = Array.from(document.querySelectorAll('.portfolio-card'));
+    const emptyMsg    = document.getElementById('pf-empty');
+    const shimGrid    = document.getElementById('pf-shimmer-grid');
+    const shimCards   = Array.from(shimGrid.querySelectorAll('.pf-shimmer'));
+    const loadWrap    = document.getElementById('pf-load-more-wrap');
+    const loadBtn     = document.getElementById('pf-load-more');
+    const countText   = document.getElementById('pf-count-text');
+    const countFill   = document.getElementById('pf-count-fill');
 
-    function applyFilter(filter) {
-        let visible = 0;
-        cards.forEach(card => {
-            const show = filter === 'all' || card.dataset.category === filter;
-            card.style.display = show ? '' : 'none';
-            if (show) visible++;
-        });
-        if (emptyMsg) emptyMsg.classList.toggle('hidden', visible > 0);
+    let filteredCards = [];
+    let shownCount    = 0;
+
+    /* ── helpers ── */
+    function getFiltered(filter) {
+        return filter === 'all' ? cards : cards.filter(c => c.dataset.category === filter);
     }
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function () {
-            tabs.forEach(t => t.classList.remove('tab-active'));
-            this.classList.add('tab-active');
-            applyFilter(this.dataset.filter);
+    function updateUI() {
+        const total   = filteredCards.length;
+        const shown   = Math.min(shownCount, total);
+        const pct     = total ? Math.round((shown / total) * 100) : 0;
+        const hasMore = shown < total;
+
+        countText.textContent = 'Showing ' + shown + ' of ' + total + ' project' + (total !== 1 ? 's' : '');
+        countFill.style.width = pct + '%';
+        loadWrap.style.display  = hasMore ? '' : 'none';
+    }
+
+    function showShimmers(count) {
+        shimCards.forEach((s, i) => s.style.display = i < count ? '' : 'none');
+        shimGrid.style.display  = '';
+        loadWrap.style.display  = 'none';
+    }
+
+    function hideShimmers() {
+        shimGrid.style.display = 'none';
+    }
+
+    function revealCards(batch, animate) {
+        batch.forEach((card, i) => {
+            card.style.display = '';
+            card.classList.add('aos-animate');
+            if (animate) {
+                card.style.animationDelay = (i * 55) + 'ms';
+                card.classList.remove('pf-card-reveal');
+                void card.offsetWidth; // reflow so animation restarts
+                card.classList.add('pf-card-reveal');
+            }
         });
-    });
+    }
+
+    /* ── filter ── */
+    function applyFilter(filter) {
+        shownCount = 0;
+        cards.forEach(c => { c.style.display = 'none'; c.classList.remove('pf-card-reveal'); });
+        hideShimmers();
+
+        filteredCards = getFiltered(filter);
+
+        if (!filteredCards.length) {
+            emptyMsg && emptyMsg.classList.remove('hidden');
+            loadWrap.style.display = 'none';
+            return;
+        }
+        emptyMsg && emptyMsg.classList.add('hidden');
+
+        const first = filteredCards.slice(0, BATCH);
+        revealCards(first, false);
+        shownCount = first.length;
+        updateUI();
+    }
+
+    /* ── load more ── */
+    function loadMore() {
+        const next = filteredCards.slice(shownCount, shownCount + BATCH);
+        if (!next.length) return;
+
+        loadBtn.disabled = true;
+        showShimmers(next.length);
+
+        // Scroll shimmers into view smoothly
+        shimGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        setTimeout(() => {
+            hideShimmers();
+            revealCards(next, true);
+            shownCount += next.length;
+            loadBtn.disabled = false;
+            updateUI();
+        }, 700);
+    }
+
+    /* ── wire up ── */
+    tabs.forEach(tab => tab.addEventListener('click', function () {
+        tabs.forEach(t => t.classList.remove('tab-active'));
+        this.classList.add('tab-active');
+        applyFilter(this.dataset.filter);
+    }));
+
+    loadBtn.addEventListener('click', loadMore);
+
+    // Boot: show first batch
+    applyFilter('all');
 })();
 </script>
 @endpush
