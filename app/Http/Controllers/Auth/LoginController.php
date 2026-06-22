@@ -240,33 +240,30 @@ class LoginController extends Controller
         return redirect()->route('user.login')->with($notify_message);
     }
 
+    private function googleProvider()
+    {
+        $clientId     = GlobalSetting::where('key', 'gmail_client_id')->value('value');
+        $clientSecret = GlobalSetting::where('key', 'gmail_secret_id')->value('value');
+        $redirectUrl  = GlobalSetting::where('key', 'gmail_redirect_url')->value('value');
+
+        return Socialite::buildProvider(
+            \Laravel\Socialite\Two\GoogleProvider::class,
+            [
+                'client_id'     => $clientId,
+                'client_secret' => $clientSecret,
+                'redirect'      => $redirectUrl,
+            ]
+        );
+    }
+
     public function redirect_to_google(){
-
-        $gmail_client_id = GlobalSetting::where('key', 'gmail_client_id')->first();
-        $gmail_secret_id = GlobalSetting::where('key', 'gmail_secret_id')->first();
-        $gmail_redirect_url = GlobalSetting::where('key', 'gmail_redirect_url')->first();
-
-
-        \Config::set('services.google.client_id', $gmail_client_id->value);
-        \Config::set('services.google.client_secret', $gmail_secret_id->value);
-        \Config::set('services.google.redirect', $gmail_redirect_url->value);
-
-        return Socialite::driver('google')->stateless()->redirect();
-
+        return $this->googleProvider()->stateless()->redirect();
     }
 
     public function google_callback(){
         try {
-            $gmail_client_id = GlobalSetting::where('key', 'gmail_client_id')->first();
-            $gmail_secret_id = GlobalSetting::where('key', 'gmail_secret_id')->first();
-            $gmail_redirect_url = GlobalSetting::where('key', 'gmail_redirect_url')->first();
-
-            \Config::set('services.google.client_id', $gmail_client_id->value);
-            \Config::set('services.google.client_secret', $gmail_secret_id->value);
-            \Config::set('services.google.redirect', $gmail_redirect_url->value);
-
-            $user = Socialite::driver('google')->stateless()->user();
-            $user = $this->create_user($user, 'google');
+            $socialUser = $this->googleProvider()->stateless()->user();
+            $user = $this->create_user($socialUser, 'google');
 
             $sessionId = session()->getId();
             auth()->login($user);
@@ -277,36 +274,36 @@ class LoginController extends Controller
             return redirect()->route('user.dashboard')->with($notify_message);
 
         } catch (\Exception $e) {
+            \Log::error('Google OAuth error: ' . $e->getMessage());
             $notify_message = array('message' => trans('Google login failed. Please try again.'), 'alert-type' => 'error');
             return redirect()->route('user.login')->with($notify_message);
         }
     }
 
+    private function facebookProvider()
+    {
+        $clientId     = GlobalSetting::where('key', 'facebook_client_id')->value('value');
+        $clientSecret = GlobalSetting::where('key', 'facebook_secret_id')->value('value');
+        $redirectUrl  = GlobalSetting::where('key', 'facebook_redirect_url')->value('value');
+
+        return Socialite::buildProvider(
+            \Laravel\Socialite\Two\FacebookProvider::class,
+            [
+                'client_id'     => $clientId,
+                'client_secret' => $clientSecret,
+                'redirect'      => $redirectUrl,
+            ]
+        );
+    }
+
     public function redirect_to_facebook(){
-
-        $facebook_client_id = GlobalSetting::where('key', 'facebook_client_id')->first();
-        $facebook_secret_id = GlobalSetting::where('key', 'facebook_secret_id')->first();
-        $facebook_redirect_url = GlobalSetting::where('key', 'facebook_redirect_url')->first();
-
-        \Config::set('services.facebook.client_id', $facebook_client_id->value);
-        \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
-        \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
-
-        return Socialite::driver('facebook')->stateless()->redirect();
+        return $this->facebookProvider()->stateless()->redirect();
     }
 
     public function facebook_callback(){
         try {
-            $facebook_client_id = GlobalSetting::where('key', 'facebook_client_id')->first();
-            $facebook_secret_id = GlobalSetting::where('key', 'facebook_secret_id')->first();
-            $facebook_redirect_url = GlobalSetting::where('key', 'facebook_redirect_url')->first();
-
-            \Config::set('services.facebook.client_id', $facebook_client_id->value);
-            \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
-            \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
-
-            $user = Socialite::driver('facebook')->stateless()->user();
-            $user = $this->create_user($user, 'facebook');
+            $socialUser = $this->facebookProvider()->stateless()->user();
+            $user = $this->create_user($socialUser, 'facebook');
 
             $sessionId = session()->getId();
             auth()->login($user);
@@ -317,6 +314,7 @@ class LoginController extends Controller
             return redirect()->route('user.dashboard')->with($notify_message);
 
         } catch (\Exception $e) {
+            \Log::error('Facebook OAuth error: ' . $e->getMessage());
             $notify_message = array('message' => trans('Facebook login failed. Please try again.'), 'alert-type' => 'error');
             return redirect()->route('user.login')->with($notify_message);
         }
