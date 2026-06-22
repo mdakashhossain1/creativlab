@@ -118,35 +118,41 @@
         to   { opacity:1; transform:translateY(0); }
     }
 
-    /* ── Load more button ── */
-    #pf-load-more-wrap { text-align:center; margin-top:48px; }
-    #pf-count-bar {
-        display:inline-flex; align-items:center; gap:10px;
-        margin-bottom:18px; font-size:13px; color:#888; font-weight:500;
+    /* ── Load more: blur fade + floating arrow ── */
+    #pf-load-more-wrap {
+        position:relative; margin-top:-170px; z-index:20;
     }
-    #pf-count-bar .pf-count-track {
-        width:120px; height:4px; background:#f0ecff; border-radius:99px; overflow:hidden;
+    #pf-blur-fade {
+        height:200px;
+        background:linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.80) 50%, #ffffff 100%);
+        pointer-events:none;
     }
-    #pf-count-bar .pf-count-fill {
-        height:100%; background:linear-gradient(90deg,#794AFF,#BA4AFF);
-        border-radius:99px; transition:width .4s ease;
+    #pf-arrow-wrap {
+        text-align:center; margin-top:-12px; padding-bottom:12px;
     }
     #pf-load-more {
-        display:inline-flex; align-items:center; gap:10px;
-        padding:14px 38px; border-radius:50px; border:none;
-        background:linear-gradient(135deg,#794AFF 0%,#BA4AFF 100%);
-        color:#fff; font-weight:700; font-size:15px; cursor:pointer;
-        box-shadow:0 8px 24px rgba(121,74,255,.28);
-        transition:transform .2s, box-shadow .2s, opacity .2s;
+        display:inline-flex; align-items:center; justify-content:center;
+        width:52px; height:52px; border-radius:50%; cursor:pointer;
+        background:#ffffff; border:2px solid rgba(121,74,255,.22);
+        box-shadow:0 4px 22px rgba(121,74,255,.18);
+        transition:transform .2s, box-shadow .2s, border-color .2s;
     }
-    #pf-load-more:hover  { transform:translateY(-3px); box-shadow:0 14px 36px rgba(121,74,255,.38); }
-    #pf-load-more:active { transform:translateY(0); }
-    #pf-load-more:disabled { opacity:.55; cursor:not-allowed; transform:none; }
-    .pf-arrow-icon { animation:pfArrowBounce 1.3s ease-in-out infinite; }
+    #pf-load-more:hover {
+        transform:translateY(4px);
+        box-shadow:0 10px 30px rgba(121,74,255,.30);
+        border-color:rgba(121,74,255,.55);
+    }
+    #pf-load-more:disabled { opacity:.40; cursor:not-allowed; transform:none; }
+    #pf-load-more svg { animation:pfArrowBounce 1.4s ease-in-out infinite; }
+    #pf-count-text {
+        display:block; margin-top:10px;
+        font-size:12px; color:#bbb; font-weight:500; letter-spacing:.03em;
+    }
     @keyframes pfArrowBounce {
         0%,100% { transform:translateY(0); }
-        50%      { transform:translateY(6px); }
+        50%      { transform:translateY(5px); }
     }
+    #pf-scroll-sentinel { height:1px; }
 </style>
 @endpush
 
@@ -249,7 +255,7 @@
                             @if($thumb)
                                 <img src="{{ $thumb }}" alt="{{ $item->title }}" loading="lazy" />
                             @elseif($item->type === 'video')
-                                <video src="{{ $item->content_source }}" muted preload="metadata" style="pointer-events:none;"></video>
+                                <video src="{{ $item->content_source }}" muted preload="none" style="pointer-events:none;"></video>
                             @else
                                 <div style="width:100%;height:100%;background:#1a1432;display:flex;align-items:center;justify-content:center;">
                                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#794AFF" opacity=".2"/><path d="M8 5v14l11-7z" fill="#794AFF"/></svg>
@@ -295,21 +301,23 @@
                 {{-- Empty state --}}
                 <p id="pf-empty" class="hidden text-center text-paragraph py-12">No projects found in this category.</p>
 
-                {{-- Load more --}}
+                {{-- Load more: gradient blur fade + floating arrow + scroll sentinel --}}
                 <div id="pf-load-more-wrap" style="display:none">
-                    <div id="pf-count-bar">
-                        <span id="pf-count-text">Showing 0 of 0</span>
-                        <div class="pf-count-track">
-                            <div class="pf-count-fill" id="pf-count-fill" style="width:0%"></div>
-                        </div>
+                    {{-- blur gradient overlaps the last row of cards --}}
+                    <div id="pf-blur-fade"></div>
+                    {{-- floating arrow button + count label --}}
+                    <div id="pf-arrow-wrap">
+                        <button id="pf-load-more" type="button" aria-label="Load more projects">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 stroke="#794AFF" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 5v14M5 12l7 7 7-7"/>
+                            </svg>
+                        </button>
+                        <span id="pf-count-text"></span>
                     </div>
-                    <br>
-                    <button id="pf-load-more" type="button">
-                        <svg class="pf-arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 5v14M5 12l7 7 7-7"/>
-                        </svg>
-                        Load More
-                    </button>
+                    {{-- invisible sentinel watched by IntersectionObserver --}}
+                    <div id="pf-scroll-sentinel"></div>
                 </div>
 
                 @else
@@ -558,19 +566,20 @@
 
 /* ── Filter + lazy-batch loader ── */
 (function () {
-    const BATCH       = 8;
-    const tabs        = document.querySelectorAll('.pf-tab');
-    const cards       = Array.from(document.querySelectorAll('.portfolio-card'));
-    const emptyMsg    = document.getElementById('pf-empty');
-    const shimGrid    = document.getElementById('pf-shimmer-grid');
-    const shimCards   = Array.from(shimGrid.querySelectorAll('.pf-shimmer'));
-    const loadWrap    = document.getElementById('pf-load-more-wrap');
-    const loadBtn     = document.getElementById('pf-load-more');
-    const countText   = document.getElementById('pf-count-text');
-    const countFill   = document.getElementById('pf-count-fill');
+    const BATCH    = 8;
+    const tabs     = document.querySelectorAll('.pf-tab');
+    const cards    = Array.from(document.querySelectorAll('.portfolio-card'));
+    const emptyMsg = document.getElementById('pf-empty');
+    const shimGrid = document.getElementById('pf-shimmer-grid');
+    const shimCards= Array.from(shimGrid.querySelectorAll('.pf-shimmer'));
+    const loadWrap = document.getElementById('pf-load-more-wrap');
+    const loadBtn  = document.getElementById('pf-load-more');
+    const countText= document.getElementById('pf-count-text');
+    const sentinel = document.getElementById('pf-scroll-sentinel');
 
     let filteredCards = [];
     let shownCount    = 0;
+    let isLoading     = false;
 
     /* ── helpers ── */
     function getFiltered(filter) {
@@ -580,18 +589,14 @@
     function updateUI() {
         const total   = filteredCards.length;
         const shown   = Math.min(shownCount, total);
-        const pct     = total ? Math.round((shown / total) * 100) : 0;
         const hasMore = shown < total;
-
-        countText.textContent = 'Showing ' + shown + ' of ' + total + ' project' + (total !== 1 ? 's' : '');
-        countFill.style.width = pct + '%';
-        loadWrap.style.display  = hasMore ? '' : 'none';
+        countText.textContent = shown + ' of ' + total + ' projects';
+        loadWrap.style.display = hasMore ? '' : 'none';
     }
 
     function showShimmers(count) {
         shimCards.forEach((s, i) => s.style.display = i < count ? '' : 'none');
-        shimGrid.style.display  = '';
-        loadWrap.style.display  = 'none';
+        shimGrid.style.display = '';
     }
 
     function hideShimmers() {
@@ -603,9 +608,9 @@
             card.style.display = '';
             card.classList.add('aos-animate');
             if (animate) {
-                card.style.animationDelay = (i * 55) + 'ms';
+                card.style.animationDelay = (i * 45) + 'ms';
                 card.classList.remove('pf-card-reveal');
-                void card.offsetWidth; // reflow so animation restarts
+                void card.offsetWidth;
                 card.classList.add('pf-card-reveal');
             }
         });
@@ -613,7 +618,7 @@
 
     /* ── filter ── */
     function applyFilter(filter) {
-        shownCount = 0;
+        shownCount = 0; isLoading = false;
         cards.forEach(c => { c.style.display = 'none'; c.classList.remove('pf-card-reveal'); });
         hideShimmers();
 
@@ -632,36 +637,49 @@
         updateUI();
     }
 
-    /* ── load more ── */
+    /* ── load more (no artificial delay — cards are already in DOM) ── */
     function loadMore() {
+        if (isLoading) return;
         const next = filteredCards.slice(shownCount, shownCount + BATCH);
         if (!next.length) return;
 
+        isLoading = true;
         loadBtn.disabled = true;
         showShimmers(next.length);
 
-        // Scroll shimmers into view smoothly
-        shimGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-        setTimeout(() => {
-            hideShimmers();
-            revealCards(next, true);
-            shownCount += next.length;
-            loadBtn.disabled = false;
-            updateUI();
-        }, 700);
+        // Single rAF tick so shimmers paint, then instantly swap to real cards
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                hideShimmers();
+                revealCards(next, true);
+                shownCount += next.length;
+                loadBtn.disabled = false;
+                isLoading = false;
+                updateUI();
+            });
+        });
     }
 
-    /* ── wire up ── */
+    /* ── auto-load on scroll via IntersectionObserver ── */
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+            (entries) => { if (entries[0].isIntersecting) loadMore(); },
+            { rootMargin: '0px 0px 120px 0px', threshold: 0 }
+        );
+        observer.observe(sentinel);
+    }
+
+    /* ── arrow click also triggers load ── */
+    loadBtn.addEventListener('click', loadMore);
+
+    /* ── filter tabs ── */
     tabs.forEach(tab => tab.addEventListener('click', function () {
         tabs.forEach(t => t.classList.remove('tab-active'));
         this.classList.add('tab-active');
         applyFilter(this.dataset.filter);
     }));
 
-    loadBtn.addEventListener('click', loadMore);
-
-    // Boot: show first batch
+    // Boot
     applyFilter('all');
 })();
 </script>
