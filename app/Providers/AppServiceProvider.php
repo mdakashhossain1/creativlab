@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Ecommerce\Entities\Cart;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Connectors\PostgresConnector;
 use Modules\Category\Entities\Category;
 use Modules\Page\App\Models\CustomPage;
 use Modules\Blog\App\Models\BlogCategory;
@@ -29,19 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Neon PostgreSQL: inject endpoint option into DSN for old libpq without SNI support
-        $this->app->bind('db.connector.pgsql', function () {
-            return new class extends PostgresConnector {
-                protected function getDsn(array $config): string
-                {
-                    $dsn = parent::getDsn($config);
-                    if (!empty($config['neon_endpoint'])) {
-                        $dsn .= ';options=endpoint=' . $config['neon_endpoint'];
-                    }
-                    return $dsn;
-                }
-            };
-        });
+        //
     }
 
     /**
