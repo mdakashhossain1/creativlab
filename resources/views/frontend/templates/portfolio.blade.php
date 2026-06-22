@@ -131,28 +131,24 @@
     }
     #pf-arrow-wrap {
         text-align:center; margin-top:-16px; padding-bottom:16px;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
     }
     #pf-load-more {
         display:inline-flex; align-items:center; justify-content:center;
-        width:56px; height:56px; border-radius:50%; cursor:pointer;
-        background:#ffffff; border:2px solid rgba(121,74,255,.30);
-        box-shadow:0 6px 28px rgba(121,74,255,.22);
-        transition:transform .25s, box-shadow .25s, border-color .25s;
+        background:none; border:none; padding:0; cursor:pointer;
+        transition:transform .25s, opacity .25s;
     }
     #pf-load-more:hover {
-        transform:translateY(5px);
-        box-shadow:0 14px 36px rgba(121,74,255,.35);
-        border-color:rgba(121,74,255,.70);
-        background:#f8f4ff;
+        transform:translateY(6px);
+        opacity:.75;
     }
     #pf-load-more:disabled {
-        opacity:.35; cursor:not-allowed; transform:none;
-        animation: pfSpinRing 1s linear infinite;
+        opacity:.30; cursor:not-allowed; transform:none;
     }
     #pf-load-more:not(:disabled) svg { animation:pfArrowBounce 1.4s ease-in-out infinite; }
     #pf-count-text {
-        display:block; margin-top:12px;
-        font-size:12px; color:#9D7BFF; font-weight:600; letter-spacing:.06em;
+        display:block;
+        font-size:11px; color:#9D7BFF; font-weight:600; letter-spacing:.10em;
         text-transform:uppercase;
     }
     #pf-count-text.loading-pulse {
@@ -160,13 +156,10 @@
     }
     @keyframes pfArrowBounce {
         0%,100% { transform:translateY(0); }
-        50%      { transform:translateY(6px); }
+        50%      { transform:translateY(8px); }
     }
     @keyframes pfCountPulse {
         from { opacity:.4; } to { opacity:1; }
-    }
-    @keyframes pfSpinRing {
-        to { transform: rotate(360deg); }
     }
     #pf-scroll-sentinel { height:1px; }
 </style>
@@ -338,13 +331,13 @@
                 <div id="pf-load-more-wrap" style="display:none">
                     {{-- blur gradient overlaps the last row of cards --}}
                     <div id="pf-blur-fade"></div>
-                    {{-- floating arrow button + count label --}}
+                    {{-- floating bold chevron arrow + count label --}}
                     <div id="pf-arrow-wrap">
                         <button id="pf-load-more" type="button" aria-label="Load more projects">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                 stroke="#794AFF" stroke-width="2.5"
+                            <svg width="52" height="52" viewBox="0 0 24 24" fill="none"
+                                 stroke="#794AFF" stroke-width="3.5"
                                  stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M5 12l7 7 7-7"/>
+                                <path d="M5 8l7 7 7-7"/>
                             </svg>
                         </button>
                         <span id="pf-count-text"></span>
