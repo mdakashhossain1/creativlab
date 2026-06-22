@@ -47,9 +47,14 @@ class AppServiceProvider extends ServiceProvider
 
             config(['app.timezone' => $setting->timezone]);
             date_default_timezone_set($setting->timezone);
+        } catch (Exception $ex) {
+            Log::error('AppServiceProvider : ' . $ex->getMessage());
 
-            View::composer('*', function ($view) {
+            Artisan::call('optimize:clear');
+        }
 
+        View::composer('*', function ($view) {
+            try {
                 $setting_data = GlobalSetting::get();
                 $setting_arr = array();
                 foreach ($setting_data as $data_item) {
@@ -103,13 +108,9 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('total_unseen_support_messages_for_admin', $total_unseen_support_messages_for_admin);
                 $view->with('total_unseen_support_messages_for_user', $total_unseen_support_messages_for_user);
                 $view->with('cta_content', $cta_content);
-
-                
-            });
-        } catch (Exception $ex) {
-            Log::info('AppServiceProvider : ' . $ex->getMessage());
-
-            Artisan::call('optimize:clear');
-        }
+            } catch (Exception $ex) {
+                Log::error('AppServiceProvider view composer : ' . $ex->getMessage());
+            }
+        });
     }
 }

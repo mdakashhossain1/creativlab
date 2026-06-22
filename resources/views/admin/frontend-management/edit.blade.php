@@ -109,7 +109,6 @@
                                                 $fieldName = $parentKey ? "{$parentKey}[{$field}]" : $field;
                                                 $fieldValue = $dataValues[$field] ?? '';
 
-                                                Log::info($fieldValue);
                                                 echo '<div class="crancy__item-form--group mt-3">';
                                                 echo '<label class="crancy__item-label">';
                                                 echo '<span class="label-text">' .

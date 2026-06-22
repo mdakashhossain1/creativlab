@@ -318,9 +318,6 @@ class ProfileController extends Controller
                     $imagePath = public_path($user->image);
                     if (File::exists($imagePath)) {
                         File::delete($imagePath);
-                        Log::info('Deleted image for user: ' . $user->id);
-                    } else {
-                        Log::warning('Image not found or already null for user: ' . $user->id);
                     }
                 }
 
@@ -331,9 +328,7 @@ class ProfileController extends Controller
                 DB::table('carts')->where('user_id', $user->id)->delete();
 
                 // Force delete the user
-                DB::enableQueryLog(); // Start query logging
                 $user->forceDelete();
-                Log::info('Query log after force delete: ', DB::getQueryLog());
 
                 // Confirm user deletion
                 $userExists = DB::table('users')->where('id', $user->id)->exists();
@@ -345,8 +340,6 @@ class ProfileController extends Controller
 
                 Auth::guard('web')->logout();
                 Session::flush();
-
-                Log::info('Successfully deleted account for user: ' . $user->id);
 
                 $notification = [
                     'message' => trans('Your account deleted successful'),

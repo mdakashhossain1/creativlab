@@ -18,6 +18,7 @@ use Modules\Ecommerce\Entities\Order;
 use Modules\Ecommerce\Entities\OrderDetail;
 use Modules\Ecommerce\Entities\Cart;
 use App\Models\Wishlist;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -40,7 +41,7 @@ class ProductController extends Controller
     {
        $request->validate([
            'name' => 'required|string|max:255',
-           'slug' => 'required|string|unique:products,slug,' . $id . '|max:255',
+           'slug' => ['required', 'string', 'max:255', Rule::unique('products', 'slug')->ignore($id)],
            'price' => 'required|numeric|min:0',
            'offer_price' => 'nullable|numeric|min:0|lt:price|max:100',
            'description' => 'required|string',

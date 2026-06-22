@@ -181,13 +181,6 @@ class LoginController extends Controller
             $message = str_replace('{{user_name}}',$user->name,$message);
             $message = str_replace('{{reset_link}}',$reset_link,$message);
             Mail::to($user->email)->send(new UserForgetPassword($message,$subject,$user));
-            \Log::info('Password Reset Email Details:', [
-                'to' => $user->email,
-                'subject' => $subject,
-                'message' => $message,
-                'reset_link' => $reset_link,
-                'user_name' => $user->name
-            ]);
 
 
             $notify_message= trans('A password reset link has been send to your mail');

@@ -263,6 +263,10 @@ svg.active {
 .td_accent_color { color: #fff; }
 .td_btn_in.td_accent_color { background-color: #794aff; }
 
+.d-none {
+    display: none !important;
+}
+
 @media screen and (max-width: 480px) {
     .common-modal {
         bottom: 16px;
