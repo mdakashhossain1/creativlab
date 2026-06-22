@@ -342,6 +342,18 @@ class LoginController extends Controller
                 'avatar'           => $get_info->avatar ?? null,
             ]);
 
+            try {
+                EmailHelper::mail_setup();
+                $template = EmailTemplate::find(10);
+                if ($template) {
+                    $subject = $template->subject;
+                    $message = str_replace('{{user_name}}', $get_info->name, $template->description);
+                    Mail::to($user->email)->send(new \App\Mail\UserRegistration($message, $subject, $user));
+                }
+            } catch (\Exception $e) {
+                \Log::error('Welcome email failed for ' . $user->email . ': ' . $e->getMessage());
+            }
+
         }
         return $user;
     }
