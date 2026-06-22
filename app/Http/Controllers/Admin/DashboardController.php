@@ -8,6 +8,7 @@ use Modules\Ecommerce\Entities\Order;
 use Modules\Ecommerce\Entities\Product;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -97,6 +98,9 @@ class DashboardController extends Controller
 
         $orders = Order::with('order_detail.singleProduct.translate')->latest()->take(10)->get();
 
+        $cron_last_run = Cache::get('cron_last_heartbeat');
+        $cron_is_running = $cron_last_run && Carbon::parse($cron_last_run)->diffInMinutes(now()) < 2;
+
         return view('admin.dashboard', [
             'lable' => $lable,
             'data' => $data,
@@ -119,6 +123,8 @@ class DashboardController extends Controller
             'monthly_labels' => $monthly_labels,
             'monthly_revenue' => $monthly_revenue,
             'monthly_order_counts' => $monthly_order_counts,
+            'cron_is_running' => $cron_is_running,
+            'cron_last_run' => $cron_last_run,
         ]);
     }
 }

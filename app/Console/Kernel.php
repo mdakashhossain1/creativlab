@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('installments:generate-monthly')->dailyAt('00:01');
+        $schedule->command('cron:heartbeat')->everyMinute();
     }
 
     /**
