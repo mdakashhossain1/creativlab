@@ -15,6 +15,8 @@
     }
     /* Override custom-heading text colour for dark aurora background */
     #pf-aurora-bg .custom-heading { color: #fff; }
+    /* Portfolio grid section — ensure dark heading on white bg */
+    #portfolio-grid .custom-heading { color: #161519; }
     /* Aurora CTA button — border + shadow driven by JS */
     #pf-aurora-cta {
         display:inline-flex; align-items:center; gap:10px;
@@ -207,11 +209,20 @@
         <section class="w-full bg-white md:py-[90px] py-14" id="portfolio-grid">
             <div class="theme-container mx-auto">
                 <div class="flex flex-col items-center mb-9" data-aos="fade-up">
-                    <span class="border text-main-black border-buisness-red/10 py-0.5 px-5 rounded-[30px] w-fit bg-buisness-red/5 font-medium mb-5">
-                        Our Portfolio
-                    </span>
-                    <h2 class="text-24 sm:text-48 font-semibold text-main-black text-center max-w-[640px]">Browse our work</h2>
+                    {{-- Pulsing badge — same style as web-development hero --}}
+                    <div class="inline-flex items-center gap-2.5 bg-white border border-purple/15 rounded-full px-5 py-2.5 mb-6 shadow-sm">
+                        <span class="flex size-2 relative">
+                            <span class="animate-ping absolute inline-flex size-2 rounded-full bg-purple opacity-75"></span>
+                            <span class="relative inline-flex size-2 rounded-full bg-purple"></span>
+                        </span>
+                        <span class="text-purple text-sm font-semibold tracking-wide">Our Portfolio</span>
+                    </div>
+                    {{-- Heading — custom-heading class (Agency font, 65px) matching WD page --}}
+                    <h2 class="custom-heading text-center" style="font-weight:400 !important;">
+                        Browse our <span>Creative</span> Work
+                    </h2>
                 </div>
+
 
                 @php
                     $allItems = collect();
