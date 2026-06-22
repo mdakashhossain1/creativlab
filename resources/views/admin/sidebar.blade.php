@@ -451,6 +451,25 @@
             </li>
 
 
+            <li class="{{ Route::is('admin.portfolio.*') ? 'active' : '' }}">
+                <a class="collapsed" href="{{ route('admin.portfolio.index') }}">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 9C2 7.11438 2 6.17157 2.58579 5.58579C3.17157 5 4.11438 5 6 5H8C8 5 8.5 3 10 3H14C15.5 3 16 5 16 5H18C19.8856 5 20.8284 5 21.4142 5.58579C22 6.17157 22 7.11438 22 9V17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17V9Z"
+                                    stroke="currentcolor" stroke-width="1.5" stroke-linejoin="round" />
+                                <path d="M12 18C14.2091 18 16 16.2091 16 14C16 11.7909 14.2091 10 12 10C9.79086 10 8 11.7909 8 14C8 16.2091 9.79086 18 12 18Z"
+                                    stroke="currentcolor" stroke-width="1.5" />
+                                <path d="M19 9H18" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">{{ __('Portfolio') }}</span>
+                    </span>
+                </a>
+            </li>
+
+
             <li
                 class="{{ Route::is('admin.blog.*') || Route::is('admin.blog-category.*') || Route::is('admin.comment-list') || Route::is('admin.show-comment') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"

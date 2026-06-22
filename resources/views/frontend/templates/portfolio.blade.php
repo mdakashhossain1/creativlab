@@ -13,12 +13,8 @@
         display:inline-block; padding:2px 14px; border-radius:10px;
         background: linear-gradient(135deg,#794AFF 0%,#BA4AFF 100%); color:#fff;
     }
-    /* Gradient text on hero h1 */
-    .pf-hero-title {
-        background: linear-gradient(to bottom right, #ffffff 0%, #aaaaaa 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+    /* Override custom-heading text colour for dark aurora background */
+    #pf-aurora-bg .custom-heading { color: #fff; }
     /* Aurora CTA button — border + shadow driven by JS */
     #pf-aurora-cta {
         display:inline-flex; align-items:center; gap:10px;
@@ -210,7 +206,12 @@
         {{-- ===================== PORTFOLIO GRID ===================== --}}
         <section class="w-full bg-white md:py-[90px] py-14" id="portfolio-grid">
             <div class="theme-container mx-auto">
-                <h2 class="md:text-40 text-28 font-bold text-main-black text-center mb-9" data-aos="fade-up">Browse our work</h2>
+                <div class="flex flex-col items-center mb-9" data-aos="fade-up">
+                    <span class="border text-main-black border-buisness-red/10 py-0.5 px-5 rounded-[30px] w-fit bg-buisness-red/5 font-medium mb-5">
+                        Our Portfolio
+                    </span>
+                    <h2 class="text-24 sm:text-48 font-semibold text-main-black text-center max-w-[640px]">Browse our work</h2>
+                </div>
 
                 @php
                     $allItems = collect();
