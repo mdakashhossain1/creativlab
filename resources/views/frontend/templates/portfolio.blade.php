@@ -9,10 +9,6 @@
 <style>
     /* Aurora background is animated each frame by JS; #020617 is the dark base */
     #pf-aurora-bg { background: #020617; }
-    .pf-hero-highlight {
-        display:inline-block; padding:2px 14px; border-radius:10px;
-        background: linear-gradient(135deg,#794AFF 0%,#BA4AFF 100%); color:#fff;
-    }
     /* Override custom-heading text colour for dark aurora background */
     #pf-aurora-bg .custom-heading { color: #fff; }
     /* Portfolio grid section — ensure dark heading on white bg */
@@ -118,37 +114,59 @@
 
     /* ── Load more: blur fade + floating arrow ── */
     #pf-load-more-wrap {
-        position:relative; margin-top:-170px; z-index:20;
+        position:relative; margin-top:-220px; z-index:20;
     }
     #pf-blur-fade {
-        height:200px;
-        background:linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.80) 50%, #ffffff 100%);
+        height:260px;
+        background:linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(255,255,255,.55) 35%,
+            rgba(255,255,255,.90) 65%,
+            #ffffff 100%
+        );
         pointer-events:none;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
     }
     #pf-arrow-wrap {
-        text-align:center; margin-top:-12px; padding-bottom:12px;
+        text-align:center; margin-top:-16px; padding-bottom:16px;
     }
     #pf-load-more {
         display:inline-flex; align-items:center; justify-content:center;
-        width:52px; height:52px; border-radius:50%; cursor:pointer;
-        background:#ffffff; border:2px solid rgba(121,74,255,.22);
-        box-shadow:0 4px 22px rgba(121,74,255,.18);
-        transition:transform .2s, box-shadow .2s, border-color .2s;
+        width:56px; height:56px; border-radius:50%; cursor:pointer;
+        background:#ffffff; border:2px solid rgba(121,74,255,.30);
+        box-shadow:0 6px 28px rgba(121,74,255,.22);
+        transition:transform .25s, box-shadow .25s, border-color .25s;
     }
     #pf-load-more:hover {
-        transform:translateY(4px);
-        box-shadow:0 10px 30px rgba(121,74,255,.30);
-        border-color:rgba(121,74,255,.55);
+        transform:translateY(5px);
+        box-shadow:0 14px 36px rgba(121,74,255,.35);
+        border-color:rgba(121,74,255,.70);
+        background:#f8f4ff;
     }
-    #pf-load-more:disabled { opacity:.40; cursor:not-allowed; transform:none; }
-    #pf-load-more svg { animation:pfArrowBounce 1.4s ease-in-out infinite; }
+    #pf-load-more:disabled {
+        opacity:.35; cursor:not-allowed; transform:none;
+        animation: pfSpinRing 1s linear infinite;
+    }
+    #pf-load-more:not(:disabled) svg { animation:pfArrowBounce 1.4s ease-in-out infinite; }
     #pf-count-text {
-        display:block; margin-top:10px;
-        font-size:12px; color:#bbb; font-weight:500; letter-spacing:.03em;
+        display:block; margin-top:12px;
+        font-size:12px; color:#9D7BFF; font-weight:600; letter-spacing:.06em;
+        text-transform:uppercase;
+    }
+    #pf-count-text.loading-pulse {
+        animation: pfCountPulse .6s ease-in-out infinite alternate;
     }
     @keyframes pfArrowBounce {
         0%,100% { transform:translateY(0); }
-        50%      { transform:translateY(5px); }
+        50%      { transform:translateY(6px); }
+    }
+    @keyframes pfCountPulse {
+        from { opacity:.4; } to { opacity:1; }
+    }
+    @keyframes pfSpinRing {
+        to { transform: rotate(360deg); }
     }
     #pf-scroll-sentinel { height:1px; }
 </style>
@@ -169,15 +187,18 @@
                 <div class="flex flex-col items-center justify-center xl:pt-[223px] pt-[130px] xl:pb-0 pb-10 h-full text-center">
                     <div class="pointer-events-auto" data-aos="fade-up">
 
-                        {{-- Badge --}}
-                        <span class="mb-6 inline-block rounded-full px-4 py-2 text-sm font-semibold text-white/80 tracking-wide"
-                              style="background:rgba(150,150,180,0.20);">
-                            Creative Portfolio
-                        </span>
+                        {{-- Badge — pulsing dot pill matching WD hero --}}
+                        <div class="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-5 py-2.5 mb-6 shadow-sm">
+                            <span class="flex size-2 relative">
+                                <span class="animate-ping absolute inline-flex size-2 rounded-full bg-purple opacity-75"></span>
+                                <span class="relative inline-flex size-2 rounded-full bg-purple"></span>
+                            </span>
+                            <span class="text-white text-sm font-semibold tracking-wide">Creative Portfolio</span>
+                        </div>
 
-                        {{-- Title — white → grey gradient text matching Aurora Hero --}}
-                        <h1 class="pf-hero-title xl:text-[64px] md:text-[50px] text-[34px] font-bold leading-[1.1] mb-7 max-w-3xl mx-auto">
-                            Our <span class="pf-hero-highlight">Creative</span> Portfolio
+                        {{-- Title — custom-heading (Agency font) with white colour --}}
+                        <h1 class="custom-heading text-center mb-7" style="font-weight:400 !important;">
+                            Our <span>Creative</span> Portfolio
                         </h1>
 
                         {{-- Description --}}
@@ -649,7 +670,7 @@
         updateUI();
     }
 
-    /* ── load more (no artificial delay — cards are already in DOM) ── */
+    /* ── load more — shimmer shows for 600 ms so user can see it ── */
     function loadMore() {
         if (isLoading) return;
         const next = filteredCards.slice(shownCount, shownCount + BATCH);
@@ -657,19 +678,20 @@
 
         isLoading = true;
         loadBtn.disabled = true;
+        countText.textContent = 'Loading...';
+        countText.classList.add('loading-pulse');
         showShimmers(next.length);
 
-        // Single rAF tick so shimmers paint, then instantly swap to real cards
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                hideShimmers();
-                revealCards(next, true);
-                shownCount += next.length;
-                loadBtn.disabled = false;
-                isLoading = false;
-                updateUI();
-            });
-        });
+        // Give shimmers 600 ms of visibility before swapping to real cards
+        setTimeout(() => {
+            hideShimmers();
+            revealCards(next, true);
+            shownCount += next.length;
+            loadBtn.disabled = false;
+            isLoading = false;
+            countText.classList.remove('loading-pulse');
+            updateUI();
+        }, 600);
     }
 
     /* ── auto-load on scroll via IntersectionObserver ── */
