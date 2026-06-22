@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\Admin\OpenAi\OpenAIController;
+use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 
 Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
 
@@ -209,6 +210,16 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['admin.reme
         // OpenAI routes
         Route::get('/openai', [OpenAIController::class, 'index'])->name('openai.index');
         Route::post('/openai/ask', [OpenAIController::class, 'ask'])->name('openai.ask');
+
+        // Portfolio management
+        Route::controller(AdminPortfolioController::class)->prefix('portfolio')->name('portfolio.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/category', 'storeCategory')->name('category.store');
+            Route::delete('/category/{id}', 'destroyCategory')->name('category.destroy');
+            Route::get('/category/{id}/items', 'items')->name('items');
+            Route::post('/category/{id}/items', 'storeItem')->name('item.store');
+            Route::delete('/item/{id}', 'destroyItem')->name('item.destroy');
+        });
     });
 });
 

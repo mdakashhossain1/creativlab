@@ -18,6 +18,7 @@ use Modules\Category\Entities\Category;
 use Modules\Page\App\Models\CustomPage;
 use Modules\Partner\App\Models\Partner;
 use Modules\Project\App\Models\Project;
+use App\Models\PortfolioCategory;
 use Modules\Blog\App\Models\BlogComment;
 use Modules\Blog\App\Models\BlogCategory;
 use Modules\Currency\App\Models\Currency;
@@ -576,11 +577,9 @@ class HomeController extends Controller
     public function portfolio(Request $request)
     {
         $cta_content = getContent('template_1_cta.content', true);
-        $projects = Project::latest()->paginate(6);
+        $portfolioCategories = PortfolioCategory::with('items')->get();
 
-
-
-        return view('frontend.templates.portfolio', compact('projects', 'cta_content'));
+        return view('frontend.templates.portfolio', compact('portfolioCategories', 'cta_content'));
     }
 
     public function portfolioShow($slug)
