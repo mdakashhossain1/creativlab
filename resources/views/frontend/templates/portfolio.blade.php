@@ -694,16 +694,7 @@
         }, 600);
     }
 
-    /* ── auto-load on scroll via IntersectionObserver ── */
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(
-            (entries) => { if (entries[0].isIntersecting) loadMore(); },
-            { rootMargin: '0px 0px 120px 0px', threshold: 0 }
-        );
-        observer.observe(sentinel);
-    }
-
-    /* ── arrow click also triggers load ── */
+    /* ── arrow click triggers load ── */
     loadBtn.addEventListener('click', loadMore);
 
     /* ── filter tabs ── */
@@ -713,8 +704,21 @@
         applyFilter(this.dataset.filter);
     }));
 
-    // Boot
+    // Boot — show first batch only
     applyFilter('all');
+
+    /* ── auto-scroll: start observer AFTER initial render + 800 ms delay
+         rootMargin: negative value means sentinel must be INSIDE viewport
+         by 150 px before auto-load fires — prevents firing on page load  ── */
+    setTimeout(() => {
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver(
+                (entries) => { if (entries[0].isIntersecting) loadMore(); },
+                { rootMargin: '0px 0px -150px 0px', threshold: 0 }
+            );
+            observer.observe(sentinel);
+        }
+    }, 800);
 })();
 </script>
 @endpush
