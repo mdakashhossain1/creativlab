@@ -256,30 +256,30 @@ class LoginController extends Controller
     }
 
     public function google_callback(){
+        try {
+            $gmail_client_id = GlobalSetting::where('key', 'gmail_client_id')->first();
+            $gmail_secret_id = GlobalSetting::where('key', 'gmail_secret_id')->first();
+            $gmail_redirect_url = GlobalSetting::where('key', 'gmail_redirect_url')->first();
 
-        $gmail_client_id = GlobalSetting::where('key', 'gmail_client_id')->first();
-        $gmail_secret_id = GlobalSetting::where('key', 'gmail_secret_id')->first();
-        $gmail_redirect_url = GlobalSetting::where('key', 'gmail_redirect_url')->first();
+            \Config::set('services.google.client_id', $gmail_client_id->value);
+            \Config::set('services.google.client_secret', $gmail_secret_id->value);
+            \Config::set('services.google.redirect', $gmail_redirect_url->value);
 
+            $user = Socialite::driver('google')->stateless()->user();
+            $user = $this->create_user($user, 'google');
 
-        \Config::set('services.google.client_id', $gmail_client_id->value);
-        \Config::set('services.google.client_secret', $gmail_secret_id->value);
-        \Config::set('services.google.redirect', $gmail_redirect_url->value);
+            $sessionId = session()->getId();
+            auth()->login($user);
+            \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
+                ->update(['user_id' => $user->id]);
 
-        $user = Socialite::driver('google')->stateless()->user();
-        $user = $this->create_user($user,'google');
-        // Get session ID before login
-        $sessionId = session()->getId();
-        auth()->login($user);
-        // Convert guest cart to user cart
-        \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
-        ->update(['user_id' => $user->id]);
+            $notify_message = array('message' => trans('Login Successfully'), 'alert-type' => 'success');
+            return redirect()->route('user.dashboard')->with($notify_message);
 
-        $notify_message= trans('Login Successfully');
-        $notify_message=array('message'=>$notify_message,'alert-type'=>'success');
-
-        return redirect()->route('user.dashboard')->with($notify_message);
-
+        } catch (\Exception $e) {
+            $notify_message = array('message' => trans('Google login failed. Please try again.'), 'alert-type' => 'error');
+            return redirect()->route('user.login')->with($notify_message);
+        }
     }
 
     public function redirect_to_facebook(){
@@ -296,29 +296,30 @@ class LoginController extends Controller
     }
 
     public function facebook_callback(){
+        try {
+            $facebook_client_id = GlobalSetting::where('key', 'facebook_client_id')->first();
+            $facebook_secret_id = GlobalSetting::where('key', 'facebook_secret_id')->first();
+            $facebook_redirect_url = GlobalSetting::where('key', 'facebook_redirect_url')->first();
 
-        $facebook_client_id = GlobalSetting::where('key', 'facebook_client_id')->first();
-        $facebook_secret_id = GlobalSetting::where('key', 'facebook_secret_id')->first();
-        $facebook_redirect_url = GlobalSetting::where('key', 'facebook_redirect_url')->first();
+            \Config::set('services.facebook.client_id', $facebook_client_id->value);
+            \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
+            \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
 
-        \Config::set('services.facebook.client_id', $facebook_client_id->value);
-        \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
-        \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
+            $user = Socialite::driver('facebook')->stateless()->user();
+            $user = $this->create_user($user, 'facebook');
 
-        $user = Socialite::driver('facebook')->stateless()->user();
-        $user = $this->create_user($user,'facebook');
-        // Get session ID before login
-        $sessionId = session()->getId();
-        auth()->login($user);
-        // Convert guest cart to user cart
-        \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
-        ->update(['user_id' => $user->id]);
+            $sessionId = session()->getId();
+            auth()->login($user);
+            \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
+                ->update(['user_id' => $user->id]);
 
-        $notify_message= trans('Login Successfully');
-        $notify_message=array('message'=>$notify_message,'alert-type'=>'success');
+            $notify_message = array('message' => trans('Login Successfully'), 'alert-type' => 'success');
+            return redirect()->route('user.dashboard')->with($notify_message);
 
-        return redirect()->route('user.dashboard')->with($notify_message);
-
+        } catch (\Exception $e) {
+            $notify_message = array('message' => trans('Facebook login failed. Please try again.'), 'alert-type' => 'error');
+            return redirect()->route('user.login')->with($notify_message);
+        }
     }
 
     public function create_user($get_info, $provider){
