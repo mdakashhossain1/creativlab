@@ -1,4 +1,4 @@
-@extends('admin.master_layout')
+﻿@extends('admin.master_layout')
 @section('title')
     <title>{{ __('Project Details') }}</title>
 @endsection
@@ -148,7 +148,7 @@
                             <i class="fas fa-money-bill-wave text-success me-2"></i>
                             {{ __('Mark Installment as Paid') }}
                         </h5>
-                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                     </div>
                     <div class="modal-body" style="padding:24px;">
 
@@ -190,12 +190,11 @@
                             </p>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top:1px solid #f0f0f0;padding:16px 24px;display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:nowrap;">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;font-weight:500;">
+                    <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius:8px;font-weight:500; width:auto !important;">
                             {{ __('Cancel') }}
                         </button>
-                        <button type="submit" class="crancy-btn" style="border-radius:8px;">
-                            <i class="fas fa-check me-1"></i> {{ __('Confirm Payment') }}
+                        <button type="submit" class="crancy-btn" style="border-radius:8px; width:auto !important;"> {{ __('Confirm Payment') }}
                         </button>
                     </div>
                 </form>

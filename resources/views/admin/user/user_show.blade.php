@@ -1,4 +1,4 @@
-@extends('admin.master_layout')
+﻿@extends('admin.master_layout')
 @section('title')
     <title>{{ __('User Details') }}</title>
 @endsection
@@ -332,7 +332,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ __('Edit User Basic Information') }}</h5>
-                    <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('admin.user-update', $user->id) }}" method="POST">
@@ -384,9 +384,9 @@
 
 
                 </div>
-                <div class="modal-footer delet_modal_form">
+                <div class="modal-footer delet_modal_form" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
 
-                    <button type="submit" class="btn btn-primary">{{ __('Update Info') }}</button>
+                    <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Update Info') }}</button>
                     </form>
                 </div>
             </div>
@@ -400,19 +400,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <p>{{ __('Are you realy want to delete this user?') }}</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
                     <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                         @csrf
                         @method('DELETE')
 
                         <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ __('Close') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ __('Yes, Delete') }}</button>
+                            data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
+                        <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Delete') }}</button>
 
                     </form>
                 </div>
@@ -426,7 +426,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ __('Freeze Confirmation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     @if ($user->feez_status == 1)
@@ -435,16 +435,16 @@
                         <p>{{ __('Do you really want to Freeze this profile?') }}</p>
                     @endif
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
                     <form action="" id="feez_confirmation" class="delet_modal_form" method="GET">
                         @csrf
 
                         <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ __('Close') }}</button>
+                            data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
                         @if ($user->feez_status == 1)
-                            <button type="submit" class="btn btn-primary">{{ __('Yes, Unfreeze') }}</button>
+                            <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Unfreeze') }}</button>
                         @else
-                            <button type="submit" class="btn btn-primary">{{ __('Yes, Freeze') }}</button>
+                            <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Freeze') }}</button>
                         @endif
 
                     </form>

@@ -1,4 +1,4 @@
-@extends('admin.master_layout')
+﻿@extends('admin.master_layout')
 @section('title')
     <title>{{ __('Purchase History') }}</title>
 @endsection
@@ -284,19 +284,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <p>{{ __('Are you realy want to delete this item?') }}</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
                     <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                         @csrf
                         @method('DELETE')
 
                         <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ __('Close') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ __('Yes, Delete') }}</button>
+                            data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
+                        <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Delete') }}</button>
 
                     </form>
                 </div>
@@ -311,19 +311,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="paymentApproval">{{ __('Payment Approval') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <p>{{ __('Are you realy want to approved this payment?') }}</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
                     <form action="{{ route('admin.purchase-history-payment-approved', $history->id) }}"
                         id="item_delect_confirmation" class="delet_modal_form" method="POST">
                         @csrf
 
                         <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ __('Close') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ __('Yes, Approved') }}</button>
+                            data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
+                        <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Approved') }}</button>
 
                     </form>
                 </div>

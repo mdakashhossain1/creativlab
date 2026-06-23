@@ -1,4 +1,4 @@
-@extends('admin.master_layout')
+﻿@extends('admin.master_layout')
 @section('title')
     <title>{{ __('Portfolio Items') }} – {{ $category->name }}</title>
 @endsection
@@ -215,7 +215,7 @@
             <div class="modal-body">
                 <p>{{ __('Are you really want to delete this item?') }}</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
                 <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                     @csrf
                     @method('DELETE')
