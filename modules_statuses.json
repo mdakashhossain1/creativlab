@@ -34,5 +34,6 @@
     "SupportTicket": true,
     "Admin": true,
     "User": true,
-    "Attendance": true
+    "Attendance": true,
+    "Payroll": true
 }
