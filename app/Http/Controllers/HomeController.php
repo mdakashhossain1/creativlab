@@ -522,11 +522,18 @@ class HomeController extends Controller
 
     public function project(Request $request, $slug)
     {
-        $project = Project::where(['status' => 'enable', 'slug' => $slug])->firstOrFail();
+        $project = Project::with(['portfolioCategory', 'portfolioItems.portfolioCategory'])
+            ->where(['status' => 'enable', 'slug' => $slug])
+            ->firstOrFail();
 
-        return view('project_detail', [
-            'project' => $project,
-        ]);
+        $previousProject = Project::where('id', '<', $project->id)
+            ->where('status', 'enable')->orderBy('id', 'desc')->first();
+        $nextProject = Project::where('id', '>', $project->id)
+            ->where('status', 'enable')->orderBy('id', 'asc')->first();
+
+        $cta_content = getContent('template_1_cta.content', true);
+
+        return view('frontend.templates.project_detail', compact('project', 'previousProject', 'nextProject', 'cta_content'));
     }
 
     public function language_switcher(Request $request)
@@ -577,7 +584,7 @@ class HomeController extends Controller
     public function portfolio(Request $request)
     {
         $cta_content = getContent('template_1_cta.content', true);
-        $portfolioCategories = PortfolioCategory::with('portfolioItems')->get();
+        $portfolioCategories = PortfolioCategory::with('items')->get();
 
         return view('frontend.templates.portfolio', compact('portfolioCategories', 'cta_content'));
     }
@@ -585,8 +592,8 @@ class HomeController extends Controller
     public function portfolioShow($slug)
     {
         $project = Project::where('slug', $slug)->firstOrFail();
-        $previousProject = Project::where('id', '<', $project->id)->with('portfolioCategory')->orderBy('id', 'desc')->first();
-        $nextProject = Project::where('id', '>', $project->id)->with('portfolioCategory')->orderBy('id', 'asc')->first();
+        $previousProject = Project::where('id', '<', $project->id)->with('category')->orderBy('id', 'desc')->first();
+        $nextProject = Project::where('id', '>', $project->id)->with('category')->orderBy('id', 'asc')->first();
         $cta_content = getContent('template_1_cta.content', true);
         $author = Auth::guard('admin')->user();
 
@@ -595,7 +602,14 @@ class HomeController extends Controller
 
     public function projects(Request $request)
     {
-        return $this->portfolio($request);
+        $projects = Project::with(['portfolioCategory'])
+            ->where('status', 'enable')
+            ->latest()
+            ->get();
+
+        $categories = $projects->pluck('portfolioCategory')->filter()->unique('id')->values();
+
+        return view('frontend.templates.projects', compact('projects', 'categories'));
     }
 
     public function download_file($file)
