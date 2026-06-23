@@ -344,10 +344,18 @@
                 </a>
             </li>
 
-            <li class="crancy-sidebar__list-item">
-                <a href="{{ route('admin.payroll.index') }}" class="{{ request()->routeIs('admin.payroll.*') ? 'active' : '' }}">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>{{ __('Payroll') }}</span>
+            <li class="{{ Route::is('admin.payroll.*') ? 'active' : '' }}">
+                <a class="collapsed" href="{{ route('admin.payroll.index') }}">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentcolor" stroke-width="1.5"/>
+                                <path d="M2 10H22" stroke="currentcolor" stroke-width="1.5"/>
+                                <path d="M6 15H8M11 15H13" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">{{ __('Payroll') }}</span>
+                    </span>
                 </a>
             </li>
 
