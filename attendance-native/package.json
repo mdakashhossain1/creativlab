@@ -45,10 +45,8 @@
     ],
     "win": {
       "target": [
-        "nsis",
-        "portable"
-      ],
-      "icon": "electron/icons/icon.ico"
+        { "target": "zip", "arch": ["x64"] }
+      ]
     },
     "nsis": {
       "oneClick": false,
