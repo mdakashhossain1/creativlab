@@ -80,11 +80,11 @@
                                                 @else
                                                     <p style="margin:0 0 6px; font-size:13px; color:#5d6a83;">{{ __('Never detected. Add this to your server cron:') }}</p>
                                                     <div style="display:flex; align-items:stretch; border:1.5px solid #d0d8ff; border-radius:8px; background:#f0f2ff; overflow:hidden;">
-                                                        <textarea id="cronCmdText" readonly rows="1"
+                                                        <textarea id="cronCmdText" readonly rows="2" wrap="soft"
                                                                   style="flex:1; resize:none; border:none; outline:none; background:#f0f2ff;
                                                                          font-family:'Courier New',Courier,monospace; font-size:11.5px;
                                                                          color:#1e3a5f; line-height:1.7; padding:11px 14px;
-                                                                         white-space:nowrap; overflow-x:auto; overflow-y:hidden;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</textarea>
+                                                                         word-break:break-all; overflow:hidden;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</textarea>
                                                         <button id="cronCopyBtn" title="{{ __('Copy') }}"
                                                                 style="background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
                                                                        cursor:pointer; padding:0 14px; flex-shrink:0;
