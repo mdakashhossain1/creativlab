@@ -15,6 +15,7 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\Admin\OpenAi\OpenAIController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
+use App\Http\Controllers\Admin\GoogleBusinessController;
 use App\Http\Controllers\CronController;
 
 Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
@@ -211,6 +212,14 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['admin.reme
         // OpenAI routes
         Route::get('/openai', [OpenAIController::class, 'index'])->name('openai.index');
         Route::post('/openai/ask', [OpenAIController::class, 'ask'])->name('openai.ask');
+
+        // Google Business Profile
+        Route::controller(GoogleBusinessController::class)->prefix('google')->name('google.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/connect', 'connect')->name('connect');
+            Route::get('/callback', 'callback')->name('callback');
+            Route::delete('/disconnect', 'disconnect')->name('disconnect');
+        });
 
         // Portfolio management
         Route::controller(AdminPortfolioController::class)->prefix('portfolio')->name('portfolio.')->group(function () {
