@@ -13,6 +13,7 @@ use Modules\Language\App\Models\Language;
 use Modules\Category\Entities\SubCategory;
 use Modules\Project\App\Models\ProjectGallery;
 use Modules\Project\App\Models\ProjectTranslation;
+use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class ProjectController extends Controller
 {
@@ -26,8 +27,9 @@ class ProjectController extends Controller
     public function create()
     {
         $categories = Category::with('translate')->where('status', 'enable')->get();
+        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
-        return view('project::create', compact('categories'));
+        return view('project::create', compact('categories', 'theme_setting'));
     }
 
     /**
@@ -121,8 +123,9 @@ class ProjectController extends Controller
 
         $project_translate = ProjectTranslation::where(['project_id' => $id, 'lang_code' => $request->lang_code])->first();
         $categories = Category::with('translate')->where('status', 'enable')->get();
+        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
-        return view('project::edit', compact('project', 'project_translate', 'categories'));
+        return view('project::edit', compact('project', 'project_translate', 'categories', 'theme_setting'));
     }
 
     /**

@@ -64,6 +64,7 @@ class ProductController extends Controller
         $product->status = Status::ENABLE;
         $product->is_digital = $request->boolean('is_digital');
         $product->download_url = $request->boolean('is_digital') ? $request->download_url : null;
+        $product->quantity = $request->input('quantity', 0);
 
         // Handle image upload and watermarking
         if ($request->hasFile('thumbnail_image')) {
