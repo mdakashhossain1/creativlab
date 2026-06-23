@@ -50,6 +50,10 @@
                                                 </th>
 
                                                 <th class="crancy-table__column-2 crancy-table__h2 sorting">
+                                                    {{ __('Image') }}
+                                                </th>
+
+                                                <th class="crancy-table__column-2 crancy-table__h2 sorting">
                                                     {{ __('Name') }}
                                                 </th>
 
@@ -76,6 +80,16 @@
                                                 <tr class="odd">
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <h4 class="crancy-table__product-title">{{ ++$index }}</h4>
+                                                    </td>
+
+                                                    <td class="crancy-table__column-2 crancy-table__data-2">
+                                                        @if($product->thumbnail_image)
+                                                            <img src="{{ asset($product->thumbnail_image) }}" alt="{{ $product->translate->name }}" style="width:52px; height:52px; object-fit:cover; border-radius:6px;">
+                                                        @else
+                                                            <div style="width:52px; height:52px; border-radius:6px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">
+                                                                <i class="fas fa-image" style="color:#ccc;"></i>
+                                                            </div>
+                                                        @endif
                                                     </td>
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
