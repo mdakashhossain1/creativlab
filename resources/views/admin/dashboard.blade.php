@@ -79,11 +79,12 @@
                                                     </p>
                                                 @else
                                                     <p style="margin:0 0 6px; font-size:13px; color:#5d6a83;">{{ __('Never detected. Add this to your server cron:') }}</p>
-                                                    <div style="display:flex; align-items:stretch; border:1.5px solid #d0d8ff; border-radius:8px; background:#f0f2ff; overflow:hidden;">
+                                                    <div style="display:flex; align-items:stretch; border:1.5px solid #d0d8ff; border-radius:8px; background:#f0f2ff; overflow:hidden; width:100%;">
                                                         <textarea id="cronCmdText" readonly rows="2" wrap="soft"
-                                                                  style="flex:1; resize:none; border:none; outline:none; background:#f0f2ff;
-                                                                         font-family:'Courier New',Courier,monospace; font-size:11.5px;
-                                                                         color:#1e3a5f; line-height:1.7; padding:11px 14px;
+                                                                  style="flex:1; min-width:0; width:0; resize:none; border:none; outline:none;
+                                                                         background:#f0f2ff; font-family:'Courier New',Courier,monospace;
+                                                                         font-size:11.5px; color:#1e3a5f; line-height:1.7;
+                                                                         padding:11px 14px; box-sizing:border-box;
                                                                          word-break:break-all; overflow:hidden;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</textarea>
                                                         <button id="cronCopyBtn" title="{{ __('Copy') }}"
                                                                 style="background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
