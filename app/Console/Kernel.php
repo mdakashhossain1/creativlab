@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('installments:generate-monthly')->dailyAt('00:01');
+        $schedule->command('google:sync-reviews')->hourly();
         $schedule->command('cron:heartbeat')->everyMinute();
 
         // Process queued mail jobs every minute; --stop-when-empty exits once

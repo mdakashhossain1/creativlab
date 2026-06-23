@@ -469,8 +469,8 @@
                 </a>
             </li>
 
-            <li class="{{ Route::is('admin.google.*') ? 'active' : '' }}">
-                <a class="collapsed" href="{{ route('admin.google.index') }}">
+            <li class="{{ Route::is('admin.google.reviews.*') ? 'active' : '' }}">
+                <a class="collapsed" href="{{ route('admin.google.reviews.index') }}">
                     <span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
                             <svg width="24" height="24" viewBox="0 0 24 24">
@@ -480,7 +480,7 @@
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
                         </span>
-                        <span class="menu-bar__name">{{ __('Google Business') }}</span>
+                        <span class="menu-bar__name">{{ __('Google Reviews') }}</span>
                     </span>
                 </a>
             </li>
