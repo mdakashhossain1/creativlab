@@ -102,9 +102,27 @@ QRCode.toCanvas(document.createElement('canvas'), token, {
 </script>
 <style>
 @media print {
-    .crancy-sidebar, .crancy-header, .bottom-nav, .btn, nav, footer { display: none !important; }
-    .card { box-shadow: none !important; border: none !important; }
-    #qrcode canvas { width: 320px !important; height: 320px !important; }
+    /* Hide everything */
+    body * { visibility: hidden !important; }
+
+    /* Show only the QR canvas and its label */
+    #qrcode,
+    #qrcode *,
+    #qrToken { visibility: visible !important; }
+
+    /* Center QR on the printed page */
+    #qrcode {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -60%) !important;
+    }
+
+    #qrcode canvas {
+        width: 350px !important;
+        height: 350px !important;
+        display: block !important;
+    }
 }
 </style>
 @endpush
