@@ -152,7 +152,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('Edit Item') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:brightness(0) !important; opacity:0.7;"></button>
+                <button type="button" data-bs-dismiss="modal" style="background:none;border:none;cursor:pointer;padding:4px;line-height:1;color:#000;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
             <form id="editItemForm" method="POST" action="">
                 @csrf
@@ -210,7 +212,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:brightness(0) !important; opacity:0.7;"></button>
+                <button type="button" data-bs-dismiss="modal" style="background:none;border:none;cursor:pointer;padding:4px;line-height:1;color:#000;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
             <div class="modal-body">
                 <p>{{ __('Are you really want to delete this item?') }}</p>
