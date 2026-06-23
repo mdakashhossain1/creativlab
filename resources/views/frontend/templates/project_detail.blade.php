@@ -101,6 +101,15 @@
     .header-wrapper li.group:hover > div > ul {
         overflow: visible !important;
     }
+
+    /* Explicit font overrides to ensure Poppins and Agency are applied correctly */
+    main p, main span, main a, main li,
+    .pf-tab, .pf-card, .pf-card *, #pf-count-text {
+        font-family: 'Poppins', sans-serif !important;
+    }
+    main h1, main h2, main h3, main h4, main h5, main h6, .custom-heading, .custom-heading * {
+        font-family: 'Agency', sans-serif !important;
+    }
 </style>
 @endpush
 

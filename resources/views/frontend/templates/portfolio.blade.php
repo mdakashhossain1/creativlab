@@ -171,6 +171,16 @@
     .header-wrapper li.group:hover > div > ul {
         overflow: visible !important;
     }
+
+    /* Explicit font overrides to ensure Poppins and Agency are applied correctly */
+    .custom-heading, .custom-heading * {
+        font-family: 'Agency', sans-serif !important;
+    }
+    #home-one-hero p, #home-one-hero span, #home-one-hero a,
+    #portfolio-grid p, #portfolio-grid span, #portfolio-grid a,
+    .pf-tab, .pf-card, .pf-card *, #pf-count-text {
+        font-family: 'Poppins', sans-serif !important;
+    }
 </style>
 @endpush
 
