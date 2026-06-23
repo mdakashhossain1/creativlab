@@ -76,7 +76,7 @@
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <h4 class="crancy-table__product-title"><a target="_blank"
-                                                                href="{{ route('portfolio', $project->slug) }}">{{ html_decode($project->translate->title) }}</a>
+                                                                href="{{ route('portfolio', $project->slug) }}">{{ html_decode($project->translate?->title ?? '—') }}</a>
                                                         </h4>
                                                     </td>
 
