@@ -44,22 +44,37 @@ class PayrollController extends Controller
         $bonus      = (float) $request->input('bonus', 0);
         $deductions = (float) $request->input('deductions', 0);
 
+        $existing = PayrollRecord::where([
+            'team_id' => $request->team_id,
+            'year'    => $request->year,
+            'month'   => $request->month,
+        ])->first();
+
+        $values = [
+            'base_salary'  => $base,
+            'bonus'        => $bonus,
+            'deductions'   => $deductions,
+            'net_salary'   => PayrollRecord::computeNet($base, $bonus, $deductions),
+            'notes'        => $request->input('notes'),
+        ];
+
+        // Editing a paid record resets it to pending so it can be re-approved and re-emailed.
+        if ($existing && $existing->status === 'paid') {
+            $values['status']  = 'pending';
+            $values['paid_at'] = null;
+        }
+
         PayrollRecord::updateOrCreate(
             [
                 'team_id' => $request->team_id,
                 'year'    => $request->year,
                 'month'   => $request->month,
             ],
-            [
-                'base_salary'  => $base,
-                'bonus'        => $bonus,
-                'deductions'   => $deductions,
-                'net_salary'   => PayrollRecord::computeNet($base, $bonus, $deductions),
-                'notes'        => $request->input('notes'),
-            ]
+            $values
         );
 
-        $notification = ['messege' => 'Payroll record saved successfully.', 'alert-type' => 'success'];
+        $wasReset = $existing && $existing->status === 'paid';
+        $notification = ['messege' => $wasReset ? 'Salary updated and reset to pending.' : 'Payroll record saved successfully.', 'alert-type' => 'success'];
         return redirect()->route('admin.payroll.index', ['year' => $request->year, 'month' => $request->month])
                          ->with($notification);
     }
