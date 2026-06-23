@@ -344,6 +344,12 @@
                 </a>
             </li>
 
+            <li class="crancy-sidebar__list-item">
+                <a href="{{ route('admin.payroll.index') }}" class="{{ request()->routeIs('admin.payroll.*') ? 'active' : '' }}">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>{{ __('Payroll') }}</span>
+                </a>
+            </li>
 
             <li
                 class="{{ Route::is('admin.user-list') || Route::is('admin.pending-user') || Route::is('admin.user-show') ? 'active' : '' }}">
