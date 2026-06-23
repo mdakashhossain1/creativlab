@@ -79,10 +79,17 @@
                                                     </p>
                                                 @else
                                                     <p style="margin:0 0 8px; font-size:13px; color:#5d6a83;">{{ __('Never detected. Add this to your server cron:') }}</p>
-                                                    <div style="display:flex; align-items:center; gap:0; background:#f0f2ff; border:1.5px solid #d0d8ff; border-radius:8px; max-width:820px;">
-                                                        <code id="cronCmdText" style="flex:1; display:block; padding:10px 14px; font-family:'Courier New',Courier,monospace; font-size:12.5px; color:#1e3a5f; background:transparent; white-space:nowrap; overflow-x:auto; line-height:1.7; border:none; outline:none;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
+                                                    <div style="display:flex; align-items:stretch; background:#f0f2ff; border:1.5px solid #d0d8ff; border-radius:8px; width:100%;">
+                                                        <code id="cronCmdText"
+                                                              style="flex:1; display:block; padding:11px 14px;
+                                                                     font-family:'Courier New',Courier,monospace; font-size:12px;
+                                                                     color:#1e3a5f !important; background:transparent;
+                                                                     white-space:pre-wrap; word-break:break-all; overflow-wrap:break-word;
+                                                                     line-height:1.8; border:none; outline:none; margin:0;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
                                                         <button id="cronCopyBtn" title="{{ __('Copy') }}"
-                                                                style="background:none; border:none; border-left:1.5px solid #d0d8ff; cursor:pointer; padding:10px 12px; flex-shrink:0; color:#5d6a83; line-height:1; align-self:stretch; display:flex; align-items:center;">
+                                                                style="background:none; border:none; border-left:1.5px solid #d0d8ff;
+                                                                       cursor:pointer; padding:10px 14px; flex-shrink:0;
+                                                                       color:#5d6a83; display:flex; align-items:center; align-self:stretch;">
                                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                                                                 <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
                                                                 <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
