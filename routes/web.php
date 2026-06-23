@@ -15,6 +15,7 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\Admin\OpenAi\OpenAIController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
+use App\Http\Controllers\CronController;
 
 Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
 
@@ -222,6 +223,9 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['admin.reme
         });
     });
 });
+
+// Curl-based cron endpoint — public, no auth, token-secured
+Route::get('/cron/run', [CronController::class, 'run']);
 
 // OAuth callback routes — must live outside any prefix group to match the
 // redirect URIs registered in Google/Facebook console (/callback/google etc.)

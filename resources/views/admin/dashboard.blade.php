@@ -18,6 +18,96 @@
                     <div class="crancy-body">
                         <!-- Dashboard Inner -->
                         <div class="crancy-dsinner">
+
+                            <!-- Cron Job Status -->
+                            <div class="row">
+                                <div class="col-12 mg-top-30">
+                                    <div style="
+                                        background: {{ $cron_is_running ? 'linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%)' : 'linear-gradient(135deg,#fff7f7 0%,#fee2e2 100%)' }};
+                                        border: 1.5px solid {{ $cron_is_running ? '#86efac' : '#fca5a5' }};
+                                        border-radius: 12px;
+                                        padding: 18px 22px;
+                                    ">
+                                        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                                            <div style="
+                                                width:44px; height:44px; border-radius:50%; flex-shrink:0;
+                                                background: {{ $cron_is_running ? '#22c55e' : '#ef4444' }};
+                                                display:flex; align-items:center; justify-content:center;
+                                            ">
+                                                @if($cron_is_running)
+                                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M5 12l5 5L20 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                @else
+                                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="2"/>
+                                                        <path d="M12 8v5" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                                                        <circle cx="12" cy="16.5" r="1" fill="#fff"/>
+                                                    </svg>
+                                                @endif
+                                            </div>
+                                            <div style="flex:1; min-width:0;">
+                                                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:5px;">
+                                                    <h5 style="margin:0; font-size:15px; font-weight:700; color:#111;">{{ __('Cron Job') }}</h5>
+                                                    <span style="
+                                                        display:inline-flex; align-items:center; gap:5px;
+                                                        padding:2px 11px; border-radius:20px; font-size:12px; font-weight:600;
+                                                        background: {{ $cron_is_running ? '#22c55e' : '#ef4444' }}; color:#fff;
+                                                    ">
+                                                        @if($cron_is_running)
+                                                            <span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;animation:cron-pulse 1.4s infinite;"></span>
+                                                            {{ __('Running') }}
+                                                        @else
+                                                            <span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;"></span>
+                                                            {{ __('Not Running') }}
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                                @if($cron_is_running)
+                                                    <p style="margin:0; font-size:13px; color:#374151;">
+                                                        {{ __('Last detected:') }} <strong>{{ \Carbon\Carbon::parse($cron_last_run)->diffForHumans() }}</strong>
+                                                        &nbsp;·&nbsp; {{ \Carbon\Carbon::parse($cron_last_run)->format('d M Y, h:i A') }}
+                                                    </p>
+                                                @else
+                                                    <p style="margin:0 0 8px; font-size:13px; color:#374151;">
+                                                        {{ __('Never detected. Add this to your server cron:') }}
+                                                    </p>
+                                                    <div style="
+                                                        display:flex; align-items:center; gap:8px;
+                                                        background:#fff; border:1px solid #e5e7eb; border-radius:8px;
+                                                        padding:8px 14px; max-width:760px;
+                                                    ">
+                                                        <code id="cronCmdText" style="font-size:12px; color:#1e40af; white-space:nowrap; overflow-x:auto; flex:1; display:block;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
+                                                        <button onclick="copyCronCmd(this)" title="{{ __('Copy') }}" style="background:none;border:none;cursor:pointer;padding:2px 4px;color:#6b7280;flex-shrink:0;">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+                                                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <style>
+                                @keyframes cron-pulse {
+                                    0%, 100% { opacity: 1; transform: scale(1); }
+                                    50% { opacity: 0.5; transform: scale(1.5); }
+                                }
+                            </style>
+                            <script>
+                            function copyCronCmd(btn) {
+                                var text = document.getElementById('cronCmdText').textContent.trim();
+                                navigator.clipboard.writeText(text).then(function() {
+                                    btn.style.color = '#22c55e';
+                                    setTimeout(function(){ btn.style.color = '#6b7280'; }, 1500);
+                                });
+                            }
+                            </script>
+                            <!-- End Cron Job Status -->
+
                             <div class="row">
                                 <div class="col-lg-3 col-12 mg-top-30">
                                     <!-- Progress Card -->
@@ -189,61 +279,6 @@
                                 </div>
 
                             </div>
-
-                            <!-- Cron Status Banner -->
-                            <div class="row">
-                                <div class="col-12 mg-top-30">
-                                    <div class="crancy-ecom-card crancy-ecom-card__v2" style="border-left: 4px solid {{ $cron_is_running ? '#22c55e' : '#ef4444' }};">
-                                        <div class="flex-main" style="align-items:center; gap:16px;">
-                                            <span style="color: {{ $cron_is_running ? '#22c55e' : '#ef4444' }};">
-                                                @if($cron_is_running)
-                                                    <svg width="44" height="44" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle opacity="0.12" cx="27" cy="27" r="27" fill="#22c55e"/>
-                                                        <path d="M19 27l6 6 12-12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
-                                                @else
-                                                    <svg width="44" height="44" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle opacity="0.12" cx="27" cy="27" r="27" fill="#ef4444"/>
-                                                        <path d="M21 21l12 12M33 21l-12 12" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
-                                                @endif
-                                            </span>
-                                            <div class="flex-1">
-                                                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                                                    <h4 class="crancy-ecom-card__title" style="margin:0;">
-                                                        {{ __('Cron Job') }}
-                                                    </h4>
-                                                    <span style="display:inline-flex; align-items:center; gap:6px; padding:3px 12px; border-radius:20px; font-size:13px; font-weight:600;
-                                                        background: {{ $cron_is_running ? '#dcfce7' : '#fee2e2' }};
-                                                        color: {{ $cron_is_running ? '#15803d' : '#b91c1c' }};">
-                                                        @if($cron_is_running)
-                                                            <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;animation:cron-pulse 1.4s infinite;"></span>
-                                                            {{ __('Running') }}
-                                                        @else
-                                                            <span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
-                                                            {{ __('Not Running') }}
-                                                        @endif
-                                                    </span>
-                                                </div>
-                                                <p style="margin:4px 0 0; font-size:13px; color:#6b7280;">
-                                                    @if($cron_last_run)
-                                                        {{ __('Last run:') }} <strong>{{ \Carbon\Carbon::parse($cron_last_run)->diffForHumans() }}</strong>
-                                                        ({{ \Carbon\Carbon::parse($cron_last_run)->format('d M Y, h:i A') }})
-                                                    @else
-                                                        {{ __('Never detected. Make sure') }} <code>* * * * * php artisan schedule:run</code> {{ __('is added to the server cron.') }}
-                                                    @endif
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <style>
-                                @keyframes cron-pulse {
-                                    0%, 100% { opacity: 1; transform: scale(1); }
-                                    50% { opacity: 0.4; transform: scale(1.4); }
-                                }
-                            </style>
 
                             <!-- Second stat row: total users / revenue / today revenue / products -->
                             <div class="row">

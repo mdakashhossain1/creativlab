@@ -100,6 +100,8 @@ class DashboardController extends Controller
 
         $cron_last_run = Cache::get('cron_last_heartbeat');
         $cron_is_running = $cron_last_run && Carbon::parse($cron_last_run)->diffInMinutes(now()) < 2;
+        $cron_token = substr(hash('sha256', config('app.key')), 0, 32);
+        $cron_url = url('/cron/run?token=' . $cron_token);
 
         return view('admin.dashboard', [
             'lable' => $lable,
@@ -125,6 +127,7 @@ class DashboardController extends Controller
             'monthly_order_counts' => $monthly_order_counts,
             'cron_is_running' => $cron_is_running,
             'cron_last_run' => $cron_last_run,
+            'cron_url' => $cron_url,
         ]);
     }
 }
