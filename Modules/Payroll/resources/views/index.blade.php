@@ -73,7 +73,7 @@
                             </form>
                             <a href="{{ route('admin.payroll.export', ['year' => $year, 'month' => $month]) }}"
                                class="crancy-btn">
-                                <i class="fas fa-file-csv me-1"></i>{{ __('Export CSV') }}
+                                <i class="fas fa-download me-1"></i>{{ __('Export CSV') }}
                             </a>
                         </div>
 
@@ -128,16 +128,15 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary me-1"
-                                                    onclick="openSalaryModal(
-                                                        {{ $team->id }},
-                                                        '{{ addslashes($team->translate?->name) }}',
-                                                        {{ $year }}, {{ $month }},
-                                                        {{ $rec ? $rec->id : 'null' }},
-                                                        {{ $rec ? $rec->base_salary : 0 }},
-                                                        {{ $rec ? $rec->bonus : 0 }},
-                                                        {{ $rec ? $rec->deductions : 0 }},
-                                                        '{{ addslashes($rec?->notes ?? '') }}'
-                                                    )">
+                                                    data-team-id="{{ $team->id }}"
+                                                    data-name="{{ $team->translate?->name }}"
+                                                    data-year="{{ $year }}"
+                                                    data-month="{{ $month }}"
+                                                    data-base="{{ $rec?->base_salary ?? 0 }}"
+                                                    data-bonus="{{ $rec?->bonus ?? 0 }}"
+                                                    data-deductions="{{ $rec?->deductions ?? 0 }}"
+                                                    data-notes="{{ $rec?->notes ?? '' }}"
+                                                    onclick="openSalaryModal(this)">
                                                     <i class="fas fa-{{ $rec ? 'edit' : 'plus' }}"></i>
                                                     {{ $rec ? __('Edit') : __('Set Salary') }}
                                                 </button>
@@ -177,7 +176,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="salaryModalLabel">{{ __('Set Salary') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST" action="{{ route('admin.payroll.save') }}">
                 @csrf
@@ -226,17 +225,19 @@
 <script>
 "use strict";
 
-function openSalaryModal(teamId, name, year, month, recId, base, bonus, deductions, notes) {
-    document.getElementById('s_team_id').value    = teamId;
-    document.getElementById('s_year').value       = year;
-    document.getElementById('s_month').value      = month;
-    document.getElementById('s_member_name').textContent = name;
-    document.getElementById('s_base').value       = base || '';
-    document.getElementById('s_bonus').value      = bonus || 0;
-    document.getElementById('s_deductions').value = deductions || 0;
-    document.getElementById('s_notes').value      = notes || '';
+function openSalaryModal(btn) {
+    const d = btn.dataset;
+    document.getElementById('s_team_id').value    = d.teamId;
+    document.getElementById('s_year').value       = d.year;
+    document.getElementById('s_month').value      = d.month;
+    document.getElementById('s_member_name').textContent = d.name;
+    document.getElementById('s_base').value       = d.base || '';
+    document.getElementById('s_bonus').value      = d.bonus || 0;
+    document.getElementById('s_deductions').value = d.deductions || 0;
+    document.getElementById('s_notes').value      = d.notes || '';
+    document.getElementById('salaryModalLabel').textContent = parseFloat(d.base) > 0 ? 'Edit Salary' : 'Set Salary';
     calcNet();
-    new bootstrap.Modal(document.getElementById('salaryModal')).show();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('salaryModal')).show();
 }
 
 function calcNet() {
