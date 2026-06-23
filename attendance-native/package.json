@@ -1,0 +1,60 @@
+{
+  "name": "creativlab-attendance",
+  "version": "1.0.0",
+  "description": "CreativLab Attendance – native wrapper for Android and Windows",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64",
+    "build:win:portable": "electron-builder --win portable",
+    "android:setup": "npx cap add android && npx cap sync android",
+    "android:sync": "npx cap sync android",
+    "android:run": "npx cap run android",
+    "android:open": "npx cap open android"
+  },
+  "dependencies": {
+    "auto-launch": "^5.0.6"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.creativlab.attendance",
+    "productName": "CreativLab Attendance",
+    "directories": {
+      "output": "dist-windows"
+    },
+    "files": [
+      "electron/**/*",
+      "config.json",
+      "!node_modules/**/*",
+      "node_modules/auto-launch/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../public/attendance-app",
+        "to": "attendance-app",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "electron/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CreativLab Attendance"
+    }
+  }
+}

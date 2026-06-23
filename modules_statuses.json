@@ -33,5 +33,6 @@
     "Coupon": true,
     "SupportTicket": true,
     "Admin": true,
-    "User": true
+    "User": true,
+    "Attendance": true
 }
