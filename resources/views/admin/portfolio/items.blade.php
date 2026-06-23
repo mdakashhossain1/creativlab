@@ -152,7 +152,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('Edit Item') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">×</button>
             </div>
             <form id="editItemForm" method="POST" action="">
                 @csrf
@@ -196,8 +196,8 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
-                    <button type="submit" class="crancy-btn" style="width:auto !important;"><i class="fas fa-check"></i> {{ __('Save Changes') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;">{{ __('Cancel') }}</button>
+                    <button type="submit" class="crancy-btn" style="width:auto !important;">{{ __('Save Changes') }}</button>
                 </div>
             </form>
         </div>
@@ -210,7 +210,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
                 <p>{{ __('Are you really want to delete this item?') }}</p>
@@ -219,8 +219,8 @@
                 <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;"><i class="fas fa-times"></i> {{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary" style="width:auto !important;"><i class="fas fa-trash"></i> {{ __('Yes, Delete') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Delete') }}</button>
                 </form>
             </div>
         </div>
