@@ -87,7 +87,7 @@
                                                                   word-break:break-all; overflow-wrap:anywhere;
                                                                   user-select:all;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</p>
                                                         <button id="cronCopyBtn" title="{{ __('Copy') }}"
-                                                                style="background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
+                                                                style="width:auto !important; background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
                                                                        cursor:pointer; padding:0 14px; flex-shrink:0;
                                                                        color:#2b4dff; display:flex; align-items:center;">
                                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
