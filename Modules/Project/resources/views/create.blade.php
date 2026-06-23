@@ -120,17 +120,21 @@
 
                                                 <div class="col-md-6">
                                                     <div class="crancy__item-form--group mg-top-form-20">
-                                                        <label class="crancy__item-label">{{ __('Category') }} * </label>
-                                                        <select class="form-select crancy__item-input" name="category_id"
-                                                            id="category-select">
-                                                            <option value="">{{ __('Select Category') }}</option>
+                                                        <label class="crancy__item-label">{{ __('Portfolio Category') }} * </label>
+                                                        <select class="form-select crancy__item-input" name="portfolio_category_id">
+                                                            <option value="">{{ __('Select Portfolio Category') }}</option>
                                                             @foreach ($categories as $category)
-                                                                <option
-                                                                    {{ $category->id == old('category_id') ? 'selected' : '' }}
-                                                                    value="{{ $category->id }}">
-                                                                    {{ $category->translate->name }}</option>
+                                                                <option value="{{ $category->id }}"
+                                                                    {{ old('portfolio_category_id') == $category->id ? 'selected' : '' }}>
+                                                                    {{ $category->name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
+                                                        <small class="text-muted">
+                                                            <a href="{{ route('admin.portfolio-category.index') }}" target="_blank">
+                                                                + {{ __('Manage Portfolio Categories') }}
+                                                            </a>
+                                                        </small>
                                                     </div>
                                                 </div>
 

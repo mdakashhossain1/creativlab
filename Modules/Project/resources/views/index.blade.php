@@ -82,7 +82,7 @@
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <h4 class="crancy-table__product-title">
-                                                            {{ html_decode($project?->category?->translate?->name) }}</h4>
+                                                            {{ $project->portfolioCategory?->name ?? '—' }}</h4>
                                                     </td>
 
 
@@ -97,12 +97,14 @@
 
                                                                 <li>
                                                                     <a href="{{ route('admin.project.edit', ['project' => $project->id, 'lang_code' => admin_lang()]) }}"
-                                                                        class=" dropdown-item"><i class="fas fa-edit"></i>
+                                                                        class="dropdown-item"><i class="fas fa-edit"></i>
                                                                         {{ __('Edit') }}</a>
-
                                                                 </li>
-
-
+                                                                <li>
+                                                                    <a href="{{ route('admin.project-items', $project->id) }}"
+                                                                        class="dropdown-item"><i class="fas fa-th me-1"></i>
+                                                                        {{ __('Portfolio Items') }}</a>
+                                                                </li>
                                                                 <li>
                                                                     <a onclick="itemDeleteConfrimation({{ $project->id }})"
                                                                         href="javascript:;" data-bs-toggle="modal"

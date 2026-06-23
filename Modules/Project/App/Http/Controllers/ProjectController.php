@@ -7,54 +7,49 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\RedirectResponse;
-use Modules\Category\Entities\Category;
 use Modules\Project\App\Models\Project;
+use Modules\Project\App\Models\PortfolioCategory;
+use Modules\Project\App\Models\PortfolioItem;
 use Modules\Language\App\Models\Language;
-use Modules\Category\Entities\SubCategory;
 use Modules\Project\App\Models\ProjectGallery;
 use Modules\Project\App\Models\ProjectTranslation;
 use Modules\GlobalSetting\App\Models\GlobalSetting;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
-
     public function index()
     {
-        $projects = Project::with('translate')->latest()->get();
+        $projects = Project::with('translate', 'portfolioCategory')->latest()->get();
         return view('project::index', compact('projects'));
     }
 
     public function create()
     {
-        $categories = Category::with('translate')->where('status', 'enable')->get();
+        $categories    = PortfolioCategory::orderBy('name')->get();
         $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
-
         return view('project::create', compact('categories', 'theme_setting'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'thumb_image' => 'required|image|mimes:jpeg,png,jpg,webp',
-            'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'nullable|exists:sub_categories,id',
-            'slug' => 'required|unique:projects,slug',
-            'website_url' => 'required',
-            'project_date' => 'required|date',
-            'title' => 'required|string|max:255',
-            'short_description' => 'required|string|max:255',
-            'description' => 'required|string',
-            'client_name' => 'required|string|max:255',
-            'seo_title' => 'nullable|string|max:255',
-            'seo_description' => 'nullable|string',
-            'video_url'=>'nullable',
-            'author_image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
-            'author_name' => 'nullable|string|max:255',
+            'thumb_image'        => 'required|image|mimes:jpeg,png,jpg,webp',
+            'portfolio_category_id' => 'required|exists:portfolio_categories,id',
+            'slug'               => 'required|unique:projects,slug',
+            'website_url'        => 'required',
+            'project_date'       => 'required|date',
+            'title'              => 'required|string|max:255',
+            'short_description'  => 'required|string|max:255',
+            'description'        => 'required|string',
+            'client_name'        => 'required|string|max:255',
+            'seo_title'          => 'nullable|string|max:255',
+            'seo_description'    => 'nullable|string',
+            'video_url'          => 'nullable',
+            'author_image'       => 'nullable|image|mimes:jpeg,png,jpg,webp',
+            'author_name'        => 'nullable|string|max:255',
             'author_designation' => 'nullable|string|max:255',
-            'author_comment' => 'nullable|string',
+            'author_comment'     => 'nullable|string',
         ]);
 
         $project = new Project();
@@ -62,256 +57,275 @@ class ProjectController extends Controller
         if ($request->thumb_image) {
             $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
             $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->thumb_image)
-                ->encode('webp', 80)
-                ->save(public_path() . '/' . $image_name);
+            Image::make($request->thumb_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
             $project->thumb_image = $image_name;
         }
-
 
         if ($request->author_image) {
             $image_name = 'project-author' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
             $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->author_image)
-                ->encode('webp', 80)
-                ->save(public_path() . '/' . $image_name);
+            Image::make($request->author_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
             $project->author_image = $image_name;
         }
 
-        $project->category_id = $request->category_id;
-        $project->sub_category_id = $request->sub_category_id;
-        $project->slug = $request->slug;
-        $project->website_url = $request->website_url;
-        $project->project_date = $request->project_date;
-        $project->project_fb = $request->input('project_fb', '');
-        $project->project_x = $request->input('project_x', '');
-        $project->project_linkedin = $request->input('project_linkedin', '');
-        $project->project_instagram = $request->input('project_instagram', '');
-        $project->status = 'enable';
-        $project->video_url = $request->input('video_url', '');
-        $project->author_name = $request->input('author_name', '');
-        $project->author_designation = $request->input('author_designation', '');
+        $project->portfolio_category_id = $request->portfolio_category_id;
+        $project->slug                   = $request->slug;
+        $project->website_url            = $request->website_url;
+        $project->project_date           = $request->project_date;
+        $project->project_fb             = $request->input('project_fb', '');
+        $project->project_x              = $request->input('project_x', '');
+        $project->project_linkedin       = $request->input('project_linkedin', '');
+        $project->project_instagram      = $request->input('project_instagram', '');
+        $project->status                 = 'enable';
+        $project->video_url              = $request->input('video_url', '');
+        $project->author_name            = $request->input('author_name', '');
+        $project->author_designation     = $request->input('author_designation', '');
         $project->save();
 
-        $languages = Language::all();
-        foreach ($languages as $language) {
-            $project_translate = new ProjectTranslation();
-            $project_translate->lang_code = $language->lang_code;
-            $project_translate->project_id = $project->id;
-            $project_translate->title = $request->title;
-            $project_translate->description = $request->description;
-            $project_translate->short_description = $request->short_description;
-            $project_translate->client_name = $request->client_name;
-            $project_translate->seo_title = $request->seo_title ? $request->seo_title : $request->title;
-            $project_translate->seo_description = $request->seo_description ? $request->seo_description : $request->title;
-            $project_translate->author_comment = $request->author_comment;
-            $project_translate->save();
+        foreach (Language::all() as $language) {
+            $pt = new ProjectTranslation();
+            $pt->lang_code         = $language->lang_code;
+            $pt->project_id        = $project->id;
+            $pt->title             = $request->title;
+            $pt->description       = $request->description;
+            $pt->short_description = $request->short_description;
+            $pt->client_name       = $request->client_name;
+            $pt->seo_title         = $request->seo_title ?: $request->title;
+            $pt->seo_description   = $request->seo_description ?: $request->title;
+            $pt->author_comment    = $request->author_comment;
+            $pt->save();
         }
 
-        $notify_message = trans('Created Successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-        return redirect()->route('admin.project.index')->with($notify_message);
+        return redirect()->route('admin.project.index')
+            ->with(['message' => trans('Created Successfully'), 'alert-type' => 'success']);
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request, $id)
     {
-        $project = Project::findOrFail($id);
-
+        $project           = Project::findOrFail($id);
         $project_translate = ProjectTranslation::where(['project_id' => $id, 'lang_code' => $request->lang_code])->first();
-        $categories = Category::with('translate')->where('status', 'enable')->get();
-        $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
+        $categories        = PortfolioCategory::orderBy('name')->get();
+        $theme_setting     = GlobalSetting::where('key', 'selected_theme')->first();
 
         return view('project::edit', compact('project', 'project_translate', 'categories', 'theme_setting'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id): RedirectResponse
     {
         $project = Project::findOrFail($id);
 
-        if($request->lang_code == admin_lang()) {
-
+        if ($request->lang_code == admin_lang()) {
             $request->validate([
-                'thumb_image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
-                'category_id' => 'required|exists:categories,id',
-                'sub_category_id' => 'nullable|exists:sub_categories,id',
-                'slug' => 'required|unique:projects,slug,'.$id,
-                'website_url' => 'required',
-                'project_date' => 'required|date',
-                'author_image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
-                'author_name' => 'nullable|string|max:255',
-                'author_designation' => 'nullable|string|max:255',
+                'thumb_image'           => 'nullable|image|mimes:jpeg,png,jpg,webp',
+                'portfolio_category_id' => 'required|exists:portfolio_categories,id',
+                'slug'                  => 'required|unique:projects,slug,' . $id,
+                'website_url'           => 'required',
+                'project_date'          => 'required|date',
+                'author_image'          => 'nullable|image|mimes:jpeg,png,jpg,webp',
+                'author_name'           => 'nullable|string|max:255',
+                'author_designation'    => 'nullable|string|max:255',
             ]);
-
 
             if ($request->thumb_image) {
                 $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
                 $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($request->thumb_image)
-                    ->encode('webp', 80)
-                    ->save(public_path() . '/' . $image_name);
+                Image::make($request->thumb_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
                 $project->thumb_image = $image_name;
             }
 
-            if($request->author_image) {
-                $old_image = $project->author_image;
-                $image_name = 'project-author'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-                $image_name ='uploads/custom-images/'.$image_name;
-                Image::make($request->author_image)
-                    ->encode('webp', 80)
-                    ->save(public_path().'/'.$image_name);
+            if ($request->author_image) {
+                $old = $project->author_image;
+                $image_name = 'project-author' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
+                $image_name = 'uploads/custom-images/' . $image_name;
+                Image::make($request->author_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
                 $project->author_image = $image_name;
-                $project->save();
-
-                if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
-                }
+                if ($old && File::exists(public_path() . '/' . $old)) unlink(public_path() . '/' . $old);
             }
 
-            $project->category_id = $request->category_id;
-            $project->sub_category_id = $request->sub_category_id;
-            $project->slug = $request->slug;
-            $project->website_url = $request->website_url;
-            $project->project_date = $request->project_date;
-            $project->project_fb = $request->input('project_fb', '');
-            $project->project_x = $request->input('project_x', '');
-            $project->project_linkedin = $request->input('project_linkedin', '');
-            $project->project_instagram = $request->input('project_instagram', '');
-            $project->video_url = $request->input('video_url', '');
-            $project->author_name = $request->input('author_name', '');
-            $project->author_designation = $request->input('author_designation', '');
+            $project->portfolio_category_id = $request->portfolio_category_id;
+            $project->slug                   = $request->slug;
+            $project->website_url            = $request->website_url;
+            $project->project_date           = $request->project_date;
+            $project->project_fb             = $request->input('project_fb', '');
+            $project->project_x              = $request->input('project_x', '');
+            $project->project_linkedin       = $request->input('project_linkedin', '');
+            $project->project_instagram      = $request->input('project_instagram', '');
+            $project->video_url              = $request->input('video_url', '');
+            $project->author_name            = $request->input('author_name', '');
+            $project->author_designation     = $request->input('author_designation', '');
             $project->save();
         }
 
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title'             => 'required|string|max:255',
             'short_description' => 'required|string|max:255',
-            'description' => 'required|string',
-            'client_name' => 'required|string|max:255',
-            'seo_title' => 'nullable|string|max:255',
-            'seo_description' => 'nullable|string',
-            'author_comment' => 'nullable|string',
+            'description'       => 'required|string',
+            'client_name'       => 'required|string|max:255',
+            'seo_title'         => 'nullable|string|max:255',
+            'seo_description'   => 'nullable|string',
+            'author_comment'    => 'nullable|string',
         ]);
 
-        $project_translate = ProjectTranslation::findOrFail($request->translate_id);
-        $project_translate->title = $request->title;
-        $project_translate->description = $request->description;
-        $project_translate->short_description = $request->short_description;
-        $project_translate->client_name = $request->client_name;
-        $project_translate->seo_title = $request->seo_title ;
-        $project_translate->seo_description = $request->seo_description;
-        $project_translate->author_comment = $request->author_comment;
-        $project_translate->save();
+        $pt = ProjectTranslation::findOrFail($request->translate_id);
+        $pt->title             = $request->title;
+        $pt->description       = $request->description;
+        $pt->short_description = $request->short_description;
+        $pt->client_name       = $request->client_name;
+        $pt->seo_title         = $request->seo_title;
+        $pt->seo_description   = $request->seo_description;
+        $pt->author_comment    = $request->author_comment;
+        $pt->save();
 
-        $notify_message = trans('Updated Successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-        return redirect()->back()->with($notify_message);
+        return redirect()->back()
+            ->with(['message' => trans('Updated Successfully'), 'alert-type' => 'success']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $listing = Project::findOrFail($id);
-        $old_image = $listing->thumb_image;
+        $project = Project::findOrFail($id);
 
-        if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+        if ($project->thumb_image && File::exists(public_path() . '/' . $project->thumb_image)) {
+            unlink(public_path() . '/' . $project->thumb_image);
         }
 
-        ProjectTranslation::where('project_id',$id)->delete();
+        ProjectTranslation::where('project_id', $id)->delete();
 
-        $galleries = ProjectGallery::where('project_id', $id)->get();
-        foreach($galleries as $gallery){
-            $old_image = $gallery->image;
-
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+        foreach (ProjectGallery::where('project_id', $id)->get() as $gallery) {
+            if ($gallery->image && File::exists(public_path() . '/' . $gallery->image)) {
+                unlink(public_path() . '/' . $gallery->image);
             }
-
             $gallery->delete();
         }
 
-        $listing->delete();
-
-        $notify_message=  trans('Delete Successfully');
-        $notify_message=array('message'=>$notify_message,'alert-type'=>'success');
-        return redirect()->route('admin.project.index')->with($notify_message);
-    }
-
-    public function setup_language($lang_code){
-        $project_translates = ProjectTranslation::where('lang_code', admin_lang())->get();
-        foreach($project_translates as $listing_translate){
-            $translate = new ProjectTranslation();
-            $translate->project_id = $listing_translate->project_id;
-            $translate->lang_code = $lang_code;
-            $translate->title = $listing_translate->title;
-            $translate->client_name = $listing_translate->client_name;
-            $translate->description = $listing_translate->description;
-            $translate->save();
+        // Delete portfolio items belonging to this project
+        foreach (PortfolioItem::where('project_id', $id)->get() as $item) {
+            if ($item->thumbnail && File::exists(public_path() . '/' . $item->thumbnail)) {
+                unlink(public_path() . '/' . $item->thumbnail);
+            }
+            $item->delete();
         }
+
+        $project->delete();
+
+        return redirect()->route('admin.project.index')
+            ->with(['message' => trans('Delete Successfully'), 'alert-type' => 'success']);
     }
 
-    public function listing_project($id){
-        $project = Project::findOrFail($id);
+    // ── Portfolio Items (sub-items within a project) ───────────────
 
+    public function portfolioItems($project_id)
+    {
+        $project = Project::with('portfolioCategory')->findOrFail($project_id);
+        $items   = PortfolioItem::with('portfolioCategory')
+            ->where('project_id', $project_id)
+            ->latest()
+            ->get();
+        $categories = PortfolioCategory::orderBy('name')->get();
+
+        return view('project::portfolio-items', compact('project', 'items', 'categories'));
+    }
+
+    public function storePortfolioItem(Request $request, $project_id)
+    {
+        $project = Project::findOrFail($project_id);
+
+        $request->validate([
+            'portfolio_category_id' => 'required|exists:portfolio_categories,id',
+            'type'                  => 'required|in:image,video,bunny',
+            'content_source'        => 'required',
+            'thumbnail'             => 'nullable|image|mimes:jpeg,png,jpg,webp',
+            'title'                 => 'nullable|string|max:255',
+            'description'           => 'nullable|string',
+        ]);
+
+        $item = new PortfolioItem();
+        $item->project_id              = $project->id;
+        $item->portfolio_category_id   = $request->portfolio_category_id;
+        $item->type                    = $request->type;
+        $item->content_source          = $request->content_source;
+        $item->title                   = $request->input('title', '');
+        $item->description             = $request->input('description', '');
+
+        if ($request->hasFile('thumbnail')) {
+            $name = 'portfolio-thumb' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
+            $name = 'uploads/custom-images/' . $name;
+            Image::make($request->thumbnail)->encode('webp', 80)->save(public_path() . '/' . $name);
+            $item->thumbnail = $name;
+        }
+
+        $item->save();
+
+        return redirect()->route('admin.project-items', $project_id)
+            ->with(['message' => trans('Item added successfully'), 'alert-type' => 'success']);
+    }
+
+    public function deletePortfolioItem($id)
+    {
+        $item = PortfolioItem::findOrFail($id);
+        $project_id = $item->project_id;
+
+        if ($item->thumbnail && File::exists(public_path() . '/' . $item->thumbnail)) {
+            unlink(public_path() . '/' . $item->thumbnail);
+        }
+
+        $item->delete();
+
+        return redirect()->route('admin.project-items', $project_id)
+            ->with(['message' => trans('Item deleted'), 'alert-type' => 'success']);
+    }
+
+    // ── Gallery (unchanged) ────────────────────────────────────────
+
+    public function listing_project($id)
+    {
+        $project  = Project::findOrFail($id);
         $galleries = ProjectGallery::where('project_id', $id)->get();
-
         return view('project::gallery', compact('project', 'galleries'));
     }
 
-    public function upload_listing_project(Request $request, $id){
-
+    public function upload_listing_project(Request $request, $id)
+    {
+        $gallery_image = null;
         foreach ($request->file as $index => $image) {
             $gallery_image = new ProjectGallery();
-
-            if($image){
-                $image_name = 'project-gallery'.date('-Y-m-d-h-i-s-').rand(999,9999).$index.'.webp';
-                $image_name ='uploads/custom-images/'.$image_name;
-                Image::make($image)
-                    ->encode('webp', 80)
-                    ->save(public_path().'/'.$image_name);
+            if ($image) {
+                $image_name = 'project-gallery' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . $index . '.webp';
+                $image_name = 'uploads/custom-images/' . $image_name;
+                Image::make($image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
                 $gallery_image->image = $image_name;
             }
-
             $gallery_image->project_id = $id;
             $gallery_image->save();
         }
 
         if ($gallery_image) {
-            return response()->json([
-                'message' => trans('Images uploaded successfully'),
-                'url' => route('admin.project-gallery', $id),
-            ]);
-        } else {
-            return response()->json([
-                'message' => trans('Images uploaded Failed'),
-                'url' => route('admin.project-gallery', $id),
-            ]);
+            return response()->json(['message' => trans('Images uploaded successfully'), 'url' => route('admin.project-gallery', $id)]);
         }
-
+        return response()->json(['message' => trans('Images uploaded Failed'), 'url' => route('admin.project-gallery', $id)]);
     }
 
-    public function delete_listing_project($id){
+    public function delete_listing_project($id)
+    {
         $gallery = ProjectGallery::findOrFail($id);
-        $old_image = $gallery->image;
-
-        if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+        if ($gallery->image && File::exists(public_path() . '/' . $gallery->image)) {
+            unlink(public_path() . '/' . $gallery->image);
         }
-
         $gallery->delete();
 
-        $notify_message=  trans('Delete Successfully');
-        $notify_message=array('message'=>$notify_message,'alert-type'=>'success');
-        return redirect()->back()->with($notify_message);
+        return redirect()->back()
+            ->with(['message' => trans('Delete Successfully'), 'alert-type' => 'success']);
+    }
 
+    public function setup_language($lang_code)
+    {
+        foreach (ProjectTranslation::where('lang_code', admin_lang())->get() as $t) {
+            $new = new ProjectTranslation();
+            $new->project_id  = $t->project_id;
+            $new->lang_code   = $lang_code;
+            $new->title       = $t->title;
+            $new->client_name = $t->client_name;
+            $new->description = $t->description;
+            $new->save();
+        }
     }
 }
