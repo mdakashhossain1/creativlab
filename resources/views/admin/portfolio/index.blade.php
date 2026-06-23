@@ -122,7 +122,7 @@
                         <input class="crancy__item-input" type="text" id="editCatDesc" name="description">
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="justify-content:space-between;">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
                     <button type="submit" class="crancy-btn"><i class="fas fa-check"></i> {{ __('Save Changes') }}</button>
                 </div>
