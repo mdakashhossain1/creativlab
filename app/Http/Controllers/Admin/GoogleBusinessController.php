@@ -8,6 +8,7 @@ use App\Services\GoogleBusinessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Socialite\Facades\Socialite;
+use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class GoogleBusinessController extends Controller
 {
@@ -41,10 +42,21 @@ class GoogleBusinessController extends Controller
         return view('admin.google.business', compact('token', 'accounts', 'reviews'));
     }
 
+    private function googleProvider()
+    {
+        return Socialite::buildProvider(
+            \Laravel\Socialite\Two\GoogleProvider::class,
+            [
+                'client_id'     => GlobalSetting::where('key', 'gmail_client_id')->value('value'),
+                'client_secret' => GlobalSetting::where('key', 'gmail_secret_id')->value('value'),
+                'redirect'      => route('admin.google.callback'),
+            ]
+        );
+    }
+
     public function connect()
     {
-        return Socialite::driver('google')
-            ->redirectUrl(route('admin.google.callback'))
+        return $this->googleProvider()
             ->scopes([
                 'openid',
                 'email',
@@ -62,10 +74,7 @@ class GoogleBusinessController extends Controller
                 ->with(['message' => 'Google connection cancelled.', 'alert-type' => 'error']);
         }
 
-        $googleUser = Socialite::driver('google')
-            ->redirectUrl(route('admin.google.callback'))
-            ->stateless()
-            ->user();
+        $googleUser = $this->googleProvider()->stateless()->user();
 
         // Replace any existing token (single-account setup)
         GoogleBusinessToken::truncate();
