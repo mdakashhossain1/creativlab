@@ -42,8 +42,8 @@ class GoogleBusinessService
     private function refreshToken(GoogleBusinessToken $token): ?GoogleBusinessToken
     {
         $response = Http::asForm()->post($this->tokenUrl, [
-            'client_id'     => GlobalSetting::where('key', 'gmail_client_id')->value('value'),
-            'client_secret' => GlobalSetting::where('key', 'gmail_secret_id')->value('value'),
+            'client_id'     => GlobalSetting::where('key', 'google_business_client_id')->value('value'),
+            'client_secret' => GlobalSetting::where('key', 'google_business_client_secret')->value('value'),
             'refresh_token' => $token->refresh_token,
             'grant_type'    => 'refresh_token',
         ]);

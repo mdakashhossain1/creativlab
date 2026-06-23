@@ -47,9 +47,9 @@ class GoogleBusinessController extends Controller
         return Socialite::buildProvider(
             \Laravel\Socialite\Two\GoogleProvider::class,
             [
-                'client_id'     => GlobalSetting::where('key', 'gmail_client_id')->value('value'),
-                'client_secret' => GlobalSetting::where('key', 'gmail_secret_id')->value('value'),
-                'redirect'      => route('admin.google.callback'),
+                'client_id'     => GlobalSetting::where('key', 'google_business_client_id')->value('value'),
+                'client_secret' => GlobalSetting::where('key', 'google_business_client_secret')->value('value'),
+                'redirect'      => env('GOOGLE_BUSINESS_REDIRECT_URL', 'https://creativlab.in/admin/google/callback'),
             ]
         );
     }
