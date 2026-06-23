@@ -577,7 +577,7 @@ class HomeController extends Controller
     public function portfolio(Request $request)
     {
         $cta_content = getContent('template_1_cta.content', true);
-        $portfolioCategories = PortfolioCategory::with('items')->get();
+        $portfolioCategories = PortfolioCategory::with('portfolioItems')->get();
 
         return view('frontend.templates.portfolio', compact('portfolioCategories', 'cta_content'));
     }
@@ -585,8 +585,8 @@ class HomeController extends Controller
     public function portfolioShow($slug)
     {
         $project = Project::where('slug', $slug)->firstOrFail();
-        $previousProject = Project::where('id', '<', $project->id)->with('category')->orderBy('id', 'desc')->first();
-        $nextProject = Project::where('id', '>', $project->id)->with('category')->orderBy('id', 'asc')->first();
+        $previousProject = Project::where('id', '<', $project->id)->with('portfolioCategory')->orderBy('id', 'desc')->first();
+        $nextProject = Project::where('id', '>', $project->id)->with('portfolioCategory')->orderBy('id', 'asc')->first();
         $cta_content = getContent('template_1_cta.content', true);
         $author = Auth::guard('admin')->user();
 

@@ -241,7 +241,7 @@
                 @php
                     $allItems = collect();
                     foreach($portfolioCategories as $cat) {
-                        foreach($cat->items as $item) {
+                        foreach($cat->portfolioItems as $item) {
                             $item->category_slug = \Illuminate\Support\Str::slug($cat->name);
                             $item->category_name = $cat->name;
                             $allItems->push($item);
