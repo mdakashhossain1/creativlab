@@ -10,7 +10,8 @@ return new class extends Migration
     {
         Schema::create('payroll_records', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
+            $table->unsignedBigInteger('team_id');
+            $table->index('team_id');
             $table->smallInteger('year')->unsigned();
             $table->tinyInteger('month')->unsigned();
             $table->decimal('base_salary', 10, 2);
