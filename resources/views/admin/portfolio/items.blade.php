@@ -195,8 +195,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                <div class="modal-footer" style="display:flex !important; flex-direction:row !important; gap:8px; justify-content:flex-end;">
+                    <button type="button" class="btn btn-secondary" style="width:auto !important;" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
                     <button type="submit" class="crancy-btn" style="width:auto !important;">{{ __('Save Changes') }}</button>
                 </div>
             </form>
