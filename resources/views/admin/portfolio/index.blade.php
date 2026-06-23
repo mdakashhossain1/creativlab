@@ -107,7 +107,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('Edit Category') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:brightness(0) !important; opacity:0.7;"></button>
             </div>
             <form id="editCategoryForm" method="POST" action="">
                 @csrf
@@ -137,7 +137,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:brightness(0) !important; opacity:0.7;"></button>
             </div>
             <div class="modal-body">
                 <p>{{ __('Are you really want to delete this item?') }}</p>
