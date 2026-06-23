@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="d-flex gap-3 justify-content-center flex-wrap mt-2">
-                                <button onclick="window.print()" class="crancy-btn">
+                                <button onclick="printQR()" class="crancy-btn">
                                     <i class="fas fa-print me-2"></i>Print QR Code
                                 </button>
                                 <a href="{{ url('/attendance-app/') }}" target="_blank" class="btn btn-outline-secondary">
@@ -94,35 +94,35 @@ QRCode.toCanvas(document.createElement('canvas'), token, {
     color: { dark: '#0f172a', light: '#ffffff' }
 }, function (err, canvas) {
     if (err) return;
+    canvas.id = 'qrCanvas';
     canvas.style.borderRadius = '12px';
     canvas.style.border = '8px solid white';
     canvas.style.boxShadow = '0 4px 20px rgba(0,0,0,.12)';
     document.getElementById('qrcode').appendChild(canvas);
 });
-</script>
-<style>
-@media print {
-    /* Hide everything */
-    body * { visibility: hidden !important; }
 
-    /* Show only the QR canvas and its label */
-    #qrcode,
-    #qrcode *,
-    #qrToken { visibility: visible !important; }
+function printQR() {
+    const canvas = document.getElementById('qrCanvas');
+    if (!canvas) { alert('QR code not ready yet.'); return; }
 
-    /* Center QR on the printed page */
-    #qrcode {
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -60%) !important;
-    }
-
-    #qrcode canvas {
-        width: 350px !important;
-        height: 350px !important;
-        display: block !important;
-    }
+    const dataUrl = canvas.toDataURL('image/png');
+    const win = window.open('', '_blank', 'width=480,height=560');
+    win.document.write(
+        '<!DOCTYPE html><html><head><title>Office Check-In QR</title>' +
+        '<style>' +
+        'body{margin:0;display:flex;flex-direction:column;align-items:center;' +
+        'justify-content:center;min-height:100vh;font-family:sans-serif;background:#fff;}' +
+        'img{width:320px;height:320px;border-radius:12px;}' +
+        'h3{margin:16px 0 4px;font-size:18px;color:#0f172a;}' +
+        'p{margin:0;font-size:12px;color:#64748b;}' +
+        '</style></head><body>' +
+        '<img src="' + dataUrl + '">' +
+        '<h3>CreativLab Office Check-In</h3>' +
+        '<p>' + new Date().toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long',year:'numeric'}) + '</p>' +
+        '<script>window.onload=function(){window.print();window.onafterprint=function(){window.close();};};<\/script>' +
+        '</body></html>'
+    );
+    win.document.close();
 }
-</style>
+</script>
 @endpush
