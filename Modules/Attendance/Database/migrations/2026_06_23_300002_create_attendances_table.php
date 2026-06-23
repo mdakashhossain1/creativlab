@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
-            $table->foreignId('device_id')->nullable()->constrained('attendance_devices')->nullOnDelete();
+            $table->unsignedBigInteger('team_id')->index();
+            $table->unsignedBigInteger('device_id')->nullable()->index();
             $table->date('date');
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();

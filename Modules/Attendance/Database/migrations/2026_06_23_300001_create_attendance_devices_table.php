@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('attendance_devices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
+            $table->unsignedBigInteger('team_id')->index();
             $table->string('device_name');
             $table->enum('device_type', ['android', 'windows', 'other'])->default('other');
             $table->string('device_fingerprint')->unique();
