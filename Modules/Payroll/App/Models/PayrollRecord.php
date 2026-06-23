@@ -15,6 +15,8 @@ class PayrollRecord extends Model
     ];
 
     protected $casts = [
+        'year'        => 'integer',
+        'month'       => 'integer',
         'paid_at'     => 'datetime',
         'base_salary' => 'decimal:2',
         'bonus'       => 'decimal:2',
