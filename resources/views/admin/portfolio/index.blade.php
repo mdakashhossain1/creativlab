@@ -106,10 +106,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" style="white-space:nowrap;">{{ __('Edit Category') }}</h5>
-                <button type="button" data-bs-dismiss="modal" style="background:none;border:none;cursor:pointer;padding:4px;line-height:1;color:#000;margin-left:auto;flex-shrink:0;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
+                <h5 class="modal-title">{{ __('Edit Category') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="editCategoryForm" method="POST" action="">
                 @csrf
@@ -124,9 +122,9 @@
                         <input class="crancy__item-input" type="text" id="editCatDesc" name="description">
                     </div>
                 </div>
-                <div class="modal-footer" style="display:flex !important; flex-direction:row !important; gap:8px; justify-content:flex-end;">
-                    <button type="button" class="btn btn-secondary" style="width:auto !important;" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="submit" class="crancy-btn" style="width:auto !important;">{{ __('Save Changes') }}</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
+                    <button type="submit" class="crancy-btn"><i class="fas fa-check"></i> {{ __('Save Changes') }}</button>
                 </div>
             </form>
         </div>
@@ -139,9 +137,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
-                <button type="button" data-bs-dismiss="modal" style="background:none;border:none;cursor:pointer;padding:4px;line-height:1;color:#000;margin-left:auto;flex-shrink:0;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <p>{{ __('Are you really want to delete this item?') }}</p>
@@ -150,8 +146,8 @@
                 <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary">{{ __('Yes, Delete') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i> {{ __('Yes, Delete') }}</button>
                 </form>
             </div>
         </div>
