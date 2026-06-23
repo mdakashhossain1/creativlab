@@ -9,6 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('project_translations', function (Blueprint $table) {
+            if (!Schema::hasColumn('project_translations', 'short_description')) {
+                $table->string('short_description')->nullable()->after('description');
+            }
             if (!Schema::hasColumn('project_translations', 'author_comment')) {
                 $table->text('author_comment')->nullable()->after('seo_description');
             }
@@ -18,9 +21,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('project_translations', function (Blueprint $table) {
-            if (Schema::hasColumn('project_translations', 'author_comment')) {
-                $table->dropColumn('author_comment');
-            }
+            $table->dropColumnIfExists('short_description');
+            $table->dropColumnIfExists('author_comment');
         });
     }
 };
