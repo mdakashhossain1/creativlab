@@ -82,7 +82,7 @@
                                     <th class="crancy-table__h2">{{ __('Type') }}</th>
                                     <th class="crancy-table__h2">{{ __('Title') }}</th>
                                     <th class="crancy-table__h2">{{ __('Source URL') }}</th>
-                                    <th class="crancy-table__h2">{{ __('Actions') }}</th>
+                                    <th class="crancy-table__h2">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="crancy-table__body">
@@ -90,9 +90,7 @@
                                 <tr>
                                     <td class="crancy-table__data-1">{{ $loop->iteration }}</td>
                                     <td class="crancy-table__data-2">
-                                        @php
-                                            $thumb = $item->thumbnail ?: ($item->type === 'image' ? $item->content_source : null);
-                                        @endphp
+                                        @php $thumb = $item->thumbnail ?: ($item->type === 'image' ? $item->content_source : null); @endphp
                                         @if($thumb)
                                             <img src="{{ $thumb }}" alt="" style="width:80px;height:60px;object-fit:cover;border-radius:6px;">
                                         @elseif($item->type === 'video')
@@ -111,11 +109,28 @@
                                         <small class="text-muted" style="word-break:break-all;max-width:200px;display:block;">{{ Str::limit($item->content_source, 60) }}</small>
                                     </td>
                                     <td class="crancy-table__data-2">
-                                        <form action="{{ route('admin.portfolio.item.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this item?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="crancy-btn crancy-btn__small crancy-btn__danger" type="submit">{{ __('Delete') }}</button>
-                                        </form>
+                                        <div class="dropdown">
+                                            <button class="crancy-btn dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{ __('Action') }}
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a onclick="editItem({{ $item->id }}, '{{ $item->type }}', '{{ addslashes($item->content_source) }}', '{{ addslashes($item->thumbnail) }}', '{{ addslashes($item->title) }}', '{{ addslashes($item->description) }}')"
+                                                       href="javascript:;" data-bs-toggle="modal" data-bs-target="#editItemModal"
+                                                       class="dropdown-item">
+                                                        <i class="fas fa-edit"></i> {{ __('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a onclick="setItemDelete({{ $item->id }})"
+                                                       href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                       class="dropdown-item">
+                                                        <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -130,17 +145,100 @@
         </div>
     </div>
 </section>
+
+{{-- Edit Item Modal --}}
+<div class="modal fade" id="editItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('Edit Item') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editItemForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="crancy__item-form--group mb-3">
+                                <label class="crancy__item-label">{{ __('Type') }}</label>
+                                <select name="type" id="editItemType" class="crancy__item-input">
+                                    <option value="image">Image</option>
+                                    <option value="video">Video (direct URL)</option>
+                                    <option value="bunny">Bunny Stream (iframe)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="crancy__item-form--group mb-3">
+                                <label class="crancy__item-label">{{ __('Source URL') }}</label>
+                                <input class="crancy__item-input" type="text" id="editItemSource" name="content_source" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="crancy__item-form--group mb-3">
+                                <label class="crancy__item-label">{{ __('Thumbnail URL') }}</label>
+                                <input class="crancy__item-input" type="text" id="editItemThumb" name="thumbnail">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="crancy__item-form--group mb-3">
+                                <label class="crancy__item-label">{{ __('Title') }}</label>
+                                <input class="crancy__item-input" type="text" id="editItemTitle" name="title">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="crancy__item-form--group">
+                                <label class="crancy__item-label">{{ __('Description') }}</label>
+                                <input class="crancy__item-input" type="text" id="editItemDesc" name="description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="submit" class="crancy-btn">{{ __('Save Changes') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Delete Confirmation Modal --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('Are you really want to delete this item?') }}</p>
+            </div>
+            <div class="modal-footer">
+                <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Yes, Delete') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('js_section')
 <script>
+"use strict"
+
+// Add item form — type switcher
 (function () {
     const select = document.getElementById('item-type-select');
     const sourceLabel = document.getElementById('source-label');
     const sourceInput = document.getElementById('source-input');
     const hintVideo = document.getElementById('hint-video');
     const hintBunny = document.getElementById('hint-bunny');
-
     const labels = {
         image: 'Image URL (Bunny CDN or any image URL)',
         video: 'Video URL (.mp4 / .webm from Bunny CDN)',
@@ -151,7 +249,6 @@
         video: 'https://creativlab.b-cdn.net/portfolio/video.mp4',
         bunny: 'https://iframe.mediadelivery.net/embed/{library_id}/{video_id}',
     };
-
     select.addEventListener('change', function () {
         const v = this.value;
         sourceLabel.textContent = labels[v];
@@ -160,5 +257,20 @@
         hintBunny.classList.toggle('d-none', v !== 'bunny');
     });
 })();
+
+// Edit item modal
+function editItem(id, type, source, thumb, title, desc) {
+    document.getElementById('editItemForm').action = '{{ url("admin/portfolio/item") }}/' + id;
+    document.getElementById('editItemType').value = type;
+    document.getElementById('editItemSource').value = source;
+    document.getElementById('editItemThumb').value = thumb || '';
+    document.getElementById('editItemTitle').value = title || '';
+    document.getElementById('editItemDesc').value = desc || '';
+}
+
+// Delete item modal
+function setItemDelete(id) {
+    document.getElementById('item_delect_confirmation').action = '{{ url("admin/portfolio/item") }}/' + id;
+}
 </script>
 @endpush

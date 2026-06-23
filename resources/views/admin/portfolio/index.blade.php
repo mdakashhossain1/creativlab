@@ -45,7 +45,7 @@
                                     <th class="crancy-table__column-1 crancy-table__h1">#</th>
                                     <th class="crancy-table__column-2 crancy-table__h2">{{ __('Name') }}</th>
                                     <th class="crancy-table__column-3 crancy-table__h2">{{ __('Items') }}</th>
-                                    <th class="crancy-table__column-4 crancy-table__h2">{{ __('Actions') }}</th>
+                                    <th class="crancy-table__column-4 crancy-table__h2">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="crancy-table__body">
@@ -60,12 +60,33 @@
                                         <span class="crancy-badge crancy-badge__active">{{ $cat->items_count }}</span>
                                     </td>
                                     <td class="crancy-table__column-4 crancy-table__data-2">
-                                        <a href="{{ route('admin.portfolio.items', $cat->id) }}" class="crancy-btn crancy-btn__small crancy-btn__secondary">{{ __('Manage Items') }}</a>
-                                        <form action="{{ route('admin.portfolio.category.destroy', $cat->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this category and all its items?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="crancy-btn crancy-btn__small crancy-btn__danger" type="submit">{{ __('Delete') }}</button>
-                                        </form>
+                                        <div class="dropdown">
+                                            <button class="crancy-btn dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{ __('Action') }}
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ route('admin.portfolio.items', $cat->id) }}" class="dropdown-item">
+                                                        <i class="fas fa-list"></i> {{ __('Manage Items') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a onclick="editCategory({{ $cat->id }}, '{{ addslashes($cat->name) }}', '{{ addslashes($cat->description) }}')"
+                                                       href="javascript:;" data-bs-toggle="modal" data-bs-target="#editCategoryModal"
+                                                       class="dropdown-item">
+                                                        <i class="fas fa-edit"></i> {{ __('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a onclick="setCategoryDelete({{ $cat->id }})"
+                                                       href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                       class="dropdown-item">
+                                                        <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -79,4 +100,71 @@
         </div>
     </div>
 </section>
+
+{{-- Edit Category Modal --}}
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('Edit Category') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editCategoryForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="crancy__item-form--group mb-3">
+                        <label class="crancy__item-label">{{ __('Category Name') }}</label>
+                        <input class="crancy__item-input" type="text" id="editCatName" name="name" required>
+                    </div>
+                    <div class="crancy__item-form--group">
+                        <label class="crancy__item-label">{{ __('Description') }}</label>
+                        <input class="crancy__item-input" type="text" id="editCatDesc" name="description">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="submit" class="crancy-btn">{{ __('Save Changes') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Delete Confirmation Modal --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Confirmation') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('Are you really want to delete this item?') }}</p>
+            </div>
+            <div class="modal-footer">
+                <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Yes, Delete') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('js_section')
+<script>
+"use strict"
+function editCategory(id, name, desc) {
+    document.getElementById('editCategoryForm').action = '{{ url("admin/portfolio/category") }}/' + id;
+    document.getElementById('editCatName').value = name;
+    document.getElementById('editCatDesc').value = desc || '';
+}
+function setCategoryDelete(id) {
+    document.getElementById('item_delect_confirmation').action = '{{ url("admin/portfolio/category") }}/' + id;
+}
+</script>
+@endpush

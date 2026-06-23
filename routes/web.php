@@ -216,9 +216,11 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['admin.reme
         Route::controller(AdminPortfolioController::class)->prefix('portfolio')->name('portfolio.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/category', 'storeCategory')->name('category.store');
+            Route::put('/category/{id}', 'updateCategory')->name('category.update');
             Route::delete('/category/{id}', 'destroyCategory')->name('category.destroy');
             Route::get('/category/{id}/items', 'items')->name('items');
             Route::post('/category/{id}/items', 'storeItem')->name('item.store');
+            Route::put('/item/{id}', 'updateItem')->name('item.update');
             Route::delete('/item/{id}', 'destroyItem')->name('item.destroy');
         });
     });

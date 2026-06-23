@@ -30,6 +30,17 @@ class PortfolioController extends Controller
         return redirect()->back()->with($notify);
     }
 
+    public function updateCategory(Request $request, $id)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        PortfolioCategory::findOrFail($id)->update([
+            'name'        => $request->name,
+            'description' => $request->description,
+        ]);
+        $notify = ['message' => 'Category updated successfully', 'alert-type' => 'success'];
+        return redirect()->route('admin.portfolio.index')->with($notify);
+    }
+
     public function destroyCategory($id)
     {
         PortfolioCategory::findOrFail($id)->delete();
@@ -65,6 +76,22 @@ class PortfolioController extends Controller
         ]);
 
         $notify = ['message' => 'Item added successfully', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify);
+    }
+
+    public function updateItem(Request $request, $id)
+    {
+        $request->validate([
+            'type'           => 'required|in:image,video,bunny',
+            'content_source' => 'required|string',
+            'thumbnail'      => 'nullable|string',
+            'title'          => 'nullable|string|max:255',
+            'description'    => 'nullable|string',
+        ]);
+        PortfolioItem::findOrFail($id)->update(
+            $request->only(['type', 'content_source', 'thumbnail', 'title', 'description'])
+        );
+        $notify = ['message' => 'Item updated successfully', 'alert-type' => 'success'];
         return redirect()->back()->with($notify);
     }
 
