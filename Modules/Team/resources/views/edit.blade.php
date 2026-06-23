@@ -161,8 +161,7 @@
 
                                                     <div class="col-md-6">
                                                         <div class="crancy__item-form--group mg-top-form-20">
-                                                            <label class="crancy__item-label">{{ __('Facebook URL') }}
-                                                                *</label>
+                                                            <label class="crancy__item-label">{{ __('Facebook URL') }}</label>
                                                             <input class="crancy__item-input" type="text"
                                                                 name="facebook" id="facebook"
                                                                 value="{{ $teamMember->facebook }}">
