@@ -31,5 +31,7 @@
     "City": true,
     "Menu": true,
     "Coupon": true,
-    "SupportTicket": true
+    "SupportTicket": true,
+    "Admin": true,
+    "User": true
 }
