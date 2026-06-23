@@ -83,14 +83,14 @@ class ProjectController extends Controller
         $project->slug = $request->slug;
         $project->website_url = $request->website_url;
         $project->project_date = $request->project_date;
-        $project->project_fb = $request->project_fb;
-        $project->project_x = $request->project_x;
-        $project->project_linkedin = $request->project_linkedin;
-        $project->project_instagram = $request->project_instagram;
+        $project->project_fb = $request->input('project_fb', '');
+        $project->project_x = $request->input('project_x', '');
+        $project->project_linkedin = $request->input('project_linkedin', '');
+        $project->project_instagram = $request->input('project_instagram', '');
         $project->status = 'enable';
-        $project->video_url = $request->video_url;
-        $project->author_name = $request->author_name;
-        $project->author_designation = $request->author_designation;
+        $project->video_url = $request->input('video_url', '');
+        $project->author_name = $request->input('author_name', '');
+        $project->author_designation = $request->input('author_designation', '');
         $project->save();
 
         $languages = Language::all();
@@ -179,13 +179,13 @@ class ProjectController extends Controller
             $project->slug = $request->slug;
             $project->website_url = $request->website_url;
             $project->project_date = $request->project_date;
-            $project->project_fb = $request->project_fb;
-            $project->project_x = $request->project_x;
-            $project->project_linkedin = $request->project_linkedin;
-            $project->project_instagram = $request->project_instagram;
-            $project->video_url = $request->video_url;
-            $project->author_name = $request->author_name;
-            $project->author_designation = $request->author_designation;
+            $project->project_fb = $request->input('project_fb', '');
+            $project->project_x = $request->input('project_x', '');
+            $project->project_linkedin = $request->input('project_linkedin', '');
+            $project->project_instagram = $request->input('project_instagram', '');
+            $project->video_url = $request->input('video_url', '');
+            $project->author_name = $request->input('author_name', '');
+            $project->author_designation = $request->input('author_designation', '');
             $project->save();
         }
 
