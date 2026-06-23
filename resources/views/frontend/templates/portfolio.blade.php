@@ -162,6 +162,15 @@
         from { opacity:.4; } to { opacity:1; }
     }
     #pf-scroll-sentinel { height:1px; }
+
+    /* Fix header dropdown menus getting cut off */
+    .header-wrapper li.group:hover > div {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .header-wrapper li.group:hover > div > ul {
+        overflow: visible !important;
+    }
 </style>
 @endpush
 
