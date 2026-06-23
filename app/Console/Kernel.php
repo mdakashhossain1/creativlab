@@ -15,6 +15,14 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('installments:generate-monthly')->dailyAt('00:01');
         $schedule->command('cron:heartbeat')->everyMinute();
+
+        // Process queued mail jobs every minute; --stop-when-empty exits once
+        // the queue is drained so it doesn't outlive the cron window.
+        // withoutOverlapping(2) prevents a second worker starting if the first
+        // is still running (lock auto-expires after 2 minutes).
+        $schedule->command('queue:work --stop-when-empty --tries=3 --timeout=55')
+                 ->everyMinute()
+                 ->withoutOverlapping(2);
     }
 
     /**
