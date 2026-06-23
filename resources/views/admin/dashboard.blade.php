@@ -79,20 +79,20 @@
                                                     </p>
                                                 @else
                                                     <p style="margin:0 0 6px; font-size:13px; color:#5d6a83;">{{ __('Never detected. Add this to your server cron:') }}</p>
-                                                    <div style="border:1.5px solid #d0d8ff; border-radius:8px; overflow:hidden; width:100%;">
-                                                        <div style="display:flex; align-items:stretch; background:#f0f2ff;">
-                                                            <div style="flex:1; overflow-x:auto; min-width:0;">
+                                                    <div style="border-radius:8px; overflow:hidden; width:100%; background:#1a2744 !important;">
+                                                        <div style="display:flex; align-items:stretch;">
+                                                            <div style="flex:1; min-width:0; overflow-x:auto;">
                                                                 <code id="cronCmdText"
-                                                                      style="display:block; padding:11px 14px; white-space:nowrap;
-                                                                             font-family:'Courier New',Courier,monospace;
-                                                                             font-size:11.5px; line-height:1.7;
-                                                                             color:#1e3a5f !important; background:transparent;
-                                                                             border:none; outline:none; margin:0; width:max-content;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
+                                                                      style="display:block !important; padding:11px 16px; white-space:nowrap !important;
+                                                                             font-family:'Courier New',Courier,monospace !important;
+                                                                             font-size:12px !important; line-height:1.8 !important;
+                                                                             color:#a5f3fc !important; background:#1a2744 !important;
+                                                                             border:none !important; outline:none; margin:0; width:max-content;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
                                                             </div>
                                                             <button id="cronCopyBtn" title="{{ __('Copy') }}"
-                                                                    style="background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
+                                                                    style="background:#243560 !important; border:none; border-left:1.5px solid #2d4070;
                                                                            cursor:pointer; padding:0 14px; flex-shrink:0;
-                                                                           color:#2b4dff; display:flex; align-items:center; align-self:stretch;">
+                                                                           color:#7cb9f5 !important; display:flex; align-items:center; align-self:stretch;">
                                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                                                                     <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
                                                                     <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
