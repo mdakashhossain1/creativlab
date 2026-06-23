@@ -89,20 +89,22 @@
 const token = 'CREATIVLAB_OFFICE_CHECKIN_{{ date("Ymd") }}';
 document.getElementById('qrToken').textContent = token;
 
-QRCode.toCanvas(document.createElement('canvas'), token, {
+let _qrCanvas = null;
+
+const qrContainer = document.getElementById('qrcode');
+QRCode.toCanvas(qrContainer, token, {
     width: 280, margin: 2,
     color: { dark: '#0f172a', light: '#ffffff' }
 }, function (err, canvas) {
-    if (err) return;
-    canvas.id = 'qrCanvas';
+    if (err) { console.error('QR error', err); return; }
+    _qrCanvas = canvas;
     canvas.style.borderRadius = '12px';
     canvas.style.border = '8px solid white';
     canvas.style.boxShadow = '0 4px 20px rgba(0,0,0,.12)';
-    document.getElementById('qrcode').appendChild(canvas);
 });
 
 function printQR() {
-    const canvas = document.getElementById('qrCanvas');
+    const canvas = _qrCanvas || document.querySelector('#qrcode canvas');
     if (!canvas) { alert('QR code not ready yet.'); return; }
 
     const dataUrl = canvas.toDataURL('image/png');
