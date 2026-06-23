@@ -57,7 +57,7 @@ class ProductController extends Controller
         $product = $id ? Product::findOrFail($id) : new Product();
         $product->slug = $request->slug;
         $product->price = $request->price;
-        $product->tags = $request->tags;
+        $product->tags = $request->input('tags') ?? '[]';
         $product->offer_price = $request->filled('offer_price') ? $request->offer_price : null;
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
