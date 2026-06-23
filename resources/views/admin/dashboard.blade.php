@@ -15,8 +15,8 @@
         }
         .cron-pulse-dot { animation: cron-pulse-anim 1.4s infinite; }
         #cron-status-card { transition: none !important; }
-        #cron-cmd-box code { color: var(--theme-color); font-size: 12.5px; }
-        #cronCopyBtn:hover { color: var(--theme-color) !important; }
+        #cronCmdText { cursor: default; }
+        #cronCopyBtn:hover { opacity: 0.8; }
     </style>
 @endpush
 @section('body-content')
@@ -79,26 +79,21 @@
                                                     </p>
                                                 @else
                                                     <p style="margin:0 0 6px; font-size:13px; color:#5d6a83;">{{ __('Never detected. Add this to your server cron:') }}</p>
-                                                    <div style="border-radius:8px; overflow:hidden; width:100%; background:#1a2744 !important;">
-                                                        <div style="display:flex; align-items:stretch;">
-                                                            <div style="flex:1; min-width:0; overflow-x:auto;">
-                                                                <code id="cronCmdText"
-                                                                      style="display:block !important; padding:11px 16px; white-space:nowrap !important;
-                                                                             font-family:'Courier New',Courier,monospace !important;
-                                                                             font-size:12px !important; line-height:1.8 !important;
-                                                                             color:#a5f3fc !important; background:#1a2744 !important;
-                                                                             border:none !important; outline:none; margin:0; width:max-content;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</code>
-                                                            </div>
-                                                            <button id="cronCopyBtn" title="{{ __('Copy') }}"
-                                                                    style="background:#243560 !important; border:none; border-left:1.5px solid #2d4070;
-                                                                           cursor:pointer; padding:0 14px; flex-shrink:0;
-                                                                           color:#7cb9f5 !important; display:flex; align-items:center; align-self:stretch;">
-                                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                                                                    <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
-                                                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                                    <div style="display:flex; align-items:stretch; border:1.5px solid #d0d8ff; border-radius:8px; background:#f0f2ff; overflow:hidden;">
+                                                        <textarea id="cronCmdText" readonly rows="1"
+                                                                  style="flex:1; resize:none; border:none; outline:none; background:#f0f2ff;
+                                                                         font-family:'Courier New',Courier,monospace; font-size:11.5px;
+                                                                         color:#1e3a5f; line-height:1.7; padding:11px 14px;
+                                                                         white-space:nowrap; overflow-x:auto; overflow-y:hidden;">* * * * * curl -s "{{ $cron_url }}" > /dev/null 2>&1</textarea>
+                                                        <button id="cronCopyBtn" title="{{ __('Copy') }}"
+                                                                style="background:#e8edff; border:none; border-left:1.5px solid #d0d8ff;
+                                                                       cursor:pointer; padding:0 14px; flex-shrink:0;
+                                                                       color:#2b4dff; display:flex; align-items:center;">
+                                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                                                                <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+                                                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 @endif
                                             </div>
@@ -913,7 +908,7 @@
     <script>
         $(document).ready(function () {
             $('#cronCopyBtn').on('click', function () {
-                var text = $('#cronCmdText').text().trim();
+                var text = $('#cronCmdText').val().trim();
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(text).then(function () {
                         toastr.success('{{ __("Cron command copied to clipboard!") }}');
