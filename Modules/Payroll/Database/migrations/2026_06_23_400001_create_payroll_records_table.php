@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('payroll_records', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id');
+            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
             $table->smallInteger('year')->unsigned();
             $table->tinyInteger('month')->unsigned();
             $table->decimal('base_salary', 10, 2);
@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->unique(['team_id', 'year', 'month']);
         });
     }
