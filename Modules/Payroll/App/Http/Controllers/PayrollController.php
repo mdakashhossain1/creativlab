@@ -102,7 +102,7 @@ class PayrollController extends Controller
             Log::error('Payroll mark-paid email error: ' . $e->getMessage());
         }
 
-        $notification = ['messege' => 'Marked as paid. Email sent to team member.', 'alert-type' => 'success'];
+        $notification = ['messege' => 'Marked as paid successfully.', 'alert-type' => 'success'];
         return redirect()->route('admin.payroll.index', ['year' => $record->year, 'month' => $record->month])
                          ->with($notification);
     }
