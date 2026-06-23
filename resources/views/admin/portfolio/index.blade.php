@@ -122,9 +122,9 @@
                         <input class="crancy__item-input" type="text" id="editCatDesc" name="description">
                     </div>
                 </div>
-                <div class="modal-footer" style="justify-content:space-between;">
-                    <button type="submit" class="crancy-btn"><i class="fas fa-check"></i> {{ __('Save Changes') }}</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
+                <div class="modal-footer" style="display:flex; flex-wrap:nowrap; justify-content:space-between; gap:10px;">
+                    <button type="submit" class="crancy-btn" style="width:auto !important;"><i class="fas fa-check"></i> {{ __('Save Changes') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;"><i class="fas fa-times"></i> {{ __('Cancel') }}</button>
                 </div>
             </form>
         </div>
@@ -146,8 +146,8 @@
                 <form action="" id="item_delect_confirmation" class="delet_modal_form" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> {{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-trash"></i> {{ __('Yes, Delete') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;"><i class="fas fa-times"></i> {{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary" style="width:auto !important;"><i class="fas fa-trash"></i> {{ __('Yes, Delete') }}</button>
                 </form>
             </div>
         </div>
