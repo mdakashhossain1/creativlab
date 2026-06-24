@@ -187,7 +187,6 @@ return [
          */
 
          Intervention\Image\ImageServiceProvider::class,
-         App\Arknox\ArknoxServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -213,8 +212,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Image'  => Intervention\Image\Facades\Image::class,
-        'Arknox' => App\Arknox\ArknoxFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];
