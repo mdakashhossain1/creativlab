@@ -7,12 +7,18 @@ use Illuminate\Support\Facades\DB;
 class BillingEngine
 {
     /**
-     * Return the invoice for the period.
-     * Paid invoices are locked snapshots. Pending/unpaid invoices always
-     * recalculate from live usage so the running total stays current.
+     * Return invoice data for a period.
+     *
+     * Current month  → live accumulation preview, never written to DB, status = "accumulating".
+     * Past months    → auto-generate and persist the real invoice on first access.
+     * Paid invoices  → locked snapshot, never recalculated.
      */
     public function invoice(int $year, int $month): array
     {
+        if ($this->isCurrentMonth($year, $month)) {
+            return $this->liveUsage($year, $month);
+        }
+
         $existing = DB::table('arknox_invoices')
             ->where('year', $year)
             ->where('month', $month)
@@ -26,11 +32,15 @@ class BillingEngine
     }
 
     /**
-     * Generate and save an invoice for the given period.
-     * Safe to call multiple times — returns existing record if already generated.
+     * Generate and persist an invoice for a completed past month.
+     * Blocked for the current month — invoices are only final once the month ends.
      */
     public function generate(int $year, int $month): array
     {
+        if ($this->isCurrentMonth($year, $month)) {
+            return $this->liveUsage($year, $month);
+        }
+
         $usage = DB::table('arknox_usage_monthly')
             ->where('year', $year)
             ->where('month', $month)
@@ -38,8 +48,8 @@ class BillingEngine
 
         $queries     = (int)   ($usage?->query_count ?? 0);
         $baseRent    = (float) config('arknoxmonitor.base_rent', 7.00);
-        $freeQuota   = (int)   config('arknoxmonitor.free_queries', 10000);
-        $overageRate = (float) config('arknoxmonitor.overage_rate', 0.0001);
+        $freeQuota   = (int)   config('arknoxmonitor.free_queries', 0);
+        $overageRate = (float) config('arknoxmonitor.overage_rate', 0.001);
 
         $overage       = max(0, $queries - $freeQuota);
         $overageAmount = round($overage * $overageRate, 4);
@@ -58,7 +68,6 @@ class BillingEngine
                 'updated_at'     => now(),
             ],
             ['year', 'month'],
-            // Only update usage snapshot if not yet paid
             ['query_count', 'overage_amount', 'total_amount', 'updated_at']
         );
 
@@ -66,8 +75,20 @@ class BillingEngine
         return $this->format($row);
     }
 
+    /**
+     * Mark a past-month invoice as paid. Blocked for the current month.
+     */
     public function markPaid(int $year, int $month): array
     {
+        if ($this->isCurrentMonth($year, $month)) {
+            return array_merge($this->liveUsage($year, $month), [
+                'error' => 'Cannot mark the current month as paid — the month is still accumulating.',
+            ]);
+        }
+
+        // Auto-generate the invoice first if it doesn't exist yet
+        $this->generate($year, $month);
+
         DB::table('arknox_invoices')
             ->where('year', $year)
             ->where('month', $month)
@@ -78,6 +99,10 @@ class BillingEngine
 
     public function markUnpaid(int $year, int $month): array
     {
+        if ($this->isCurrentMonth($year, $month)) {
+            return $this->liveUsage($year, $month);
+        }
+
         DB::table('arknox_invoices')
             ->where('year', $year)
             ->where('month', $month)
@@ -96,30 +121,66 @@ class BillingEngine
         return $rows->map(fn($r) => $this->format($r))->all();
     }
 
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    private function isCurrentMonth(int $year, int $month): bool
+    {
+        return $year === (int) now()->year && $month === (int) now()->month;
+    }
+
+    /**
+     * Live preview for the current (still-running) month.
+     * Never written to the DB — status is "accumulating".
+     */
+    private function liveUsage(int $year, int $month): array
+    {
+        $usage       = DB::table('arknox_usage_monthly')
+                         ->where('year', $year)->where('month', $month)->first();
+        $queries     = (int)   ($usage?->query_count ?? 0);
+        $timeMs      = (int)   ($usage?->total_time_ms ?? 0);
+        $baseRent    = (float) config('arknoxmonitor.base_rent', 7.00);
+        $freeQuota   = (int)   config('arknoxmonitor.free_queries', 0);
+        $overageRate = (float) config('arknoxmonitor.overage_rate', 0.001);
+        $overage     = max(0, $queries - $freeQuota);
+        $overageAmt  = round($overage * $overageRate, 4);
+
+        return [
+            'period'           => ['year' => $year, 'month' => $month],
+            'request_count'    => $queries,
+            'total_time_ms'    => $timeMs,
+            'avg_response_ms'  => $queries > 0 ? round($timeMs / $queries, 2) : 0,
+            'free_quota'       => $freeQuota,
+            'overage_requests' => $overage,
+            'base_rent_usd'    => $baseRent,
+            'overage_amount'   => $overageAmt,
+            'total_usd'        => round($baseRent + $overageAmt, 4),
+            'status'           => 'accumulating',
+            'paid_at'          => null,
+        ];
+    }
+
     private function format(object $row): array
     {
-        $freeQuota  = (int) config('arknoxmonitor.free_queries', 0);
-        $queries    = (int) $row->query_count;
-        $usage      = DB::table('arknox_usage_monthly')
-            ->where('year', $row->year)
-            ->where('month', $row->month)
-            ->first();
+        $freeQuota = (int) config('arknoxmonitor.free_queries', 0);
+        $queries   = (int) $row->query_count;
+        $usage     = DB::table('arknox_usage_monthly')
+                       ->where('year', $row->year)->where('month', $row->month)->first();
 
         $liveRequests = (int) ($usage?->query_count ?? $queries);
         $timeMs       = (int) ($usage?->total_time_ms ?? 0);
 
         return [
-            'period'            => ['year' => (int) $row->year, 'month' => (int) $row->month],
-            'request_count'     => $queries,
-            'total_time_ms'     => $timeMs,
-            'avg_response_ms'   => $liveRequests > 0 ? round($timeMs / $liveRequests, 2) : 0,
-            'free_quota'        => $freeQuota,
-            'overage_requests'  => max(0, $queries - $freeQuota),
-            'base_rent_usd'     => (float) $row->base_rent,
-            'overage_amount'    => (float) $row->overage_amount,
-            'total_usd'         => (float) $row->total_amount,
-            'status'            => $row->status,
-            'paid_at'           => $row->paid_at ?? null,
+            'period'           => ['year' => (int) $row->year, 'month' => (int) $row->month],
+            'request_count'    => $queries,
+            'total_time_ms'    => $timeMs,
+            'avg_response_ms'  => $liveRequests > 0 ? round($timeMs / $liveRequests, 2) : 0,
+            'free_quota'       => $freeQuota,
+            'overage_requests' => max(0, $queries - $freeQuota),
+            'base_rent_usd'    => (float) $row->base_rent,
+            'overage_amount'   => (float) $row->overage_amount,
+            'total_usd'        => (float) $row->total_amount,
+            'status'           => $row->status,
+            'paid_at'          => $row->paid_at ?? null,
         ];
     }
 }
