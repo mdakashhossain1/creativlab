@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\DB;
 class BillingEngine
 {
     /**
-     * Return an existing invoice for the period, or generate and persist one.
+     * Return the invoice for the period.
+     * Paid invoices are locked snapshots. Pending/unpaid invoices always
+     * recalculate from live usage so the running total stays current.
      */
     public function invoice(int $year, int $month): array
     {
@@ -16,7 +18,7 @@ class BillingEngine
             ->where('month', $month)
             ->first();
 
-        if ($existing) {
+        if ($existing && $existing->status === 'paid') {
             return $this->format($existing);
         }
 
@@ -96,18 +98,21 @@ class BillingEngine
 
     private function format(object $row): array
     {
-        $freeQuota = (int) config('arknoxmonitor.free_queries', 10000);
-        $queries   = (int) $row->query_count;
-        $usage     = DB::table('arknox_usage_monthly')
+        $freeQuota  = (int) config('arknoxmonitor.free_queries', 0);
+        $queries    = (int) $row->query_count;
+        $usage      = DB::table('arknox_usage_monthly')
             ->where('year', $row->year)
             ->where('month', $row->month)
             ->first();
 
+        $liveQueries = (int) ($usage?->query_count ?? $queries);
+        $timeMs      = (int) ($usage?->total_time_ms ?? 0);
+
         return [
             'period'           => ['year' => (int) $row->year, 'month' => (int) $row->month],
             'query_count'      => $queries,
-            'total_time_ms'    => (int) ($usage?->total_time_ms ?? 0),
-            'avg_query_ms'     => $queries > 0 ? round(($usage?->total_time_ms ?? 0) / $queries, 2) : 0,
+            'total_time_ms'    => $timeMs,
+            'avg_query_ms'     => $liveQueries > 0 ? round($timeMs / $liveQueries, 2) : 0,
             'free_quota'       => $freeQuota,
             'overage_queries'  => max(0, $queries - $freeQuota),
             'base_rent_usd'    => (float) $row->base_rent,

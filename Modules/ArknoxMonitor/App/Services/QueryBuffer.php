@@ -22,6 +22,10 @@ class QueryBuffer
         if (self::$listening) return;
         self::$listening = true;
 
+        // Skip tracking for ArknoxMonitor's own API requests
+        $prefix = trim(config('arknoxmonitor.route_prefix', 'arknox-monitor'), '/');
+        if (str_starts_with(request()->path(), $prefix)) return;
+
         $exclude = config('arknoxmonitor.exclude_connections', []);
 
         DB::listen(function ($query) use ($exclude) {
@@ -30,7 +34,6 @@ class QueryBuffer
 
             self::$queries++;
             self::$timeMs += (float) $query->time;
-            // rowCount not available from QueryExecuted; track time + count only
         });
     }
 
