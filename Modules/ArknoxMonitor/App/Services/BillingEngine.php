@@ -105,21 +105,21 @@ class BillingEngine
             ->where('month', $row->month)
             ->first();
 
-        $liveQueries = (int) ($usage?->query_count ?? $queries);
-        $timeMs      = (int) ($usage?->total_time_ms ?? 0);
+        $liveRequests = (int) ($usage?->query_count ?? $queries);
+        $timeMs       = (int) ($usage?->total_time_ms ?? 0);
 
         return [
-            'period'           => ['year' => (int) $row->year, 'month' => (int) $row->month],
-            'query_count'      => $queries,
-            'total_time_ms'    => $timeMs,
-            'avg_query_ms'     => $liveQueries > 0 ? round($timeMs / $liveQueries, 2) : 0,
-            'free_quota'       => $freeQuota,
-            'overage_queries'  => max(0, $queries - $freeQuota),
-            'base_rent_usd'    => (float) $row->base_rent,
-            'overage_amount'   => (float) $row->overage_amount,
-            'total_usd'        => (float) $row->total_amount,
-            'status'           => $row->status,
-            'paid_at'          => $row->paid_at ?? null,
+            'period'            => ['year' => (int) $row->year, 'month' => (int) $row->month],
+            'request_count'     => $queries,
+            'total_time_ms'     => $timeMs,
+            'avg_response_ms'   => $liveRequests > 0 ? round($timeMs / $liveRequests, 2) : 0,
+            'free_quota'        => $freeQuota,
+            'overage_requests'  => max(0, $queries - $freeQuota),
+            'base_rent_usd'     => (float) $row->base_rent,
+            'overage_amount'    => (float) $row->overage_amount,
+            'total_usd'         => (float) $row->total_amount,
+            'status'            => $row->status,
+            'paid_at'           => $row->paid_at ?? null,
         ];
     }
 }

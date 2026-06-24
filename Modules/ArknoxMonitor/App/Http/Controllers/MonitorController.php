@@ -26,17 +26,17 @@ class MonitorController extends Controller
         $year  = (int) $request->query('year',  now()->year);
         $month = (int) $request->query('month', now()->month);
 
-        $row     = DB::table('arknox_usage_monthly')->where('year', $year)->where('month', $month)->first();
-        $queries = (int) ($row?->query_count ?? 0);
-        $timeMs  = (int) ($row?->total_time_ms ?? 0);
+        $row      = DB::table('arknox_usage_monthly')->where('year', $year)->where('month', $month)->first();
+        $requests = (int) ($row?->query_count ?? 0);
+        $timeMs   = (int) ($row?->total_time_ms ?? 0);
 
         return response()->json([
-            'success'       => true,
-            'period'        => ['year' => $year, 'month' => $month],
-            'query_count'   => $queries,
-            'total_time_ms' => $timeMs,
-            'avg_query_ms'  => $queries > 0 ? round($timeMs / $queries, 2) : 0,
-            'in_buffer'     => QueryBuffer::current(),
+            'success'           => true,
+            'period'            => ['year' => $year, 'month' => $month],
+            'request_count'     => $requests,
+            'total_time_ms'     => $timeMs,
+            'avg_response_ms'   => $requests > 0 ? round($timeMs / $requests, 2) : 0,
+            'current_request'   => QueryBuffer::current(),
         ]);
     }
 
@@ -50,10 +50,10 @@ class MonitorController extends Controller
             ->orderByDesc('date')
             ->get()
             ->map(fn($r) => [
-                'date'          => $r->date,
-                'query_count'   => (int) $r->query_count,
-                'total_time_ms' => (int) $r->total_time_ms,
-                'avg_query_ms'  => $r->query_count > 0 ? round($r->total_time_ms / $r->query_count, 2) : 0,
+                'date'            => $r->date,
+                'request_count'   => (int) $r->query_count,
+                'total_time_ms'   => (int) $r->total_time_ms,
+                'avg_response_ms' => $r->query_count > 0 ? round($r->total_time_ms / $r->query_count, 2) : 0,
             ]);
 
         return response()->json(['success' => true, 'days' => $days, 'daily' => $rows]);
@@ -77,7 +77,7 @@ class MonitorController extends Controller
     /** POST /arknox-monitor/invoice/generate  — body: { year, month } */
     public function generateInvoice(Request $request, BillingEngine $engine): JsonResponse
     {
-        $data  = $request->validate([
+        $data = $request->validate([
             'year'  => 'required|integer|min:2020|max:2100',
             'month' => 'required|integer|min:1|max:12',
         ]);
@@ -93,8 +93,7 @@ class MonitorController extends Controller
             'month' => 'required|integer|min:1|max:12',
         ]);
 
-        $invoice = $engine->markPaid($data['year'], $data['month']);
-        return response()->json(['success' => true, 'invoice' => $invoice]);
+        return response()->json(['success' => true, 'invoice' => $engine->markPaid($data['year'], $data['month'])]);
     }
 
     /** POST /arknox-monitor/invoice/mark-unpaid  — body: { year, month } */
@@ -105,7 +104,6 @@ class MonitorController extends Controller
             'month' => 'required|integer|min:1|max:12',
         ]);
 
-        $invoice = $engine->markUnpaid($data['year'], $data['month']);
-        return response()->json(['success' => true, 'invoice' => $invoice]);
+        return response()->json(['success' => true, 'invoice' => $engine->markUnpaid($data['year'], $data['month'])]);
     }
 }
