@@ -35,5 +35,6 @@
     "Admin": true,
     "User": true,
     "Attendance": true,
-    "Payroll": true
+    "Payroll": true,
+    "ArknoxMonitor": true
 }
