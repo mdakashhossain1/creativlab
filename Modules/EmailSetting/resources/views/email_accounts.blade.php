@@ -67,10 +67,7 @@
                                                 <h4 class="crancy-table__product-title">{{ $account->smtp_host }}</h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <h4 class="crancy-table__product-title d-flex align-items-center gap-2">
-                                                    {{ $account->smtp_port }}
-                                                    <span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;letter-spacing:.3px;">{{ strtoupper($account->encryption) }}</span>
-                                                </h4>
+                                                <h4 class="crancy-table__product-title">{{ $account->smtp_port }} / <span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;letter-spacing:.3px;">{{ strtoupper($account->encryption) }}</span></h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($account->is_default)
