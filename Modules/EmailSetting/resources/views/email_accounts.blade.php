@@ -73,11 +73,13 @@
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($account->is_default)
-                                                    <i class="fas fa-star" style="color:#f59e0b;font-size:18px;" title="{{ __('Default') }}"></i>
+                                                    <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;">
+                                                        <i class="fas fa-star" style="color:#f59e0b;font-size:18px;" title="{{ __('Default') }}"></i>
+                                                    </span>
                                                 @else
-                                                    <form action="{{ route('admin.email-accounts.set-default', $account->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('admin.email-accounts.set-default', $account->id) }}" method="POST" style="display:inline-flex;margin:0;padding:0;">
                                                         @csrf
-                                                        <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;" title="{{ __('Set as Default') }}">
+                                                        <button type="submit" style="background:none;border:none;padding:0;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;" title="{{ __('Set as Default') }}">
                                                             <i class="far fa-star" style="color:#d1d5db;font-size:18px;transition:color .2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#d1d5db'"></i>
                                                         </button>
                                                     </form>
