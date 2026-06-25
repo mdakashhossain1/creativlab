@@ -19,13 +19,15 @@
                                 <div class="crancy-customer-filter__single crancy-customer-filter__single--csearch d-flex items-center justify-between create_new_btn_box">
                                     <div class="crancy-header__form crancy-header__form--customer create_new_btn_inline_box">
                                         <h4 class="crancy-product-card__title">{{ __('Email Accounts') }}</h4>
-                                        <a href="{{ route('admin.email-accounts.create') }}" class="crancy-btn">
-                                            <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                                            {{ __('Add Account') }}
-                                        </a>
-                                        <a href="{{ route('admin.mailbox.index') }}" class="crancy-btn" style="background:#17a2b8;">
-                                            <span><i class="fas fa-inbox"></i></span> {{ __('Mailbox') }}
-                                        </a>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('admin.email-accounts.create') }}" class="crancy-btn">
+                                                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                                {{ __('Add Account') }}
+                                            </a>
+                                            <a href="{{ route('admin.mailbox.index') }}" class="crancy-btn" style="background:#17a2b8;">
+                                                <span><i class="fas fa-inbox"></i></span> {{ __('Mailbox') }}
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
