@@ -17,32 +17,46 @@ class MailboxController extends Controller
 
     public function index(Request $request)
     {
-        $accounts    = BusinessEmailAccount::withCount('logs')->latest()->get();
-        $inboxUnread = ReceivedMailLog::unread()->count();
-
-        $query = SentMailLog::with('account')->latest('sent_at');
-
-        if ($request->filled('account') && $request->account !== 'all') {
-            $query->where('account_id', $request->account);
-        }
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-        if ($request->filled('search')) {
-            $s = $request->search;
-            $query->where(function ($q) use ($s) {
-                $q->where('subject', 'like', "%{$s}%")
-                  ->orWhere('to_email', 'like', "%{$s}%")
-                  ->orWhere('from_email', 'like', "%{$s}%");
-            });
+        try {
+            $accounts = BusinessEmailAccount::withCount('logs')->latest()->get();
+        } catch (\Throwable $e) {
+            $accounts = collect();
         }
 
-        $logs  = $query->paginate(20)->withQueryString();
-        $stats = [
-            'total'  => SentMailLog::count(),
-            'sent'   => SentMailLog::sent()->count(),
-            'failed' => SentMailLog::failed()->count(),
-        ];
+        try {
+            $inboxUnread = ReceivedMailLog::unread()->count();
+        } catch (\Throwable $e) {
+            $inboxUnread = 0;
+        }
+
+        try {
+            $query = SentMailLog::with('account')->latest('sent_at');
+
+            if ($request->filled('account') && $request->account !== 'all') {
+                $query->where('account_id', $request->account);
+            }
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+            if ($request->filled('search')) {
+                $s = $request->search;
+                $query->where(function ($q) use ($s) {
+                    $q->where('subject', 'like', "%{$s}%")
+                      ->orWhere('to_email', 'like', "%{$s}%")
+                      ->orWhere('from_email', 'like', "%{$s}%");
+                });
+            }
+
+            $logs  = $query->paginate(20)->withQueryString();
+            $stats = [
+                'total'  => SentMailLog::count(),
+                'sent'   => SentMailLog::sent()->count(),
+                'failed' => SentMailLog::failed()->count(),
+            ];
+        } catch (\Throwable $e) {
+            $logs  = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
+            $stats = ['total' => 0, 'sent' => 0, 'failed' => 0];
+        }
 
         return view('emailsetting::mailbox', compact('logs', 'accounts', 'stats', 'inboxUnread')
             + ['viewMode' => 'sent']);
@@ -75,33 +89,47 @@ class MailboxController extends Controller
 
     public function inbox(Request $request)
     {
-        $accounts    = BusinessEmailAccount::withCount('logs')->latest()->get();
-        $inboxUnread = ReceivedMailLog::unread()->count();
-
-        $query = ReceivedMailLog::with('account')->latest('received_at');
-
-        if ($request->filled('account') && $request->account !== 'all') {
-            $query->where('account_id', $request->account);
-        }
-        if ($request->filled('status')) {
-            if ($request->status === 'unread') $query->unread();
-            if ($request->status === 'read')   $query->where('is_read', true);
-        }
-        if ($request->filled('search')) {
-            $s = $request->search;
-            $query->where(function ($q) use ($s) {
-                $q->where('subject', 'like', "%{$s}%")
-                  ->orWhere('from_email', 'like', "%{$s}%")
-                  ->orWhere('from_name', 'like', "%{$s}%");
-            });
+        try {
+            $accounts = BusinessEmailAccount::withCount('logs')->latest()->get();
+        } catch (\Throwable $e) {
+            $accounts = collect();
         }
 
-        $receivedLogs = $query->paginate(20)->withQueryString();
-        $inboxStats   = [
-            'total'  => ReceivedMailLog::count(),
-            'unread' => ReceivedMailLog::unread()->count(),
-            'read'   => ReceivedMailLog::where('is_read', true)->count(),
-        ];
+        try {
+            $inboxUnread = ReceivedMailLog::unread()->count();
+        } catch (\Throwable $e) {
+            $inboxUnread = 0;
+        }
+
+        try {
+            $query = ReceivedMailLog::with('account')->latest('received_at');
+
+            if ($request->filled('account') && $request->account !== 'all') {
+                $query->where('account_id', $request->account);
+            }
+            if ($request->filled('status')) {
+                if ($request->status === 'unread') $query->unread();
+                if ($request->status === 'read')   $query->where('is_read', true);
+            }
+            if ($request->filled('search')) {
+                $s = $request->search;
+                $query->where(function ($q) use ($s) {
+                    $q->where('subject', 'like', "%{$s}%")
+                      ->orWhere('from_email', 'like', "%{$s}%")
+                      ->orWhere('from_name', 'like', "%{$s}%");
+                });
+            }
+
+            $receivedLogs = $query->paginate(20)->withQueryString();
+            $inboxStats   = [
+                'total'  => ReceivedMailLog::count(),
+                'unread' => ReceivedMailLog::unread()->count(),
+                'read'   => ReceivedMailLog::where('is_read', true)->count(),
+            ];
+        } catch (\Throwable $e) {
+            $receivedLogs = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
+            $inboxStats   = ['total' => 0, 'unread' => 0, 'read' => 0];
+        }
 
         return view('emailsetting::mailbox', compact('receivedLogs', 'accounts', 'inboxStats', 'inboxUnread')
             + ['viewMode' => 'inbox', 'logs' => collect(), 'stats' => []]);
