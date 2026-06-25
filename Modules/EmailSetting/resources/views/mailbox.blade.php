@@ -349,8 +349,9 @@
                             </button>
                         </div>
                         <div class="mailbox-detail-meta" id="detailMeta"></div>
-                        <div class="mailbox-detail-body" id="detailBody">
-                            <p class="text-muted">{{ __('Click an email to read it.') }}</p>
+                        <div class="mailbox-detail-body" id="detailBody" style="display:flex;flex-direction:column;">
+                            <div id="detailBodyText"><p class="text-muted">{{ __('Click an email to read it.') }}</p></div>
+                            <iframe id="detailBodyFrame" sandbox="allow-popups allow-popups-to-escape-sandbox" style="display:none;width:100%;flex:1;min-height:350px;border:none;" scrolling="auto"></iframe>
                         </div>
                         <div class="p-3 border-top">
                             <form id="deleteMailForm" method="POST">
@@ -486,9 +487,17 @@ function openMail(id, mode) {
         }
         document.getElementById('detailMeta').innerHTML = meta;
 
-        document.getElementById('detailBody').innerHTML = data.body
-            ? data.body
-            : '<p class="text-muted">{{ __("(No body)") }}</p>';
+        var bodyText  = document.getElementById('detailBodyText');
+        var bodyFrame = document.getElementById('detailBodyFrame');
+        if (data.body) {
+            bodyText.style.display  = 'none';
+            bodyFrame.srcdoc        = data.body;
+            bodyFrame.style.display = 'block';
+        } else {
+            bodyFrame.style.display = 'none';
+            bodyText.innerHTML      = '<p class="text-muted">{{ __("(No body)") }}</p>';
+            bodyText.style.display  = 'block';
+        }
 
         var deleteBase = mode === 'inbox'
             ? '{{ url("admin/mailbox/received") }}'
@@ -496,7 +505,10 @@ function openMail(id, mode) {
         document.getElementById('deleteMailForm').action = deleteBase + '/' + id;
     })
     .catch(function() {
-        document.getElementById('detailBody').innerHTML = '<p class="text-danger">{{ __("Failed to load email.") }}</p>';
+        document.getElementById('detailBodyFrame').style.display = 'none';
+        var bt = document.getElementById('detailBodyText');
+        bt.innerHTML      = '<p class="text-danger">{{ __("Failed to load email.") }}</p>';
+        bt.style.display  = 'block';
     });
 }
 

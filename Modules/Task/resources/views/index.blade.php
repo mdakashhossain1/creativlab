@@ -151,7 +151,7 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a href="#" class="dropdown-item" onclick="openTaskModal({{ $task->id }}, {{ json_encode($task) }})">
+                                        <a href="#" class="dropdown-item" onclick="openTaskModal({{ $task->id }}, {{ json_encode($task, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }})">
                                             <i class="fas fa-edit me-2"></i>{{ __('Edit') }}
                                         </a>
                                     </li>
