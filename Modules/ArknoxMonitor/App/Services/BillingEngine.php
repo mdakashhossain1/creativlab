@@ -113,7 +113,16 @@ class BillingEngine
 
     public function allInvoices(): array
     {
+        $now = now();
         $rows = DB::table('arknox_invoices')
+            ->where(function ($q) use ($now) {
+                // Exclude the current month — it's still accumulating
+                $q->where('year', '<', $now->year)
+                  ->orWhere(function ($q2) use ($now) {
+                      $q2->where('year', $now->year)
+                         ->where('month', '<', $now->month);
+                  });
+            })
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->get();
