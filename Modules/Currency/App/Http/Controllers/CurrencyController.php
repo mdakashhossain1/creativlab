@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Http;
 use Modules\Currency\App\Models\Currency;
 use Modules\PaymentGateway\App\Models\PaymentGateway;
 use Modules\Currency\App\Http\Requests\CurrencyRequest;
@@ -98,6 +99,66 @@ class CurrencyController extends Controller
         $notify_message = trans('Updated successfully');
         $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
         return redirect()->route('admin.multi-currency.index')->with($notify_message);
+    }
+
+    /**
+     * Sync all currency rates from Fixer API (EUR-based free tier).
+     * Rates are converted to be relative to the default currency.
+     */
+    public function syncRates()
+    {
+        $apiKey = config('services.fixer.key');
+        if (empty($apiKey)) {
+            $notify_message = array('message' => trans('Fixer API key is not configured. Add FIXER_API_KEY to your .env file.'), 'alert-type' => 'error');
+            return redirect()->back()->with($notify_message);
+        }
+
+        try {
+            $response = Http::timeout(10)->get('http://data.fixer.io/api/latest', [
+                'access_key' => $apiKey,
+            ]);
+
+            $data = $response->json();
+
+            if (!($data['success'] ?? false)) {
+                $errorInfo = $data['error']['info'] ?? 'Unknown Fixer API error';
+                throw new \Exception($errorInfo);
+            }
+
+            $rates = $data['rates'] ?? [];
+
+            // Determine default currency to use as the base for all rate calculations
+            $defaultCurrency = Currency::where('is_default', 'yes')->first() ?? Currency::find(1);
+            $defaultCode = $defaultCurrency?->currency_code ?? 'USD';
+
+            // Fixer free tier is always EUR-based. Derive EUR→default rate for conversion.
+            $eurToDefault = $rates[$defaultCode] ?? null;
+            if (!$eurToDefault) {
+                throw new \Exception("Default currency '{$defaultCode}' was not found in Fixer response. Check your currency code.");
+            }
+
+            $updated = 0;
+            foreach (Currency::all() as $currency) {
+                if ($currency->is_default === 'yes') {
+                    $currency->currency_rate = 1.0;
+                    $currency->save();
+                    $updated++;
+                    continue;
+                }
+
+                if (isset($rates[$currency->currency_code])) {
+                    $currency->currency_rate = round($rates[$currency->currency_code] / $eurToDefault, 6);
+                    $currency->save();
+                    $updated++;
+                }
+            }
+
+            $notify_message = array('message' => trans("Exchange rates synced successfully ({$updated} currencies updated)."), 'alert-type' => 'success');
+        } catch (\Throwable $e) {
+            $notify_message = array('message' => trans('Rate sync failed: ') . $e->getMessage(), 'alert-type' => 'error');
+        }
+
+        return redirect()->back()->with($notify_message);
     }
 
     /**

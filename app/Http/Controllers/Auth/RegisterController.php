@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Mail, Str;
 use App\Models\User;
 use App\Rules\Captcha;
+use App\Rules\DisposableEmail;
+use App\Rules\ValidPhone;
 use App\Helper\EmailHelper;
 use Illuminate\Http\Request;
 use App\Mail\UserRegistration;
@@ -57,18 +59,18 @@ class RegisterController extends Controller
     public function store_register(Request $request){
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:'.User::class, new DisposableEmail()],
+            'phone'    => ['nullable', 'string', 'max:20', new ValidPhone()],
             'password' => ['required', 'confirmed', 'min:4', 'max:100'],
-            'g-recaptcha-response'=>new Captcha()
-
+            'g-recaptcha-response' => new Captcha(),
         ],[
-            'name.required' => trans('Name is required'),
-            'email.required' => trans('Email is required'),
-            'email.unique' => trans('Email already exist'),
+            'name.required'     => trans('Name is required'),
+            'email.required'    => trans('Email is required'),
+            'email.unique'      => trans('Email already exist'),
             'password.required' => trans('Password is required'),
-            'password.confirmed' => trans('Confirm password does not match'),
-            'password.min' => trans('You have to provide minimum 4 character password'),
+            'password.confirmed'=> trans('Confirm password does not match'),
+            'password.min'      => trans('You have to provide minimum 4 character password'),
         ]);
 
         $user = User::create([

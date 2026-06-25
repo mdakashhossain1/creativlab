@@ -3,6 +3,8 @@
 namespace Modules\ContactMessage\App\Http\Requests;
 
 use App\Rules\Captcha;
+use App\Rules\DisposableEmail;
+use App\Rules\ValidPhone;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactMessageRequest extends FormRequest
@@ -14,8 +16,8 @@ class ContactMessageRequest extends FormRequest
     {
         $rules = [
             'name'=>'required',
-            'email'=>'required',
-            'phone'=>'nullable',
+            'email' => ['required', 'email', new DisposableEmail()],
+            'phone' => ['nullable', 'string', 'max:20', new ValidPhone()],
             'message'=>'required',
             'g-recaptcha-response'=>new Captcha()
         ];
@@ -38,7 +40,8 @@ class ContactMessageRequest extends FormRequest
         return [
             'name.required' => trans('Name is required'),
             'email.required' => trans('Email is required'),
-            'phone.nullable' => trans('Phones is nullable'),
+            'email.email'    => trans('Please enter a valid email address'),
+            'phone.max'      => trans('Phone number is too long'),
             'message.required' => trans('Message is required')
         ];
     }

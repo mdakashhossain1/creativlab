@@ -4,6 +4,7 @@ namespace Modules\Newsletter\App\Http\Controllers;
 
 use Mail, Str;
 use App\Helper\EmailHelper;
+use App\Rules\DisposableEmail;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class NewsletterController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'email' => 'required|unique:newsletters',
+            'email' => ['required', 'email', 'unique:newsletters', new DisposableEmail()],
         ];
 
         $custom_error = [

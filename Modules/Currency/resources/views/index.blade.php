@@ -35,6 +35,13 @@
                                                             stroke-linecap="round" stroke-linejoin="round"></path>
                                                     </svg>
                                                 </span> {{ __('Create New') }}</a>
+
+                                            <form action="{{ route('admin.multi-currency.sync-rates') }}" method="POST" class="d-inline ms-2">
+                                                @csrf
+                                                <button type="submit" class="crancy-btn" style="background:#17a2b8;" onclick="return confirm('{{ __('Sync live exchange rates from Fixer API?') }}')">
+                                                    <span><i class="fas fa-sync-alt"></i></span> {{ __('Sync Rates') }}
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

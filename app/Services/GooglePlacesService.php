@@ -25,6 +25,10 @@ class GooglePlacesService
      */
     public function fetchPlaceDetails(): ?array
     {
+        if (empty($this->apiKey()) || empty($this->placeId())) {
+            return null;
+        }
+
         $response = Http::get($this->baseUrl, [
             'place_id' => $this->placeId(),
             'fields'   => 'name,rating,user_ratings_total,reviews',

@@ -43,4 +43,20 @@ return [
         'redirect' => '',
     ],
 
+    'apilayer' => [
+        'email_key' => env('APILAYER_EMAIL_API_KEY'),
+    ],
+
+    'numverify' => [
+        'key' => env('NUMVERIFY_API_KEY'),
+    ],
+
+    'ipstack' => [
+        'key' => env('IPSTACK_API_KEY'),
+    ],
+
+    'fixer' => [
+        'key' => env('FIXER_API_KEY'),
+    ],
+
 ];

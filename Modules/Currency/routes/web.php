@@ -18,6 +18,7 @@ use Modules\Currency\App\Http\Controllers\CurrencyController;
 Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admin']], function () {
 
     Route::resource('multi-currency', CurrencyController::class)->names('multi-currency');
+    Route::post('multi-currency-sync-rates', [CurrencyController::class, 'syncRates'])->name('multi-currency.sync-rates');
 });
 
 

@@ -34,6 +34,9 @@ class ShippingMethodController extends Controller
         $method = $id ? ShippingMethod::findOrFail($id) : new ShippingMethod();
         $method->name = $request->name;
         $method->price = $request->price;
+        if (!$id) {
+            $method->status = \App\Constants\Status::ENABLE;
+        }
         $method->save();
 
         $notification = trans('' . ($id ? 'Updated Successfully' : 'Created Successfully'));
