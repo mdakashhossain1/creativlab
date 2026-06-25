@@ -858,7 +858,7 @@
 
 
             <li
-                class="{{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') ? 'active' : '' }}">
+                class="{{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') || Route::is('admin.mailbox.*') || Route::is('admin.email-accounts.*') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"
                     data-bs-target="#menu-item__apps_email_config"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
@@ -881,7 +881,7 @@
                         <span class="menu-bar__name">{{ __('Email Configuration') }}</span></span> <span
                         class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') ? 'show' : '' }}"
+                <div class="collapse crancy__dropdown {{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') || Route::is('admin.mailbox.*') || Route::is('admin.email-accounts.*') ? 'show' : '' }}"
                     id="menu-item__apps_email_config" data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
@@ -891,6 +891,14 @@
 
                         <li class="{{ Route::is('admin.email-template') || Route::is('admin.edit-email-template') ? 'active' : '' }}"><a href="{{ route('admin.email-template') }}"><span class="menu-bar__text"><span
                                         class="menu-bar__name">{{ __('Email Template') }}</span></span></a>
+                        </li>
+
+                        <li class="{{ Route::is('admin.mailbox.*') ? 'active' : '' }}"><a href="{{ route('admin.mailbox.index') }}"><span class="menu-bar__text"><span
+                                        class="menu-bar__name">{{ __('Mailbox') }}</span></span></a>
+                        </li>
+
+                        <li class="{{ Route::is('admin.email-accounts.*') ? 'active' : '' }}"><a href="{{ route('admin.email-accounts.index') }}"><span class="menu-bar__text"><span
+                                        class="menu-bar__name">{{ __('Email Accounts') }}</span></span></a>
                         </li>
 
 
