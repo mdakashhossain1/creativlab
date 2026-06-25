@@ -81,6 +81,12 @@ class EmailSettingController extends Controller
             return view('emailsetting::client_project_created', ['template_item' => $template_item]);
         }elseif($template_item->id == 10){
             return view('emailsetting::user_welcome', ['template_item' => $template_item]);
+        }elseif($template_item->id == 11){
+            return view('emailsetting::payroll_paid', ['template_item' => $template_item]);
+        }elseif($template_item->id == 12){
+            return view('emailsetting::task_meeting_reminder', ['template_item' => $template_item]);
+        }elseif($template_item->id == 13){
+            return view('emailsetting::task_meeting_now', ['template_item' => $template_item]);
         }else{
             abort(404);
         }
