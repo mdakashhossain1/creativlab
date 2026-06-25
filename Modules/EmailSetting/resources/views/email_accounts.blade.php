@@ -91,12 +91,24 @@
                                                 @endif
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <a href="{{ route('admin.email-accounts.edit', $account->id) }}" class="crancy-btn">
-                                                    <i class="fas fa-edit"></i> {{ __('Edit') }}
-                                                </a>
-                                                <a onclick="itemDeleteConfrimation({{ $account->id }})" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteModal" class="crancy-btn delete_danger_btn">
-                                                    <i class="fas fa-trash"></i> {{ __('Delete') }}
-                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="crancy-btn dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        {{ __('Action') }}
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="{{ route('admin.email-accounts.edit', $account->id) }}" class="dropdown-item">
+                                                                <i class="fas fa-edit"></i> {{ __('Edit') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a onclick="itemDeleteConfrimation({{ $account->id }})" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteModal" class="dropdown-item text-danger">
+                                                                <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                         @empty
