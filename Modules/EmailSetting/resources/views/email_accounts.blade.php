@@ -20,12 +20,12 @@
                                     <div class="crancy-header__form crancy-header__form--customer create_new_btn_inline_box">
                                         <h4 class="crancy-product-card__title">{{ __('Email Accounts') }}</h4>
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('admin.email-accounts.create') }}" class="crancy-btn">
-                                                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                            <a href="{{ route('admin.email-accounts.create') }}" class="crancy-btn" style="transition:transform .1s ease;display:inline-flex;align-items:center;gap:6px;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1V15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8H15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                 {{ __('Add Account') }}
                                             </a>
-                                            <a href="{{ route('admin.mailbox.index') }}" class="crancy-btn" style="background:#17a2b8;">
-                                                <span><i class="fas fa-inbox"></i></span> {{ __('Mailbox') }}
+                                            <a href="{{ route('admin.mailbox.index') }}" class="crancy-btn" style="background:#17a2b8;transition:transform .1s ease;display:inline-flex;align-items:center;gap:6px;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+                                                <i class="fas fa-inbox"></i> {{ __('Mailbox') }}
                                             </a>
                                         </div>
                                     </div>
@@ -50,11 +50,11 @@
                                         @forelse($accounts as $i => $account)
                                         <tr>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <h4 class="crancy-table__product-title">{{ $i + 1 }}</h4>
+                                                <h4 class="crancy-table__product-title" style="font-variant-numeric:tabular-nums;">{{ $i + 1 }}</h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;">
+                                                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06);">
                                                         {{ strtoupper(substr($account->name, 0, 1)) }}
                                                     </div>
                                                     <span class="crancy-table__product-title">{{ $account->name }}</span>
@@ -67,20 +67,25 @@
                                                 <h4 class="crancy-table__product-title">{{ $account->smtp_host }}</h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <h4 class="crancy-table__product-title" style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 6px !important; white-space: nowrap !important;">
-                                                    {{ $account->smtp_port }} / <span style="background:#dcfce7;color:#16a34a;border-radius: 2px;padding:2px 5px;font-size:11px;font-weight:600;display: inline-block !important;">{{ strtoupper($account->encryption) }}</span>
+                                                <h4 class="crancy-table__product-title" style="display:flex;align-items:center;gap:6px;white-space:nowrap;font-variant-numeric:tabular-nums;">
+                                                    {{ $account->smtp_port }} / <span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;letter-spacing:.3px;line-height:1.6;">{{ strtoupper($account->encryption) }}</span>
                                                 </h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($account->is_default)
-                                                    <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;">
+                                                    <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;">
                                                         <i class="fas fa-star" style="color:#f59e0b;font-size:18px;" title="{{ __('Default') }}"></i>
                                                     </span>
                                                 @else
                                                     <form action="{{ route('admin.email-accounts.set-default', $account->id) }}" method="POST" style="display:inline-flex;margin:0;padding:0;">
                                                         @csrf
-                                                        <button type="submit" style="background:none;border:none;padding:0;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;" title="{{ __('Set as Default') }}">
-                                                            <i class="far fa-star" style="color:#d1d5db;font-size:18px;transition:color .2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#d1d5db'"></i>
+                                                        <button type="submit"
+                                                            style="background:none;border:none;padding:0;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;transition:transform .1s ease;"
+                                                            title="{{ __('Set as Default') }}"
+                                                            onmousedown="this.style.transform='scale(0.88)'"
+                                                            onmouseup="this.style.transform='scale(1)'"
+                                                            onmouseleave="this.style.transform='scale(1)'">
+                                                            <i class="far fa-star" style="color:#d1d5db;font-size:18px;transition:color .15s ease,transform .15s ease;" onmouseover="this.style.color='#f59e0b';this.style.transform='scale(1.15)'" onmouseout="this.style.color='#d1d5db';this.style.transform='scale(1)'"></i>
                                                         </button>
                                                     </form>
                                                 @endif
@@ -95,7 +100,11 @@
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 <div class="dropdown">
                                                     <button class="crancy-btn dropdown-toggle" type="button"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                                        style="transition:transform .1s ease;"
+                                                        onmousedown="this.style.transform='scale(0.96)'"
+                                                        onmouseup="this.style.transform='scale(1)'"
+                                                        onmouseleave="this.style.transform='scale(1)'">
                                                         {{ __('Action') }}
                                                     </button>
                                                     <ul class="dropdown-menu">
