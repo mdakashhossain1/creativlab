@@ -67,19 +67,19 @@
                                                 <h4 class="crancy-table__product-title">{{ $account->smtp_host }}</h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <h4 class="crancy-table__product-title">
+                                                <h4 class="crancy-table__product-title d-flex align-items-center gap-2">
                                                     {{ $account->smtp_port }}
-                                                    <span class="badge bg-secondary text-white">{{ strtoupper($account->encryption) }}</span>
+                                                    <span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;letter-spacing:.3px;">{{ strtoupper($account->encryption) }}</span>
                                                 </h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($account->is_default)
-                                                    <span class="badge bg-success text-white"><i class="fas fa-star me-1"></i>{{ __('Default') }}</span>
+                                                    <i class="fas fa-star" style="color:#f59e0b;font-size:18px;" title="{{ __('Default') }}"></i>
                                                 @else
                                                     <form action="{{ route('admin.email-accounts.set-default', $account->id) }}" method="POST" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary" title="{{ __('Set as Default') }}">
-                                                            <i class="far fa-star"></i>
+                                                        <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;" title="{{ __('Set as Default') }}">
+                                                            <i class="far fa-star" style="color:#d1d5db;font-size:18px;transition:color .2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#d1d5db'"></i>
                                                         </button>
                                                     </form>
                                                 @endif
