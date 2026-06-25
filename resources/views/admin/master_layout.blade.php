@@ -134,6 +134,7 @@
                                                     @endphp
 
                                                     <!-- Inbox Mail Notification -->
+                                                    @if(Route::has('admin.mailbox.inbox'))
                                                     <div class="crancy-header__single" style="position:relative;">
                                                         <a class="crancy-header__blink" href="{{ route('admin.mailbox.inbox') }}" title="{{ __('Inbox') }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
@@ -144,6 +145,7 @@
                                                             @endif
                                                         </a>
                                                     </div>
+                                                    @endif
                                                     <!-- End Inbox Notification -->
 
                                                     <!-- Header Settings -->
