@@ -86,15 +86,20 @@
                                     <div class="col-md-6">
                                         <div class="crancy-option__single">
                                             <label class="crancy-option__label">{{ __('SMTP Password') }} <span class="text-danger">*</span></label>
-                                            <div class="position-relative">
-                                                <input type="password" id="smtpPassword" name="smtp_password" class="crancy-option__input @error('smtp_password') is-invalid @enderror"
+                                            <div style="position:relative;display:flex;align-items:stretch;">
+                                                <input type="password" id="smtpPassword" name="smtp_password"
+                                                    class="crancy-option__input @error('smtp_password') is-invalid @enderror"
                                                     value="{{ old('smtp_password', $account?->smtp_password) }}"
-                                                    placeholder="••••••••">
-                                                <button type="button" onclick="togglePassword()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;">
-                                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                                    placeholder="••••••••"
+                                                    autocomplete="current-password"
+                                                    style="padding-right:46px;flex:1;">
+                                                <button type="button" id="togglePasswordBtn"
+                                                    style="position:absolute;right:0;top:0;bottom:0;width:44px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;z-index:5;"
+                                                    title="{{ __('Show/Hide password') }}">
+                                                    <i class="fas fa-eye" id="eyeIcon" style="font-size:15px;pointer-events:none;"></i>
                                                 </button>
                                             </div>
-                                            @error('smtp_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                            @error('smtp_password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
 
@@ -189,17 +194,20 @@
 
 @push('js_section')
 <script>
-"use strict";
-function togglePassword() {
+document.addEventListener('DOMContentLoaded', function () {
+    var btn   = document.getElementById('togglePasswordBtn');
     var input = document.getElementById('smtpPassword');
-    var icon = document.getElementById('eyeIcon');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-    }
-}
+    var icon  = document.getElementById('eyeIcon');
+    if (!btn || !input || !icon) return;
+
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        icon.classList.remove(isPassword ? 'fa-eye' : 'fa-eye-slash');
+        icon.classList.add(isPassword ? 'fa-eye-slash' : 'fa-eye');
+        input.focus();
+    });
+});
 </script>
 @endpush
