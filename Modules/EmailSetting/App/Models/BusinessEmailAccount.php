@@ -12,6 +12,7 @@ class BusinessEmailAccount extends Model
     protected $fillable = [
         'name', 'email', 'smtp_host', 'smtp_port',
         'smtp_username', 'smtp_password', 'encryption',
+        'imap_host', 'imap_port', 'imap_encryption',
         'is_default', 'status',
     ];
 
@@ -22,6 +23,26 @@ class BusinessEmailAccount extends Model
     public function logs()
     {
         return $this->hasMany(SentMailLog::class, 'account_id');
+    }
+
+    public function receivedMails()
+    {
+        return $this->hasMany(ReceivedMailLog::class, 'account_id');
+    }
+
+    public function hasImap(): bool
+    {
+        return !empty($this->imap_host);
+    }
+
+    public function imapConnectionString(): string
+    {
+        $enc = match ($this->imap_encryption) {
+            'tls'  => '/imap/tls/novalidate-cert',
+            'none' => '/imap/novalidate-cert',
+            default => '/imap/ssl/novalidate-cert',
+        };
+        return '{' . $this->imap_host . ':' . $this->imap_port . $enc . '}INBOX';
     }
 
     public function scopeActive($query)

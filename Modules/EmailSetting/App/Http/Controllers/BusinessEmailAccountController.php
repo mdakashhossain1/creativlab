@@ -22,13 +22,16 @@ class BusinessEmailAccountController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'          => 'required|string|max:100',
-            'email'         => 'required|email|max:150',
-            'smtp_host'     => 'required|string|max:150',
-            'smtp_port'     => 'required|numeric|between:1,65535',
-            'smtp_username' => 'required|string|max:150',
-            'smtp_password' => 'required|string|max:255',
-            'encryption'    => 'required|in:ssl,tls,none',
+            'name'             => 'required|string|max:100',
+            'email'            => 'required|email|max:150',
+            'smtp_host'        => 'required|string|max:150',
+            'smtp_port'        => 'required|numeric|between:1,65535',
+            'smtp_username'    => 'required|string|max:150',
+            'smtp_password'    => 'required|string|max:255',
+            'encryption'       => 'required|in:ssl,tls,none',
+            'imap_host'        => 'nullable|string|max:150',
+            'imap_port'        => 'nullable|numeric|between:1,65535',
+            'imap_encryption'  => 'nullable|in:ssl,tls,none',
         ]);
 
         if ($request->boolean('is_default')) {
@@ -36,15 +39,18 @@ class BusinessEmailAccountController extends Controller
         }
 
         BusinessEmailAccount::create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'smtp_host'     => $request->smtp_host,
-            'smtp_port'     => $request->smtp_port,
-            'smtp_username' => $request->smtp_username,
-            'smtp_password' => $request->smtp_password,
-            'encryption'    => $request->encryption,
-            'is_default'    => $request->boolean('is_default'),
-            'status'        => $request->input('status', 'active'),
+            'name'            => $request->name,
+            'email'           => $request->email,
+            'smtp_host'       => $request->smtp_host,
+            'smtp_port'       => $request->smtp_port,
+            'smtp_username'   => $request->smtp_username,
+            'smtp_password'   => $request->smtp_password,
+            'encryption'      => $request->encryption,
+            'imap_host'       => $request->input('imap_host') ?: null,
+            'imap_port'       => $request->input('imap_port', 993),
+            'imap_encryption' => $request->input('imap_encryption', 'ssl'),
+            'is_default'      => $request->boolean('is_default'),
+            'status'          => $request->input('status', 'active'),
         ]);
 
         return redirect()->route('admin.email-accounts.index')
@@ -62,13 +68,16 @@ class BusinessEmailAccountController extends Controller
         $account = BusinessEmailAccount::findOrFail($id);
 
         $request->validate([
-            'name'          => 'required|string|max:100',
-            'email'         => 'required|email|max:150',
-            'smtp_host'     => 'required|string|max:150',
-            'smtp_port'     => 'required|numeric|between:1,65535',
-            'smtp_username' => 'required|string|max:150',
-            'smtp_password' => 'required|string|max:255',
-            'encryption'    => 'required|in:ssl,tls,none',
+            'name'            => 'required|string|max:100',
+            'email'           => 'required|email|max:150',
+            'smtp_host'       => 'required|string|max:150',
+            'smtp_port'       => 'required|numeric|between:1,65535',
+            'smtp_username'   => 'required|string|max:150',
+            'smtp_password'   => 'required|string|max:255',
+            'encryption'      => 'required|in:ssl,tls,none',
+            'imap_host'       => 'nullable|string|max:150',
+            'imap_port'       => 'nullable|numeric|between:1,65535',
+            'imap_encryption' => 'nullable|in:ssl,tls,none',
         ]);
 
         if ($request->boolean('is_default')) {
@@ -76,15 +85,18 @@ class BusinessEmailAccountController extends Controller
         }
 
         $account->update([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'smtp_host'     => $request->smtp_host,
-            'smtp_port'     => $request->smtp_port,
-            'smtp_username' => $request->smtp_username,
-            'smtp_password' => $request->smtp_password,
-            'encryption'    => $request->encryption,
-            'is_default'    => $request->boolean('is_default'),
-            'status'        => $request->input('status', 'active'),
+            'name'            => $request->name,
+            'email'           => $request->email,
+            'smtp_host'       => $request->smtp_host,
+            'smtp_port'       => $request->smtp_port,
+            'smtp_username'   => $request->smtp_username,
+            'smtp_password'   => $request->smtp_password,
+            'encryption'      => $request->encryption,
+            'imap_host'       => $request->input('imap_host') ?: null,
+            'imap_port'       => $request->input('imap_port', 993),
+            'imap_encryption' => $request->input('imap_encryption', 'ssl'),
+            'is_default'      => $request->boolean('is_default'),
+            'status'          => $request->input('status', 'active'),
         ]);
 
         return redirect()->route('admin.email-accounts.index')

@@ -120,6 +120,49 @@
                                         </div>
                                     </div>
 
+                                    {{-- IMAP Section --}}
+                                    <div class="col-12">
+                                        <hr style="border-color:#eef0f7;margin:8px 0;">
+                                        <p class="crancy-option__label mb-1" style="font-size:13px;font-weight:700;color:#4338ca;">
+                                            <i class="fas fa-inbox me-1"></i> {{ __('Incoming Mail (IMAP) — Optional') }}
+                                        </p>
+                                        <small class="text-muted">{{ __('Fill this section to receive emails in the mailbox inbox.') }}</small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="crancy-option__single">
+                                            <label class="crancy-option__label">{{ __('IMAP Host') }}</label>
+                                            <input type="text" name="imap_host" class="crancy-option__input @error('imap_host') is-invalid @enderror"
+                                                value="{{ old('imap_host', $account?->imap_host) }}"
+                                                placeholder="imap.hostinger.com">
+                                            @error('imap_host')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="crancy-option__single">
+                                            <label class="crancy-option__label">{{ __('IMAP Port') }}</label>
+                                            <input type="number" name="imap_port" class="crancy-option__input @error('imap_port') is-invalid @enderror"
+                                                value="{{ old('imap_port', $account?->imap_port ?? '993') }}">
+                                            @error('imap_port')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="crancy-option__single">
+                                            <label class="crancy-option__label">{{ __('IMAP Encryption') }}</label>
+                                            <select name="imap_encryption" class="crancy-option__input">
+                                                @foreach(['ssl' => 'SSL (993)', 'tls' => 'TLS (143)', 'none' => 'None'] as $val => $label)
+                                                    <option value="{{ $val }}" {{ old('imap_encryption', $account?->imap_encryption ?? 'ssl') === $val ? 'selected' : '' }}>{{ $label }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <small class="text-muted"><i class="fas fa-info-circle me-1"></i>{{ __('IMAP uses the same username and password as SMTP above.') }}</small>
+                                    </div>
+
                                     <div class="col-12">
                                         <div class="d-flex gap-3">
                                             <button type="submit" class="crancy-btn">

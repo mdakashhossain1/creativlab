@@ -858,7 +858,7 @@
 
 
             <li
-                class="{{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') || Route::is('admin.mailbox.*') || Route::is('admin.email-accounts.*') ? 'active' : '' }}">
+                class="{{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') || Route::is('admin.mailbox.*') || Route::is('admin.mailbox.inbox') || Route::is('admin.email-accounts.*') ? 'active' : '' }}">
                 <a href="#!" class="collapsed" data-bs-toggle="collapse"
                     data-bs-target="#menu-item__apps_email_config"><span class="menu-bar__text">
                         <span class="crancy-menu-icon crancy-svg-icon__v1">
