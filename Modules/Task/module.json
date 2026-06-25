@@ -1,0 +1,11 @@
+{
+    "name": "Task",
+    "alias": "task",
+    "description": "Todo list and meeting scheduler with email reminders",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Task\\App\\Providers\\TaskServiceProvider"
+    ],
+    "files": []
+}

@@ -36,5 +36,6 @@
     "User": true,
     "Attendance": true,
     "Payroll": true,
-    "ArknoxMonitor": true
+    "ArknoxMonitor": true,
+    "Task": true
 }
