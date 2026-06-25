@@ -19,7 +19,8 @@
                             <th class="crancy-table__column-2 crancy-table__h2">{{ __('Meaning') }}</th>
                         </tr></thead>
                         <tbody class="crancy-table__body">
-                            @foreach([
+                            @php
+                            $keywords = [
                                 ['{{name}}',        'Employee Name'],
                                 ['{{designation}}', 'Designation'],
                                 ['{{month_year}}',  'Salary Month & Year'],
@@ -28,7 +29,9 @@
                                 ['{{deductions}}',  'Deductions'],
                                 ['{{net_salary}}',  'Net Salary'],
                                 ['{{paid_date}}',   'Date Paid'],
-                            ] as [$kw, $meaning])
+                            ];
+                            @endphp
+                            @foreach($keywords as [$kw, $meaning])
                             <tr><td class="crancy-table__column-2 crancy-table__data-2"><h4 class="crancy-table__product-title">{{ $kw }}</h4></td>
                             <td class="crancy-table__column-2 crancy-table__data-2"><h4 class="crancy-table__product-title">{{ __($meaning) }}</h4></td></tr>
                             @endforeach

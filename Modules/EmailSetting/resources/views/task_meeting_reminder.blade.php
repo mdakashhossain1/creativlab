@@ -19,12 +19,15 @@
                             <th class="crancy-table__column-2 crancy-table__h2">{{ __('Meaning') }}</th>
                         </tr></thead>
                         <tbody class="crancy-table__body">
-                            @foreach([
-                                ['{{title}}',       'Task / Meeting Title'],
-                                ['{{minutes_left}}','Minutes Until Meeting'],
-                                ['{{meeting_time}}','Scheduled Meeting Time'],
-                                ['{{description}}', 'Task Description'],
-                            ] as [$kw, $meaning])
+                            @php
+                            $keywords = [
+                                ['{{title}}',        'Task / Meeting Title'],
+                                ['{{minutes_left}}', 'Minutes Until Meeting'],
+                                ['{{meeting_time}}', 'Scheduled Meeting Time'],
+                                ['{{description}}',  'Task Description'],
+                            ];
+                            @endphp
+                            @foreach($keywords as [$kw, $meaning])
                             <tr><td class="crancy-table__column-2 crancy-table__data-2"><h4 class="crancy-table__product-title">{{ $kw }}</h4></td>
                             <td class="crancy-table__column-2 crancy-table__data-2"><h4 class="crancy-table__product-title">{{ __($meaning) }}</h4></td></tr>
                             @endforeach
