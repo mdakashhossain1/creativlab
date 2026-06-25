@@ -68,7 +68,7 @@
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 <h4 class="crancy-table__product-title" style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
-                                                    {{ $account->smtp_port }} / <span style="background:#dcfce7;color:#16a34a;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;letter-spacing:.3px;display: inline-block;">{{ strtoupper($account->encryption) }}</span>
+                                                    {{ $account->smtp_port }} / <span style="background:#dcfce7;color:#16a34a;border-radius: 2px;padding:2px 5px;font-size:11px;font-weight:600;display: inline-block;">{{ strtoupper($account->encryption) }}</span>
                                                 </h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
