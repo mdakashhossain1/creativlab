@@ -20,9 +20,9 @@
 .mailbox-folder-item:hover, .mailbox-folder-item.active { background:#eff1fd; color:#4338ca; border-left-color:#4338ca; }
 .mailbox-folder-item i { width:18px; text-align:center; font-size:14px; }
 .mailbox-folder-item .ml-auto { margin-left:auto; }
-.mailbox-folder-item .folder-count { background:#4338ca; color:#fff; border-radius:10px; padding:1px 7px; font-size:11px; }
+.mailbox-folder-item .folder-count { background:#4338ca; color:#fff; border-radius:999px; min-width:20px; height:20px; padding:0 5px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; line-height:1; flex-shrink:0; }
 .mailbox-folder-item .folder-count.danger { background:#ef4444; }
-.mailbox-folder-item .folder-count.warning { background:#f59e0b; }
+.mailbox-folder-item .folder-count.warning { background:#f59e0b; color:#1a1d3b; }
 .mailbox-divider { border:none; border-top:1px solid #eef0f7; margin:10px 0; }
 .mailbox-account-item { display:flex; align-items:center; gap:10px; padding:9px 16px; cursor:pointer; text-decoration:none; color:#4a4f73; border-left:3px solid transparent; transition:all .2s; }
 .mailbox-account-item:hover, .mailbox-account-item.active { background:#eff1fd; color:#4338ca; border-left-color:#4338ca; }
@@ -30,6 +30,7 @@
 .mailbox-account-info { flex:1; min-width:0; }
 .mailbox-account-name { display:block; font-size:12px; font-weight:600; color:inherit; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .mailbox-account-email { display:block; font-size:11px; color:#a0a3bd; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mailbox-account-item .folder-count { background:#4338ca; color:#fff; border-radius:999px; min-width:20px; height:20px; padding:0 5px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
 
 /* Main area */
 .mailbox-main { flex:1; display:flex; flex-direction:column; min-width:0; }

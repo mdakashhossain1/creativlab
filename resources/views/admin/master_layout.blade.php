@@ -125,7 +125,27 @@
                                                     </div>
                                                     <!-- End Header Message -->
 
+                                                    @php
+                                                        try {
+                                                            $_inboxUnread = \Modules\EmailSetting\App\Models\ReceivedMailLog::where('is_read', false)->count();
+                                                        } catch (\Throwable $e) {
+                                                            $_inboxUnread = 0;
+                                                        }
+                                                    @endphp
 
+                                                    <!-- Inbox Mail Notification -->
+                                                    <div class="crancy-header__single" style="position:relative;">
+                                                        <a class="crancy-header__blink" href="{{ route('admin.mailbox.inbox') }}" title="{{ __('Inbox') }}">
+                                                            <svg class="crancy-header__svg--icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path d="M7 7.5L9.94202 9.23943C11.6572 10.2535 12.3428 10.2535 14.058 9.23943L17 7.5" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M2.01577 12.4756C2.08114 15.5412 2.11383 17.0739 3.24496 18.2094C4.37608 19.3448 5.95033 19.3843 9.09883 19.4634C11.0393 19.5122 12.9607 19.5122 14.9012 19.4634C18.0497 19.3843 19.6239 19.3448 20.7551 18.2094C21.8862 17.0739 21.9189 15.5412 21.9842 12.4756C21.9952 11.4899 21.9952 10.5101 21.9842 9.52438C21.9189 6.45885 21.8862 4.92608 20.7551 3.79065C19.6239 2.65521 18.0497 2.61566 14.9012 2.53656C12.9607 2.48781 11.0393 2.48781 9.09882 2.53657C5.95033 2.61568 4.37608 2.65523 3.24495 3.79066C2.11382 4.92609 2.08114 6.45886 2.01577 9.52439C2.00474 10.5101 2.00474 11.4899 2.01577 12.4756Z" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                            @if($_inboxUnread > 0)
+                                                                <span style="position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;border-radius:50%;min-width:18px;height:18px;padding:0 4px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 0 0 2px #fff;">{{ $_inboxUnread > 99 ? '99+' : $_inboxUnread }}</span>
+                                                            @endif
+                                                        </a>
+                                                    </div>
+                                                    <!-- End Inbox Notification -->
 
                                                     <!-- Header Settings -->
                                                     <div class="crancy-header__settings">

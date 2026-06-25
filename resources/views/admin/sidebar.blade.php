@@ -878,7 +878,12 @@
 
 
                         </span>
-                        <span class="menu-bar__name">{{ __('Email Configuration') }}</span></span> <span
+                        <span class="menu-bar__name">{{ __('Email Configuration') }}</span>
+                            @php try { $_sidebarInboxUnread = \Modules\EmailSetting\App\Models\ReceivedMailLog::where('is_read', false)->count(); } catch (\Throwable $e) { $_sidebarInboxUnread = 0; } @endphp
+                            @if($_sidebarInboxUnread > 0)
+                                <span style="background:#ef4444;color:#fff;border-radius:50%;min-width:18px;height:18px;padding:0 3px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-left:5px;flex-shrink:0;">{{ $_sidebarInboxUnread > 99 ? '99+' : $_sidebarInboxUnread }}</span>
+                            @endif
+                        </span> <span
                         class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
                 <div class="collapse crancy__dropdown {{ Route::is('admin.email-setting') || Route::is('admin.email-template') || Route::is('admin.edit-email-template') || Route::is('admin.mailbox.*') || Route::is('admin.email-accounts.*') ? 'show' : '' }}"
