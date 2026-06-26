@@ -220,11 +220,13 @@
                                 <span class="text-16p text-white font-medium">{{ currency_pay($sub_total, true) }}</span>
                             </div>
 
+                            @if(!$isOnlyDigital)
                             <div class="flex justify-between items-center mb-5 ">
                                 <span class="text-16p text-white">{{ __('Delivery Fee') }}</span>
                                 <span
                                     class="text-16p text-white font-medium">(+){{ currency_pay($shipping_charge, true) }}</span>
                             </div>
+                            @endif
                             <div class="flex justify-between items-center mb-5 pb-5 border-b border-b-buisness-red/20">
                                 <span class="text-16p text-white">{{ __('Coupon') }}</span>
                                 <span class="text-16p text-white font-medium">

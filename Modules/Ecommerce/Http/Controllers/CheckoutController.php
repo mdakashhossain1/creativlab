@@ -42,7 +42,8 @@ class CheckoutController extends Controller
             $stripe = PaymentGateway::where(['key' => 'stripe_currency_id'])->first();
             $paypal_status = PaymentGateway::where('key', 'paypal_status')->value('value');
             $cta_content=getContent('template_1_cta.content', true);
-            return view('ecommerce::frontend.checkout', compact('carts','seo_setting','methods','sub_total', 'paypal', 'stripe', 'paypal_status','cta_content'));
+            $isOnlyDigital = $carts->isNotEmpty() && $carts->every(fn($cart) => $cart->product?->is_digital);
+            return view('ecommerce::frontend.checkout', compact('carts','seo_setting','methods','sub_total', 'paypal', 'stripe', 'paypal_status','cta_content', 'isOnlyDigital'));
         }else{
             $notification = trans('First You Need To login This Checkout');
             $notification = array('messege' => $notification, 'alert-type' => 'error');
@@ -59,13 +60,22 @@ class CheckoutController extends Controller
             return redirect()->back()->with($notification);
         }
 
+        $carts = Cart::where('user_id', auth()->user()->id)->get();
+        $isOnlyDigital = $carts->isNotEmpty() && $carts->every(fn($cart) => $cart->product?->is_digital);
+
         $rules = [
-            'shipping_method_id' => 'required',
-            'address' => 'required',
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
         ];
+        if (!$isOnlyDigital) {
+            $rules['shipping_method_id'] = 'required';
+            $rules['address'] = 'required';
+        } else {
+            $rules['shipping_method_id'] = 'nullable';
+            $rules['address'] = 'nullable';
+        }
+
         $customMessages = [
             'shipping_method_id.required' => trans('Shipping Method is required'),
             'address.required' => trans('Address is required'),
@@ -76,19 +86,23 @@ class CheckoutController extends Controller
 
         $request->validate($rules, $customMessages);
 
+        $shipping_method_id = !$isOnlyDigital ? $request->shipping_method_id : 0;
+        $shipping_charge = !$isOnlyDigital ? $request->shipping_charge : 0;
+        $address = !$isOnlyDigital ? $request->address : ($request->address ?? 'Digital Delivery');
+
         $customerDetails = json_encode([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'address' => $request->address,
+            'address' => $address,
         ]);
 
         // Prepare order data
         $orderData = [
             'subtotal' => $request->subtotal,
-            'shipping_charge' => $request->shipping_charge,
+            'shipping_charge' => $shipping_charge,
             'total' => $request->total,
-            'shipping_method_id' => $request->shipping_method_id,
+            'shipping_method_id' => $shipping_method_id,
             'address' => json_decode($customerDetails),
         ];
 
@@ -122,7 +136,7 @@ class CheckoutController extends Controller
         $paystack_currency = Currency::findOrFail($this->payment_setting->paystack_currency_id);
 
 
-        return view('ecommerce::frontend.payment', compact('breadcrumb','paypalStatus','user','total','shipping_charge','carts','seo_setting','methods','sub_total', 'paypal', 'stripe', 'razorpay', 'paystack', 'instamojo', 'bank','payment_setting','razorpay_currency','payable_amount','paystack_currency','cta_content'));
+        return view('ecommerce::frontend.payment', compact('breadcrumb','paypalStatus','user','total','shipping_charge','carts','seo_setting','methods','sub_total', 'paypal', 'stripe', 'razorpay', 'paystack', 'instamojo', 'bank','payment_setting','razorpay_currency','payable_amount','paystack_currency','cta_content', 'isOnlyDigital'));
     }
 
 }

@@ -44,6 +44,7 @@
                                             <input type="text" name="email" value="{{ Auth::user()?->email }}" id="emailAddress"
                                                 class="form-input" placeholder="{{ __('Email Address') }}">
                                         </div>
+                                        @if(!$isOnlyDigital)
                                         <div class="form-box col-span-full">
                                             <label for="state" class="text-base mb-2">{{ __('Shipping Method') }}</label>
                                             <div class="custom-select relative  form-input !pt-2.5 shipping-method">
@@ -68,8 +69,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @else
+                                        <input type="hidden" name="shipping_method_id" value="0">
+                                        @endif
                                         <div class="form-box col-span-full">
-                                            <label for="address " class="text-base mb-2">{{ __('Full Address') }}</label>
+                                            <label for="address " class="text-base mb-2">{{ __('Full Address') }} {{ $isOnlyDigital ? __('(Optional)') : '' }}</label>
                                             <input type="text" name="address" id="address" class="form-input"
                                                 placeholder="{{ __('Address') }}">
                                         </div>
@@ -105,11 +109,11 @@
                                             class="text-16p text-white font-medium sub_total">{{ currency($sub_total) }}</span>
                                         <input type="hidden" name="subtotal" value="{{ $sub_total }}">
                                     </div>
-                                    <div class="flex justify-between items-center mb-5">
-                                        <span class="text-16p text-white">{{ __('Delivery Fee') }}</span>
-                                        <span class="text-16p text-white font-medium shipping_cost">(+){{ currency(0) }}</span>
-                                        <input type="hidden" name="shipping_charge" value="">
-                                    </div>
+                                     <div class="flex justify-between items-center mb-5 {{ $isOnlyDigital ? 'hidden' : '' }}">
+                                         <span class="text-16p text-white">{{ __('Delivery Fee') }}</span>
+                                         <span class="text-16p text-white font-medium shipping_cost">(+){{ currency(0) }}</span>
+                                         <input type="hidden" name="shipping_charge" value="">
+                                     </div>
                                     <div class="flex justify-between items-center mb-5 pb-5 border-b border-b-buisness-red/20">
                                         <span class="text-16p text-white">{{ __('Coupon') }}</span>
                                         <span class="text-16p text-white font-medium discount">
@@ -179,7 +183,9 @@
             let curencyicon = '{{ session('currency_icon', "$") }}';
 
             function parseCurrency(currencyStr) {
-                return parseFloat(currencyStr.replace(/[^0-9.-]+/g, '')); // Removing non-numeric characters
+                if (!currencyStr) return 0;
+                const parsed = parseFloat(currencyStr.replace(/[^0-9.-]+/g, '')); // Removing non-numeric characters
+                return isNaN(parsed) ? 0 : parsed;
             }
 
             // Function to format number into currency format (e.g., $10.00)
