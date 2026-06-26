@@ -57,22 +57,22 @@
                         {{-- Month Filter + Export --}}
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mg-top-30">
                             <form method="GET" class="d-flex align-items-center gap-2 flex-wrap">
-                                <select name="month" class="form-select crancy__item-input" style="width: 150px; height: 46px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0 12px; background-color: #fff; display: inline-block;">
+                                <select name="month" class="form-select crancy__item-input" style="width: 150px !important; min-height: 46px !important; height: 46px !important; border: 1px solid #e2e8f0 !important; border-radius: 6px !important; padding: 0 12px !important; background-color: #fff !important; display: inline-block !important;">
                                     @foreach(range(1,12) as $m)
                                         <option value="{{ $m }}" @selected($m == $month)>
                                             {{ \Carbon\Carbon::createFromDate(null, $m, 1)->format('F') }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <select name="year" class="form-select crancy__item-input" style="width: 110px; height: 46px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0 12px; background-color: #fff; display: inline-block;">
+                                <select name="year" class="form-select crancy__item-input" style="width: 110px !important; min-height: 46px !important; height: 46px !important; border: 1px solid #e2e8f0 !important; border-radius: 6px !important; padding: 0 12px !important; background-color: #fff !important; display: inline-block !important;">
                                     @foreach(range(now()->year - 2, now()->year + 1) as $y)
                                         <option value="{{ $y }}" @selected($y == $year)>{{ $y }}</option>
                                     @endforeach
                                 </select>
-                                <button type="submit" class="crancy-btn" style="height: 46px; padding: 0 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px;">{{ __('Filter') }}</button>
+                                <button type="submit" class="crancy-btn" style="height: 46px !important; padding: 0 24px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 6px !important;">{{ __('Filter') }}</button>
                             </form>
                             <a href="{{ route('admin.payroll.export', ['year' => $year, 'month' => $month]) }}"
-                               class="crancy-btn" style="height: 46px; padding: 0 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px;">
+                               class="crancy-btn" style="height: 46px !important; padding: 0 24px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 6px !important;">
                                 <i class="fas fa-download me-2"></i>{{ __('Export CSV') }}
                             </a>
                         </div>
