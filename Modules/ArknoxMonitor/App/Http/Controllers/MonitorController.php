@@ -12,6 +12,17 @@ use Modules\ArknoxMonitor\App\Services\QueryBuffer;
 
 class MonitorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $secret = config('arknoxmonitor.secret');
+            if (!$secret || $request->header('X-Monitor-Token') !== $secret) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            return $next($request);
+        });
+    }
+
     /** GET /arknox-monitor/health */
     public function health(HealthChecker $checker): JsonResponse
     {
