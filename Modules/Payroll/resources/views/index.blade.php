@@ -193,7 +193,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="salaryModalLabel">{{ __('Set Salary') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
             <form method="POST" action="{{ route('admin.payroll.save') }}">
                 @csrf
