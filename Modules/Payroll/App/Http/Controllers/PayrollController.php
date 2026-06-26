@@ -134,25 +134,28 @@ class PayrollController extends Controller
         $filename = 'payroll-' . $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '.csv';
 
         $headers = [
-            'Content-Type'        => 'text/csv',
+            'Content-Type'        => 'text/csv; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
         $callback = function () use ($records) {
             $handle = fopen('php://output', 'w');
+            // Write UTF-8 BOM to make it open correctly in Excel
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+            
             fputcsv($handle, ['#', 'Name', 'Designation', 'Base Salary', 'Bonus', 'Deductions', 'Net Salary', 'Status', 'Paid At']);
 
             foreach ($records as $i => $rec) {
                 fputcsv($handle, [
                     $i + 1,
-                    $rec->team?->translate?->name ?? '—',
-                    $rec->team?->translate?->designation ?? '—',
+                    $rec->team?->translate?->name ?? '',
+                    $rec->team?->translate?->designation ?? '',
                     number_format($rec->base_salary, 2),
                     number_format($rec->bonus, 2),
                     number_format($rec->deductions, 2),
                     number_format($rec->net_salary, 2),
                     ucfirst($rec->status),
-                    $rec->paid_at ? $rec->paid_at->format('d M Y') : '—',
+                    $rec->paid_at ? $rec->paid_at->format('d M Y') : '',
                 ]);
             }
 
