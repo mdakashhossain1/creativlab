@@ -56,27 +56,26 @@
 
                         </div>
 
-                        {{-- Date Filter + Actions --}}
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
-                            <form method="GET" class="d-flex gap-2 align-items-center">
-                                <input type="date" name="date" value="{{ $date }}" class="form-control" style="width:200px;">
-                                <button class="crancy-btn">{{ __('Filter') }}</button>
-                            </form>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('admin.attendance.monthly') }}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-chart-bar me-1"></i>{{ __('Monthly Report') }}
-                                </a>
-                                <a href="{{ route('admin.attendance.devices') }}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-mobile-alt me-1"></i>{{ __('Devices') }}
-                                </a>
-                                <a href="{{ route('admin.attendance.qrcode') }}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-qrcode me-1"></i>{{ __('QR Code') }}
-                                </a>
-                            </div>
-                        </div>
-
                         {{-- Attendance Table --}}
                         <div class="crancy-table crancy-table--v3">
+                            {{-- Date Filter + Actions --}}
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                                <form method="GET" class="d-flex gap-2 align-items-center">
+                                    <input type="date" name="date" value="{{ $date }}" class="form-control" style="width:200px;">
+                                    <button class="crancy-btn">{{ __('Filter') }}</button>
+                                </form>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('admin.attendance.monthly') }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-chart-bar me-1"></i>{{ __('Monthly Report') }}
+                                    </a>
+                                    <a href="{{ route('admin.attendance.devices') }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-mobile-alt me-1"></i>{{ __('Devices') }}
+                                    </a>
+                                    <a href="{{ route('admin.attendance.qrcode') }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-qrcode me-1"></i>{{ __('QR Code') }}
+                                    </a>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="crancy-table__main crancy-table__main-v3 no-footer w-100">
                                     <thead class="crancy-table__head">
