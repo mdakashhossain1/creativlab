@@ -111,9 +111,9 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
         Route::get('/register-verification', [UserRegisterController::class, 'register_verification'])->name('register-verification');
 
 
-        Route::post('/update-user-image', [UserProfileController::class, 'updateImage'])->name('update-image');
-
         Route::group(['middleware' => 'auth:web'],function () {
+
+            Route::post('/update-user-image', [UserProfileController::class, 'updateImage'])->name('update-image');
 
             Route::get('/dashboard', [UserProfileController::class, 'dashboard'])->name('dashboard');
 

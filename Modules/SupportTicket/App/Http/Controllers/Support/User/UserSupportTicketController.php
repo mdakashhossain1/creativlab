@@ -44,12 +44,16 @@ class UserSupportTicketController extends Controller
     {
         $request->validate(
             [
-                'subject' => 'required|max:255',
-                'message' => 'required',
+                'subject'      => 'required|max:255',
+                'message'      => 'required',
+                'documents'    => 'nullable|array|max:5',
+                'documents.*'  => 'file|mimes:pdf,jpg,jpeg,png,gif,doc,docx,zip|max:5120',
             ],
             [
-                'subject.required' => 'Subject is required',
-                'message.required' => 'Message is required',
+                'subject.required'    => 'Subject is required',
+                'message.required'    => 'Message is required',
+                'documents.*.mimes'   => 'Only pdf, jpg, jpeg, png, gif, doc, docx, zip files are allowed',
+                'documents.*.max'     => 'Each file must not exceed 5MB',
             ]
         );
 
@@ -126,10 +130,14 @@ class UserSupportTicketController extends Controller
     {
         $request->validate(
             [
-                'message' => 'required',
+                'message'      => 'required',
+                'documents'    => 'nullable|array|max:5',
+                'documents.*'  => 'file|mimes:pdf,jpg,jpeg,png,gif,doc,docx,zip|max:5120',
             ],
             [
-                'message.required' => 'Message is required',
+                'message.required'   => 'Message is required',
+                'documents.*.mimes'  => 'Only pdf, jpg, jpeg, png, gif, doc, docx, zip files are allowed',
+                'documents.*.max'    => 'Each file must not exceed 5MB',
             ]
         );
 
