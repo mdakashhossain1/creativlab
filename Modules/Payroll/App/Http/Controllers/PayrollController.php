@@ -148,14 +148,14 @@ class PayrollController extends Controller
             foreach ($records as $i => $rec) {
                 fputcsv($handle, [
                     $i + 1,
-                    $rec->team?->translate?->name ?? '',
-                    $rec->team?->translate?->designation ?? '',
+                    $rec->team?->translate?->name ?? '-',
+                    $rec->team?->translate?->designation ?? '-',
                     number_format($rec->base_salary, 2),
                     number_format($rec->bonus, 2),
                     number_format($rec->deductions, 2),
                     number_format($rec->net_salary, 2),
                     ucfirst($rec->status),
-                    $rec->paid_at ? $rec->paid_at->format('d M Y') : '',
+                    $rec->paid_at ? $rec->paid_at->format('d M Y') : '-',
                 ]);
             }
 
