@@ -279,5 +279,3 @@ class UserPaypalController extends Controller
         return $html;
     }
 }
-
-}

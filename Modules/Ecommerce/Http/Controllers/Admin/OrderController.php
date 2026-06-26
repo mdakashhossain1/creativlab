@@ -30,12 +30,15 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-
-
         $order = Order::findOrFail($id);
+        $wasApproved = $order->payment_status == Status::APPROVED;
         $order->order_status = $request->input('order_status');
         $order->payment_status = $request->input('payment_status');
         $order->save();
+
+        if (!$wasApproved && $order->payment_status == Status::APPROVED) {
+            $this->dispatchDigitalDelivery($order);
+        }
 
         $notification=  trans('Status updated successfully');
         $notification=array('message'=>$notification,'alert-type'=>'success');
