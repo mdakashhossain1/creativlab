@@ -10,6 +10,10 @@ class Listing extends Model
 
     protected $fillable = [];
 
+    protected $attributes = [
+        'total_view' => 0,
+    ];
+
     protected $appends = ['title', 'description', 'short_description'];
 
     protected $hidden = ['front_translate'];
