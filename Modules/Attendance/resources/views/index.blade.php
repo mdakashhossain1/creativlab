@@ -129,13 +129,28 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-outline-primary"
-                                                    onclick="openManual({{ $team->id }}, '{{ $date }}', '{{ $att?->check_in }}', '{{ $att?->check_out }}', '{{ $att?->notes }}')">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <a href="{{ route('admin.attendance.calendar', $team->id) }}" class="btn btn-sm btn-outline-secondary" title="Calendar">
-                                                    <i class="fas fa-calendar-alt"></i>
-                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="crancy-btn dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton{{ $team->id }}"
+                                                        data-bs-toggle="dropdown"
+                                                        data-bs-flip="false"
+                                                        aria-expanded="false">
+                                                        {{ __('Action') }}
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $team->id }}">
+                                                        <li>
+                                                            <a class="dropdown-item" href="javascript:;"
+                                                                onclick="openManual({{ $team->id }}, '{{ $date }}', '{{ $att?->check_in }}', '{{ $att?->check_out }}', '{{ $att?->notes }}')">
+                                                                <i class="fas fa-edit"></i> {{ __('Edit') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('admin.attendance.calendar', $team->id) }}">
+                                                                <i class="fas fa-calendar-alt"></i> {{ __('Calendar') }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                         @endforeach
