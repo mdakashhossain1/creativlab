@@ -45,12 +45,12 @@
 
                                         <div>
                                             <div class="mb-2">
-                                                <span class="badge bg-success">v1.0.1</span>
+                                                <span id="win-version-badge" class="badge bg-success">checking…</span>
                                                 <span class="text-muted ms-2" style="font-size:12px;">Windows 10/11 · 64-bit</span>
                                             </div>
-                                            <a href="https://github.com/mdakashhossain1/creativlab/releases/latest/download/CreativLab-Attendance-Setup-1.0.1.exe"
+                                            <a id="win-download-btn" href="#" target="_blank"
                                                class="crancy-btn w-100 text-center d-block" style="text-decoration:none;">
-                                                <i class="fas fa-download me-2"></i>Download Installer (.exe)
+                                                <i class="fas fa-download me-2"></i><span id="win-btn-text">Loading…</span>
                                             </a>
                                             <p class="text-muted mt-2 mb-0" style="font-size:11px;">
                                                 <i class="fas fa-shield-alt me-1 text-success"></i>
@@ -110,3 +110,33 @@
     </div>
 </section>
 @endsection
+
+@push('js_section')
+<script>
+(function () {
+    const REPO = 'mdakashhossain1/creativlab';
+    const badge = document.getElementById('win-version-badge');
+    const btn   = document.getElementById('win-download-btn');
+    const label = document.getElementById('win-btn-text');
+
+    fetch('https://api.github.com/repos/' + REPO + '/releases/latest', {
+        headers: { 'Accept': 'application/vnd.github+json' }
+    })
+    .then(r => r.json())
+    .then(release => {
+        const asset = (release.assets || []).find(a => a.name.endsWith('.exe'));
+        if (!asset) throw new Error('no exe asset');
+
+        badge.textContent = release.tag_name;
+        btn.href = asset.browser_download_url;
+        label.textContent = 'Download Installer (.exe)';
+    })
+    .catch(() => {
+        badge.textContent = 'latest';
+        btn.href = 'https://github.com/' + REPO + '/releases/latest';
+        btn.target = '_blank';
+        label.textContent = 'Go to Releases page';
+    });
+})();
+</script>
+@endpush
