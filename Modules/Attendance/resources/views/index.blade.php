@@ -72,7 +72,7 @@
                                         <i class="fas fa-mobile-alt me-1"></i>{{ __('Devices') }}
                                     </a>
                                     <a href="{{ route('admin.attendance.qrcode') }}" class="btn btn-outline-secondary btn-sm">
-                                        <i class="fas fa-qrcode me-1"></i>{{ __('QR Code') }}
+                                        <i class="fas fa-download me-1"></i>{{ __('Download App') }}
                                     </a>
                                 </div>
                             </div>

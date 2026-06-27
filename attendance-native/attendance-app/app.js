@@ -32,6 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Refresh home grid whenever the background monitor checks someone in or out
     window.electron.onMemberArrived(() => loadTeamData().catch(() => {}));
     window.electron.onMemberLeft(()    => loadTeamData().catch(() => {}));
+
+    // Auto-update notifications
+    window.electron.onUpdateAvailable(version => {
+      const banner = document.getElementById('updateBanner');
+      if (banner) {
+        document.getElementById('updateBannerText').textContent = `⬆ Update v${version} downloading…`;
+        banner.style.display = 'flex';
+      }
+    });
+    window.electron.onUpdateProgress(pct => {
+      const el = document.getElementById('updateProgressText');
+      if (el) el.textContent = `${pct}%`;
+    });
+    window.electron.onUpdateDownloaded(version => {
+      document.getElementById('updateBannerText').textContent  = `⬆ v${version} ready to install`;
+      document.getElementById('updateProgressText').textContent = '';
+      document.getElementById('updateInstallBtn').style.display = 'inline-block';
+    });
   }
 });
 

@@ -1,77 +1,106 @@
 @extends('admin.master_layout')
-@section('title')<title>{{ __('Office Check-In QR') }}</title>@endsection
+@section('title')<title>{{ __('Download Attendance App') }}</title>@endsection
 @section('body-header')
-    <h3 class="crancy-header__title m-0">{{ __('Office Check-In QR Code') }}</h3>
-    <p class="crancy-header__text">{{ __('Attendance') }} >> {{ __('QR Code') }}</p>
+    <h3 class="crancy-header__title m-0">{{ __('Download Attendance App') }}</h3>
+    <p class="crancy-header__text">{{ __('Attendance') }} >> {{ __('Download App') }}</p>
 @endsection
 
 @section('body-content')
 <section class="crancy-adashboard crancy-show">
     <div class="container container__bscreen">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
+            <div class="col-md-10 col-lg-8">
                 <div class="crancy-body">
                     <div class="crancy-dsinner">
 
-                        <div class="card border-0 shadow-sm text-center p-4 mt-3">
-                            <h4 class="mb-1">Today's Check-In QR Code</h4>
-                            <p class="text-muted mb-4" style="font-size:14px;">
-                                Display this QR at the office entrance. Team members scan it from the Attendance PWA to check in.
-                                <strong>Refreshes daily automatically.</strong>
-                            </p>
-
-                            {{-- QR Code rendered by JS --}}
-                            <div id="qrcode" class="d-flex justify-content-center mb-4"></div>
-
-                            <div class="alert alert-info d-flex align-items-center gap-2 text-start" style="font-size:13px;">
-                                <i class="fas fa-info-circle"></i>
-                                <div>
-                                    QR Token: <code id="qrToken" style="font-size:12px; word-break:break-all;"></code>
-                                </div>
+                        <div class="card border-0 shadow-sm p-4 mt-3">
+                            <div class="text-center mb-4">
+                                <h4 class="mb-1">CreativLab Attendance App</h4>
+                                <p class="text-muted" style="font-size:14px;">
+                                    Install the desktop app on Windows PCs to automatically track office attendance via Wi-Fi.
+                                </p>
                             </div>
 
-                            <div class="d-flex gap-3 justify-content-center flex-wrap mt-2">
-                                <button onclick="printQR()" class="crancy-btn">
-                                    <i class="fas fa-print me-2"></i>Print QR Code
-                                </button>
-                                <a href="{{ url('/attendance-app/') }}" target="_blank" class="btn btn-outline-secondary">
-                                    <i class="fas fa-external-link-alt me-2"></i>Open PWA App
-                                </a>
-                            </div>
+                            <div class="row g-4">
 
-                            <hr class="my-4">
-
-                            <h6 class="mb-3 text-muted">PWA Installation Instructions</h6>
-                            <div class="row g-3 text-start">
+                                {{-- Windows Download Card --}}
                                 <div class="col-md-6">
-                                    <div class="p-3 rounded" style="background:#f8fafc; border:1px solid #e2e8f0;">
-                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                            <i class="fab fa-android text-success fa-lg"></i>
-                                            <strong>Android</strong>
+                                    <div class="p-4 rounded h-100" style="background:#f0f4ff; border:2px solid #6366f1;">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div style="width:48px;height:48px;background:#6366f1;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fab fa-windows text-white fa-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0">Windows</h5>
+                                                <small class="text-muted">Desktop Installer</small>
+                                            </div>
                                         </div>
-                                        <ol class="mb-0 ps-3" style="font-size:13px;">
-                                            <li>Open Chrome browser</li>
-                                            <li>Visit: <code style="font-size:11px;">{{ url('/attendance-app/') }}</code></li>
-                                            <li>Tap <strong>⋮ Menu → Add to Home Screen</strong></li>
-                                            <li>App installs and runs in background</li>
-                                        </ol>
+
+                                        <ul class="list-unstyled mb-4" style="font-size:13px;color:#374151;">
+                                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Runs silently in the background</li>
+                                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Auto-starts on Windows login</li>
+                                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Detects office Wi-Fi automatically</li>
+                                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Syncs attendance without any action</li>
+                                        </ul>
+
+                                        <div>
+                                            <div class="mb-2">
+                                                <span class="badge bg-success">v1.0.0</span>
+                                                <span class="text-muted ms-2" style="font-size:12px;">Windows 10/11 · 64-bit</span>
+                                            </div>
+                                            <a href="https://github.com/mdakashhossain1/creativlab/releases/latest/download/CreativLab.Attendance.Setup.1.0.0.exe"
+                                               class="crancy-btn w-100 text-center d-block" style="text-decoration:none;">
+                                                <i class="fas fa-download me-2"></i>Download Installer (.exe)
+                                            </a>
+                                            <p class="text-muted mt-2 mb-0" style="font-size:11px;">
+                                                <i class="fas fa-shield-alt me-1 text-success"></i>
+                                                Signed installer — run <code>trust-cert.ps1</code> once as Admin to bypass SmartScreen
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
+
+                                {{-- Android Placeholder --}}
                                 <div class="col-md-6">
-                                    <div class="p-3 rounded" style="background:#f8fafc; border:1px solid #e2e8f0;">
-                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                            <i class="fab fa-windows text-primary fa-lg"></i>
-                                            <strong>Windows</strong>
+                                    <div class="p-4 rounded h-100" style="background:#f8fafc; border:2px dashed #cbd5e1;">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div style="width:48px;height:48px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fab fa-android fa-xl" style="color:#94a3b8;"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="mb-0 text-muted">Android</h5>
+                                                <small class="text-muted">APK Coming Soon</small>
+                                            </div>
                                         </div>
-                                        <ol class="mb-0 ps-3" style="font-size:13px;">
-                                            <li>Open Edge or Chrome browser</li>
-                                            <li>Visit: <code style="font-size:11px;">{{ url('/attendance-app/') }}</code></li>
-                                            <li>Click <strong>⋯ Menu → Apps → Install</strong></li>
-                                            <li>App installs to Start Menu</li>
-                                        </ol>
+
+                                        <ul class="list-unstyled mb-4" style="font-size:13px;color:#94a3b8;">
+                                            <li class="mb-2"><i class="fas fa-clock me-2"></i>GPS-based location check-in</li>
+                                            <li class="mb-2"><i class="fas fa-clock me-2"></i>Background attendance tracking</li>
+                                            <li class="mb-2"><i class="fas fa-clock me-2"></i>Push notifications</li>
+                                            <li class="mb-2"><i class="fas fa-clock me-2"></i>Works on Android 8+</li>
+                                        </ul>
+
+                                        <div>
+                                            <button class="btn btn-secondary w-100" disabled>
+                                                <i class="fas fa-hourglass-half me-2"></i>Coming Soon
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
+
+                            {{-- Setup Instructions --}}
+                            <div class="mt-4 p-3 rounded" style="background:#fffbeb; border:1px solid #fcd34d;">
+                                <h6 class="mb-2"><i class="fas fa-info-circle text-warning me-2"></i>First-Time Setup (Windows)</h6>
+                                <ol class="mb-0 ps-3" style="font-size:13px;color:#374151;">
+                                    <li>Download and run the installer above</li>
+                                    <li>Right-click <code>trust-cert.ps1</code> → <strong>Run as Administrator</strong> (one-time, removes SmartScreen warning)</li>
+                                    <li>The app starts automatically at login and runs in the system tray</li>
+                                    <li>Click the tray icon to open the dashboard and link your device</li>
+                                </ol>
+                            </div>
+
                         </div>
 
                     </div>
@@ -81,50 +110,3 @@
     </div>
 </section>
 @endsection
-
-@push('js_section')
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-<script>
-"use strict";
-const token = 'CREATIVLAB_OFFICE_CHECKIN_{{ date("Ymd") }}';
-document.getElementById('qrToken').textContent = token;
-
-let _qrCanvas = null;
-
-const qrContainer = document.getElementById('qrcode');
-QRCode.toCanvas(qrContainer, token, {
-    width: 280, margin: 2,
-    color: { dark: '#0f172a', light: '#ffffff' }
-}, function (err, canvas) {
-    if (err) { console.error('QR error', err); return; }
-    _qrCanvas = canvas;
-    canvas.style.borderRadius = '12px';
-    canvas.style.border = '8px solid white';
-    canvas.style.boxShadow = '0 4px 20px rgba(0,0,0,.12)';
-});
-
-function printQR() {
-    const canvas = _qrCanvas || document.querySelector('#qrcode canvas');
-    if (!canvas) { alert('QR code not ready yet.'); return; }
-
-    const dataUrl = canvas.toDataURL('image/png');
-    const win = window.open('', '_blank', 'width=480,height=560');
-    win.document.write(
-        '<!DOCTYPE html><html><head><title>Office Check-In QR</title>' +
-        '<style>' +
-        'body{margin:0;display:flex;flex-direction:column;align-items:center;' +
-        'justify-content:center;min-height:100vh;font-family:sans-serif;background:#fff;}' +
-        'img{width:320px;height:320px;border-radius:12px;}' +
-        'h3{margin:16px 0 4px;font-size:18px;color:#0f172a;}' +
-        'p{margin:0;font-size:12px;color:#64748b;}' +
-        '</style></head><body>' +
-        '<img src="' + dataUrl + '">' +
-        '<h3>CreativLab Office Check-In</h3>' +
-        '<p>' + new Date().toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long',year:'numeric'}) + '</p>' +
-        '<script>window.onload=function(){window.print();window.onafterprint=function(){window.close();};};<\/script>' +
-        '</body></html>'
-    );
-    win.document.close();
-}
-</script>
-@endpush

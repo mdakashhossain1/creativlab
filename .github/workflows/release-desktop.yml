@@ -1,0 +1,51 @@
+name: Release Desktop App
+
+on:
+  push:
+    tags:
+      - 'desktop-v*'   # trigger on tags like desktop-v1.0.1
+
+permissions:
+  contents: write   # needed to create GitHub releases
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: landing-new/attendance-native/package-lock.json
+
+      - name: Install dependencies
+        working-directory: landing-new/attendance-native
+        run: npm ci
+
+      - name: Restore code-signing certificate
+        working-directory: landing-new/attendance-native
+        env:
+          CODESIGN_PFX_B64: ${{ secrets.CODESIGN_PFX_B64 }}
+        shell: pwsh
+        run: |
+          if ($env:CODESIGN_PFX_B64) {
+            [System.IO.File]::WriteAllBytes(
+              "electron\icons\codesign.pfx",
+              [Convert]::FromBase64String($env:CODESIGN_PFX_B64)
+            )
+            Write-Host "Certificate restored."
+          } else {
+            Write-Host "No certificate secret found — build will be unsigned."
+          }
+
+      - name: Build & publish to GitHub Releases
+        working-directory: landing-new/attendance-native
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_KEY_PASSWORD: ${{ secrets.CODESIGN_PASSWORD }}
+        run: npm run release

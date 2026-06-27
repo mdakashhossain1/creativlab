@@ -7,22 +7,30 @@ const os    = require('os');
 const { exec } = require('child_process');
 const https = require('https');
 const http  = require('http');
+const { autoUpdater } = require('electron-updater');
 
 // ── Paths ──────────────────────────────────────────────────────────
-const CONFIG_PATH = path.join(__dirname, '..', 'config.json');
-const isDev       = !app.isPackaged;
-const APP_HTML    = isDev
+const isDev    = !app.isPackaged;
+const APP_HTML = isDev
   ? path.join(__dirname, '..', 'attendance-app', 'index.html')
   : path.join(process.resourcesPath, 'attendance-app', 'index.html');
 
+// Config lives in the user's writable AppData dir — never in Program Files.
+// app.getPath('userData') = C:\Users\<user>\AppData\Roaming\CreativLab Attendance
+function getConfigPath() {
+  return path.join(app.getPath('userData'), 'config.json');
+}
+
 // ── Config ─────────────────────────────────────────────────────────
 function readConfig() {
-  try { return JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8')); }
+  try { return JSON.parse(fs.readFileSync(getConfigPath(), 'utf8')); }
   catch { return {}; }
 }
 function writeConfig(delta) {
+  const cfgPath = getConfigPath();
+  fs.mkdirSync(path.dirname(cfgPath), { recursive: true });
   const current = readConfig();
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify({ ...current, ...delta }, null, 2));
+  fs.writeFileSync(cfgPath, JSON.stringify({ ...current, ...delta }, null, 2));
 }
 
 // ── State ──────────────────────────────────────────────────────────
@@ -113,6 +121,8 @@ function createWindow() {
     title:     'CreativLab Attendance',
     icon:      winIcon,
     show:      false,
+    // Start hidden from taskbar — only tray icon is shown while minimised
+    skipTaskbar: true,
     webPreferences: {
       preload:          path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -123,13 +133,17 @@ function createWindow() {
   });
 
   mainWindow.loadFile(APP_HTML);
-  mainWindow.once('ready-to-show', () => mainWindow.show());
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    mainWindow.setSkipTaskbar(false); // show in taskbar when window is open
+  });
 
-  // Minimise to tray instead of closing
+  // X button → hide to tray, NEVER quit
   mainWindow.on('close', (e) => {
     if (!app._quitting) {
       e.preventDefault();
       mainWindow.hide();
+      mainWindow.setSkipTaskbar(true); // remove from taskbar while hidden
     }
   });
 }
@@ -139,7 +153,11 @@ function buildTrayMenu() {
   return Menu.buildFromTemplate([
     {
       label: 'Open Attendance',
-      click: () => { mainWindow.show(); mainWindow.focus(); },
+      click: () => {
+        mainWindow.setSkipTaskbar(false);
+        mainWindow.show();
+        mainWindow.focus();
+      },
     },
     { type: 'separator' },
     {
@@ -170,7 +188,9 @@ function createTray() {
   tray.on('click', () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
+      mainWindow.setSkipTaskbar(true);
     } else {
+      mainWindow.setSkipTaskbar(false);
       mainWindow.show();
       mainWindow.focus();
     }
@@ -387,13 +407,70 @@ function startNetworkMonitor() {
   setInterval(networkMonitorLoop, 30_000); // then every 30 seconds
 }
 
-// ── Auto-launch setup ──────────────────────────────────────────────
-async function setupAutoLaunch() {
-  try {
-    const AutoLaunch = require('auto-launch');
-    const al = new AutoLaunch({ name: 'CreativLab Attendance', path: app.getPath('exe') });
-    if (!(await al.isEnabled())) await al.enable();
-  } catch { /* optional feature */ }
+// ── Background service registration (Windows Task Scheduler) ──────
+// Registers the app as a scheduled task that:
+//   • starts automatically at every user logon
+//   • restarts itself up to 9999 times (1 min wait) if it crashes
+// This replaces auto-launch and survives crashes without manual restart.
+function registerBackgroundService() {
+  if (isDev || process.platform !== 'win32') return;
+
+  const exePath  = app.getPath('exe').replace(/'/g, "''");
+  const taskName = 'CreativLabAttendance';
+
+  // PowerShell script — idempotent, overwrites existing task
+  const ps = [
+    `$a = New-ScheduledTaskAction -Execute '${exePath}'`,
+    `$t = New-ScheduledTaskTrigger -AtLogOn`,
+    `$s = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) ` +
+         `-RestartCount 9999 -RestartInterval (New-TimeSpan -Minutes 1) ` +
+         `-StartWhenAvailable $true`,
+    `$p = New-ScheduledTaskPrincipal -LogonType Interactive -RunLevel Highest`,
+    `Register-ScheduledTask -TaskName '${taskName}' -Action $a -Trigger $t -Settings $s -Principal $p -Force | Out-Null`,
+  ].join('; ');
+
+  exec(
+    `powershell -NonInteractive -NoProfile -WindowStyle Hidden -Command "${ps}"`,
+    (err) => {
+      if (err) console.error('[service] Task Scheduler registration failed:', err.message);
+      else     console.log('[service] Registered as background service (Task Scheduler)');
+    }
+  );
+}
+
+// ── Auto-updater ───────────────────────────────────────────────────
+function setupAutoUpdater() {
+  if (isDev) return; // only run in packaged app
+
+  autoUpdater.autoDownload        = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('[updater] Update available:', info.version);
+    if (mainWindow && !mainWindow.isDestroyed())
+      mainWindow.webContents.send('update-available', info.version);
+  });
+
+  autoUpdater.on('download-progress', (progress) => {
+    if (mainWindow && !mainWindow.isDestroyed())
+      mainWindow.webContents.send('update-progress', Math.round(progress.percent));
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('[updater] Update downloaded:', info.version);
+    if (mainWindow && !mainWindow.isDestroyed())
+      mainWindow.webContents.send('update-downloaded', info.version);
+    // Update tray tooltip
+    if (tray) tray.setToolTip(`CreativLab Attendance\n⬆ Update v${info.version} ready — restart to install`);
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('[updater] Error:', err.message);
+  });
+
+  // Check on launch, then every 4 hours
+  autoUpdater.checkForUpdatesAndNotify().catch(() => {});
+  setInterval(() => autoUpdater.checkForUpdatesAndNotify().catch(() => {}), 4 * 60 * 60 * 1000);
 }
 
 // ── IPC handlers ───────────────────────────────────────────────────
@@ -406,6 +483,7 @@ ipcMain.handle('scan-network-full',  ()      => scanNetworkFull());
 ipcMain.handle('get-network-info',   ()      => getNetworkInfo());
 ipcMain.handle('get-username',       ()      => os.userInfo().username);
 ipcMain.handle('get-hostname',       ()      => os.hostname());
+ipcMain.handle('install-update',     ()      => { autoUpdater.quitAndInstall(); });
 
 // Renderer can ask for an immediate monitor scan (e.g. after linking a new device)
 ipcMain.handle('trigger-monitor-scan', () => {
@@ -417,12 +495,17 @@ ipcMain.handle('trigger-monitor-scan', () => {
 app.whenReady().then(() => {
   createWindow();
   createTray();
-  startNetworkMonitor(); // background ARP monitor — runs forever in tray
-  setupAutoLaunch();     // registers app to start on Windows login
+  startNetworkMonitor();      // background ARP monitor — runs forever in tray
+  registerBackgroundService(); // Windows Task Scheduler: auto-start + crash-restart
+  setupAutoUpdater();          // check GitHub releases for updates
 });
 
-// Stay alive in tray even when all windows are closed
-app.on('window-all-closed', () => { /* intentional – tray app */ });
+// Never quit when all windows close — stay alive in the system tray
+app.on('window-all-closed', () => { /* intentional: tray app */ });
+
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
+
+// Only truly quit when the user picks "Quit" from the tray menu
+app.on('before-quit', () => { app._quitting = true; });

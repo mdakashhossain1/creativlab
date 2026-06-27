@@ -83,6 +83,22 @@
 <!-- ── Toast Container ─────────────────────────────────────────────── -->
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- ── Update Banner ────────────────────────────────────────────────── -->
+<div id="updateBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9000;
+  background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff;
+  padding:10px 16px;font-size:13px;font-weight:600;
+  display:none;align-items:center;justify-content:space-between;gap:12px;">
+  <span id="updateBannerText">⬆ Update available…</span>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <span id="updateProgressText" style="font-size:12px;opacity:.85;"></span>
+    <button id="updateInstallBtn" onclick="window.electron?.installUpdate()"
+      style="display:none;background:#fff;color:#6366f1;border:none;border-radius:8px;
+      padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;">
+      Restart &amp; Install
+    </button>
+  </div>
+</div>
+
 <!-- ── Member Detail Overlay ──────────────────────────────────────── -->
 <div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
   <div class="detail-sheet">

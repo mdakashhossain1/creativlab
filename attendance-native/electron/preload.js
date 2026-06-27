@@ -4,8 +4,13 @@ const { contextBridge, ipcRenderer } = require('electron');
 const path = require('path');
 const fs   = require('fs');
 
-// Read config bundled next to this preload
-const configPath = path.join(__dirname, '..', 'config.json');
+// Read config from the user-writable AppData dir — matches app.getPath('userData') in main.js.
+// app name (package.json "name") = creativlab-attendance  →  %APPDATA%\creativlab-attendance
+const configPath = path.join(
+  process.env.APPDATA || path.join(require('os').homedir(), 'AppData', 'Roaming'),
+  'creativlab-attendance',
+  'config.json'
+);
 let cfg = {};
 try { cfg = JSON.parse(fs.readFileSync(configPath, 'utf8')); } catch {}
 
@@ -48,4 +53,10 @@ contextBridge.exposeInMainWorld('electron', {
   // fn({ mac, name }) — fired when a linked device appears / disappears
   onMemberArrived: (fn) => ipcRenderer.on('member-arrived', (_e, data) => fn(data)),
   onMemberLeft:    (fn) => ipcRenderer.on('member-left',    (_e, data) => fn(data)),
+
+  // Auto-update
+  onUpdateAvailable: (fn) => ipcRenderer.on('update-available', (_e, v)  => fn(v)),
+  onUpdateProgress:  (fn) => ipcRenderer.on('update-progress',  (_e, pct) => fn(pct)),
+  onUpdateDownloaded:(fn) => ipcRenderer.on('update-downloaded', (_e, v) => fn(v)),
+  installUpdate:     ()   => ipcRenderer.invoke('install-update'),
 });
