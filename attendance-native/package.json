@@ -72,7 +72,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "CreativLab Attendance"
+      "shortcutName": "CreativLab Attendance",
+      "artifactName": "CreativLab-Attendance-Setup-${version}.${ext}"
     },
     "publish": {
       "provider": "github",
