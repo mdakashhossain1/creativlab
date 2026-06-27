@@ -27,8 +27,9 @@
     "appId": "com.creativlab.attendance",
     "productName": "CreativLab Attendance",
     "directories": {
-      "output": "dist-windows"
+      "output": "dist-win"
     },
+    "asar": false,
     "files": [
       "electron/**/*",
       "config.json",
@@ -46,12 +47,15 @@
     ],
     "win": {
       "sign": null,
+      "icon": "electron/icons/icon.ico",
       "target": [
         {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
           "target": "zip",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         }
       ]
     },
