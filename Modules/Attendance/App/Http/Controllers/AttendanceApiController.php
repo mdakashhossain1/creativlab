@@ -19,23 +19,36 @@ class AttendanceApiController extends Controller
             'team_id'            => 'required|exists:teams,id',
             'device_name'        => 'required|string|max:255',
             'device_type'        => 'required|in:android,windows,other',
-            'device_fingerprint' => 'required|string|unique:attendance_devices,device_fingerprint',
+            'device_fingerprint' => 'required|string',
         ]);
 
-        $device = AttendanceDevice::create([
-            'team_id'            => $request->team_id,
-            'device_name'        => $request->device_name,
-            'device_type'        => $request->device_type,
-            'device_fingerprint' => $request->device_fingerprint,
-            'is_active'          => true,
-            'last_seen_at'       => now(),
-        ]);
+        // updateOrCreate so re-assigning the same device (after unlink) just updates the row
+        $device = AttendanceDevice::updateOrCreate(
+            ['device_fingerprint' => $request->device_fingerprint],
+            [
+                'team_id'      => $request->team_id,
+                'device_name'  => $request->device_name,
+                'device_type'  => $request->device_type,
+                'is_active'    => true,
+                'last_seen_at' => now(),
+            ]
+        );
 
         return response()->json([
             'success'   => true,
             'device_id' => $device->id,
-            'message'   => 'Device registered successfully',
+            'message'   => $device->wasRecentlyCreated ? 'Device registered successfully' : 'Device reassigned successfully',
         ]);
+    }
+
+    public function deactivateDevice(Request $request)
+    {
+        $request->validate(['device_fingerprint' => 'required|string']);
+
+        AttendanceDevice::where('device_fingerprint', $request->device_fingerprint)
+            ->update(['is_active' => false]);
+
+        return response()->json(['success' => true, 'message' => 'Device deactivated']);
     }
 
     // Check-in
