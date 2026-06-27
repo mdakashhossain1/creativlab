@@ -16,17 +16,22 @@ let pendingLinkDevice = null;
 let detailMemberId   = null;
 
 // ── Boot ──────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   updateHeaderDate();
   initEditDatePicker();
   updateNativePlatformUI();
 
-  await loadTeamData();
+  // Show home immediately — don't block on API
   showScreen('home');
+  loadTeamData().catch(() => {});
   startAutoRefresh();
 
   if (isElectron()) {
     window.electron.onWifiChange((ssid, isOffice) => updateWifiBadge(ssid, isOffice));
+
+    // Refresh home grid whenever the background monitor checks someone in or out
+    window.electron.onMemberArrived(() => loadTeamData().catch(() => {}));
+    window.electron.onMemberLeft(()    => loadTeamData().catch(() => {}));
   }
 });
 
@@ -53,25 +58,29 @@ async function loadTeamData() {
     updateCounts();
   } catch {
     document.getElementById('teamGrid').innerHTML =
-      '<div class="empty-state"><div class="icon">⚠️</div><p>Failed to load team. Check your connection.</p></div>';
+      `<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-alert"/></svg></div><p>Failed to load team. Check your connection.</p></div>`;
   }
 }
 
 function renderGrid(members) {
   const grid = document.getElementById('teamGrid');
   if (!members.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>No members found</p></div>';
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-search"/></svg></div>
+      <p>No members found</p>
+    </div>`;
     return;
   }
-  grid.innerHTML = members.map(m => `
-    <div class="member-card status-${m.status}" onclick="showDetail(${m.id})">
-      <div class="status-dot ${m.status === 'late' ? 'late' : (m.check_in ? 'present' : 'absent')}"></div>
+  const dotClass = m => m.status === 'late' ? 'late' : (m.check_in ? 'present' : 'absent');
+  grid.innerHTML = members.map((m, i) => `
+    <div class="member-card status-${m.status}" onclick="showDetail(${m.id})" style="animation-delay:${i * 35}ms">
+      <div class="status-dot ${dotClass(m)}"></div>
       ${m.image
-        ? `<img class="member-avatar" src="${m.image}" alt="${m.name}" loading="lazy">`
+        ? `<img class="member-avatar" src="${m.image}" alt="${escHtml(m.name)}" loading="lazy">`
         : `<div class="member-avatar-placeholder">${m.name.charAt(0).toUpperCase()}</div>`}
       <div class="member-name">${escHtml(m.name)}</div>
       <div class="member-role">${escHtml(m.designation || '')}</div>
-      <div class="member-time">${m.check_in ? '🟢 ' + fmt12(m.check_in) : '⚪ Not in'}</div>
+      <div class="member-time${m.check_in ? '' : ' no-time'}">${m.check_in ? fmt12(m.check_in) : 'Not checked in'}</div>
     </div>`).join('');
 }
 
@@ -88,9 +97,9 @@ function filterTeam(q) {
     m.name.toLowerCase().includes(lower) || (m.designation || '').toLowerCase().includes(lower)));
 }
 
-function filterByStatus(status) {
-  document.querySelectorAll('.stat-chip').forEach(c => c.style.fontWeight = '');
-  event.currentTarget.style.fontWeight = '800';
+function filterByStatus(status, el) {
+  document.querySelectorAll('.stat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
   const f = status === 'all'    ? allMembers
     : status === 'absent' ? allMembers.filter(m => !m.check_in)
     : allMembers.filter(m => m.status === status);
@@ -181,26 +190,22 @@ async function loadEditList() {
   const picker = document.getElementById('editDatePicker');
   const date   = picker?.value || todayDate();
 
-  list.innerHTML = '<div class="empty-state"><div class="spinner" style="width:32px;height:32px;border-width:3px;"></div></div>';
+  list.innerHTML = '<div class="list-spinner"><div class="spinner"></div></div>';
 
   try {
     const records = await apiFetch(`/attendance/by-date?date=${date}`);
-    // records: [{ team_member_id, name, designation, image, check_in, check_out, status }]
     if (!records.length) {
-      list.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No records for this date</p></div>';
+      list.innerHTML = `<div class="empty-state"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-clipboard"/></svg></div><p>No records for this date</p></div>`;
       return;
     }
     list.innerHTML = records.map(r => `
       <div class="edit-row" id="editrow-${r.team_member_id}">
         <div class="edit-row-meta">
-          ${r.image
-            ? `<img class="edit-avatar" src="${r.image}" alt="${r.name}">`
-            : `<div class="edit-avatar-placeholder">${r.name.charAt(0)}</div>`}
-          <div>
+          <div style="flex:1;min-width:0;">
             <div class="edit-row-name">${escHtml(r.name)}</div>
             <div class="edit-row-role">${escHtml(r.designation || '')}</div>
           </div>
-          <span class="status-badge ${r.status}" style="margin-left:auto;">${statusLabel(r.status)}</span>
+          <span class="status-badge ${r.status}">${statusLabel(r.status)}</span>
         </div>
         <div class="edit-row-times">
           <div class="edit-time-field">
@@ -215,7 +220,7 @@ async function loadEditList() {
         </div>
       </div>`).join('');
   } catch (e) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>${escHtml(e.message)}</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-alert"/></svg></div><p>${escHtml(e.message)}</p></div>`;
   }
 }
 
@@ -275,11 +280,11 @@ async function refreshDevices() {
   const info = document.getElementById('devicesScanInfo');
   const list = document.getElementById('devicesList');
   info.textContent = 'Scanning network…';
-  list.innerHTML   = '<div class="empty-state"><div class="spinner" style="width:32px;height:32px;border-width:3px;"></div></div>';
+  list.innerHTML = '<div class="list-spinner"><div class="spinner"></div></div>';
 
   if (!isElectron()) {
     info.textContent = 'Device scanning is only available in the Windows app.';
-    list.innerHTML = '<div class="empty-state"><div class="icon">🖥</div><p>Open this app on your Windows PC to manage device links.</p></div>';
+    list.innerHTML = `<div class="empty-state"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-monitor"/></svg></div><p>Open this app on your Windows PC to manage device links.</p></div>`;
     return;
   }
 
@@ -300,7 +305,7 @@ async function refreshDevices() {
       : 'No devices found';
 
     if (!devices.length) {
-      list.innerHTML = '<div class="empty-state"><div class="icon">📡</div><p>No devices found. Make sure you\'re connected to the office Wi-Fi.</p></div>';
+      list.innerHTML = `<div class="empty-state"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-wifi"/></svg></div><p>No devices found. Make sure you're connected to the office Wi-Fi.</p></div>`;
       return;
     }
 
@@ -314,7 +319,9 @@ async function refreshDevices() {
       return `
       <div class="device-card${isMe ? ' device-me' : ''}">
         <div class="device-icon-wrap">
-          <span class="device-icon">${isMe ? '🖥' : '💻'}</span>
+          <div class="device-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><use href="#${isMe ? 'ico-monitor' : 'ico-laptop'}"/></svg>
+          </div>
           ${isMe ? '<span class="me-chip">This PC</span>' : ''}
         </div>
         <div class="device-info">
@@ -332,7 +339,7 @@ async function refreshDevices() {
 
   } catch (e) {
     info.textContent = 'Scan failed';
-    list.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>${escHtml(e.message)}</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26"><use href="#ico-alert"/></svg></div><p>${escHtml(e.message)}</p></div>`;
   }
 }
 
@@ -396,6 +403,8 @@ async function confirmLink() {
 
     toast(`${member?.name ?? 'Device'} linked! ✅`, 'success');
     closeLink();
+    // Immediately scan so the person gets checked in without waiting 30 s
+    if (isElectron()) window.electron.triggerMonitorScan().catch(() => {});
     await refreshDevices();
   } catch (e) {
     toast(e.message || 'Failed to link device', 'error');
@@ -489,8 +498,16 @@ async function apiFetch(path, opts = {}) {
   const headers = { 'Accept': 'application/json' };
   let body;
   if (opts.body) { headers['Content-Type'] = 'application/json'; body = JSON.stringify(opts.body); }
-  const res  = await fetch(url, { method, headers, body });
-  const json = await res.json();
-  if (!res.ok) throw new Error(json.message || `HTTP ${res.status}`);
-  return json;
+  const ctrl = new AbortController();
+  const tid  = setTimeout(() => ctrl.abort(), 10_000);
+  try {
+    const res  = await fetch(url, { method, headers, body, signal: ctrl.signal });
+    clearTimeout(tid);
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || `HTTP ${res.status}`);
+    return json;
+  } catch (e) {
+    clearTimeout(tid);
+    throw e;
+  }
 }

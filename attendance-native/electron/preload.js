@@ -40,4 +40,12 @@ contextBridge.exposeInMainWorld('electron', {
   getNetworkInfo:  ()      => ipcRenderer.invoke('get-network-info'),
   getUsername:     ()      => ipcRenderer.invoke('get-username'),
   getHostname:     ()      => ipcRenderer.invoke('get-hostname'),
+
+  // Ask the main process to run an ARP scan immediately (e.g. after linking a device)
+  triggerMonitorScan: () => ipcRenderer.invoke('trigger-monitor-scan'),
+
+  // Real-time events pushed from the background monitor
+  // fn({ mac, name }) — fired when a linked device appears / disappears
+  onMemberArrived: (fn) => ipcRenderer.on('member-arrived', (_e, data) => fn(data)),
+  onMemberLeft:    (fn) => ipcRenderer.on('member-left',    (_e, data) => fn(data)),
 });
