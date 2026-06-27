@@ -22,11 +22,11 @@ jobs:
           node-version: '24'
 
       - name: Install dependencies
-        working-directory: landing-new/attendance-native
+        working-directory: attendance-native
         run: npm ci
 
       - name: Restore code-signing certificate
-        working-directory: landing-new/attendance-native
+        working-directory: attendance-native
         env:
           CODESIGN_PFX_B64: ${{ secrets.CODESIGN_PFX_B64 }}
         shell: pwsh
@@ -42,7 +42,7 @@ jobs:
           }
 
       - name: Build & publish to GitHub Releases
-        working-directory: landing-new/attendance-native
+        working-directory: attendance-native
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_KEY_PASSWORD: ${{ secrets.CODESIGN_PASSWORD }}
