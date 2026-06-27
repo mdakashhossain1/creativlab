@@ -416,6 +416,16 @@ async function unlinkDevice(mac, macKey) {
   if (!isElectron()) return;
   const cfg         = await window.electron.getConfig();
   const assignments = cfg.deviceAssignments || {};
+  const assignment  = assignments[mac] || assignments[macKey];
+
+  // Deactivate in DB so background monitor stops checking this device in
+  if (assignment?.fingerprint) {
+    apiFetch('/attendance/deactivate-device', {
+      method: 'POST',
+      body: { device_fingerprint: assignment.fingerprint },
+    }).catch(() => {});
+  }
+
   delete assignments[mac];
   delete assignments[macKey];
   await window.electron.saveConfig({ deviceAssignments: assignments });
