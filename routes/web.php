@@ -41,16 +41,19 @@ Route::get('/debug-paths', function () {
     $publicHtmlPath = '/home/u663255439/domains/creativlab.in/public_html/' . $fileToCheck;
     $results['file_in_public_html'] = file_exists($publicHtmlPath);
     
-    // Find all files matching the name on the server
+    // Find all files matching the name on the server inside base_path
     $foundFiles = [];
-    $searchDir = '/home/u663255439';
+    $searchDir = base_path();
     if (is_dir($searchDir)) {
         try {
-            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($searchDir));
+            $it = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($searchDir, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
             foreach ($it as $file) {
                 if ($file->isFile() && str_contains($file->getFilename(), 'team-2026')) {
                     $foundFiles[] = $file->getPathname();
-                    if (count($foundFiles) >= 20) break; // Limit search results
+                    if (count($foundFiles) >= 30) break;
                 }
             }
         } catch (\Exception $e) {
