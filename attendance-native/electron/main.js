@@ -192,43 +192,74 @@ function normaliseMac(mac) {
   return mac.replace(/-/g, ':').toUpperCase();
 }
 
-function scanNetworkDevices() {
+// ── Ping sweep — populates ARP cache for ALL devices on the subnet ─
+// Without this, arp -a only shows devices the PC has recently talked to.
+function pingSubnet() {
+  return new Promise((resolve) => {
+    // Find the local IPv4 address to derive the subnet base (e.g. 192.168.1)
+    const ifaces = os.networkInterfaces();
+    const bases  = new Set();
+    for (const addrs of Object.values(ifaces)) {
+      for (const addr of addrs) {
+        if (addr.family === 'IPv4' && !addr.internal) {
+          const parts = addr.address.split('.');
+          if (parts.length === 4) bases.add(`${parts[0]}.${parts[1]}.${parts[2]}`);
+        }
+      }
+    }
+    if (!bases.size) return resolve();
+
+    // Fire a ping to every host in each detected subnet simultaneously.
+    // -n 1  = one packet   -w 300 = 300 ms timeout (fast, just to populate ARP)
+    const pings = [];
+    for (const base of bases) {
+      for (let i = 1; i <= 254; i++) {
+        pings.push(new Promise(r => {
+          exec(`ping -n 1 -w 300 ${base}.${i}`, { timeout: 500 }, () => r());
+        }));
+      }
+    }
+    Promise.all(pings).then(() => resolve());
+  });
+}
+
+// Read ARP table after ensuring the cache is warm
+function readArp() {
   return new Promise((resolve) => {
     exec('arp -a', { encoding: 'utf8', timeout: 8000 }, (err, stdout) => {
       if (err) return resolve([]);
       const devices = [];
       for (const line of stdout.split('\n')) {
         const m = line.match(/(\d{1,3}(?:\.\d{1,3}){3})\s+([0-9a-f-]{17})\s+(dynamic|static)/i);
-        if (m) devices.push({ ip: m[1], mac: normaliseMac(m[2]), type: m[3] });
+        if (m) devices.push({ ip: m[1], mac: normaliseMac(m[2]) });
       }
       resolve(devices);
     });
   });
 }
 
-function scanNetworkFull() {
-  return new Promise((resolve) => {
-    exec('arp -a', { encoding: 'utf8', timeout: 8000 }, (err, stdout) => {
-      if (err) return resolve([]);
-      const devices = [];
-      for (const line of stdout.split('\n')) {
-        const m = line.match(/(\d{1,3}(?:\.\d{1,3}){3})\s+([0-9a-f-]{17})\s+(dynamic|static)/i);
-        if (m) devices.push({ ip: m[1], mac: normaliseMac(m[2]), type: m[3], hostname: null });
+async function scanNetworkDevices() {
+  await pingSubnet();
+  return readArp();
+}
+
+async function scanNetworkFull() {
+  await pingSubnet();
+  const devices = (await readArp()).map(d => ({ ...d, type: 'dynamic', hostname: null }));
+  if (!devices.length) return devices;
+
+  // Best-effort hostname resolution via nbtstat (parallel, non-blocking)
+  await Promise.all(devices.map(d => new Promise(resolve => {
+    exec(`nbtstat -A ${d.ip}`, { encoding: 'utf8', timeout: 3000 }, (e, out) => {
+      if (!e && out) {
+        const hm = out.match(/<00>\s+UNIQUE\s+Registered/i) &&
+                   out.match(/^([A-Z0-9_-]{1,15})\s+<00>/im);
+        if (hm) d.hostname = hm[1];
       }
-      if (!devices.length) return resolve(devices);
-      let pending = devices.length;
-      devices.forEach((d) => {
-        exec(`nbtstat -A ${d.ip}`, { encoding: 'utf8', timeout: 3000 }, (e, out) => {
-          if (!e && out) {
-            const hm = out.match(/<00>\s+UNIQUE\s+Registered/i) &&
-                       out.match(/^([A-Z0-9_-]{1,15})\s+<00>/im);
-            if (hm) d.hostname = hm[1];
-          }
-          if (--pending === 0) resolve(devices);
-        });
-      });
+      resolve();
     });
-  });
+  })));
+  return devices;
 }
 
 function getNetworkInfo() {
