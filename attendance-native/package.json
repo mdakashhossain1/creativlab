@@ -35,8 +35,7 @@
     "files": [
       "electron/**/*",
       "config.json",
-      "!node_modules/**/*",
-      "node_modules/auto-launch/**/*"
+      "node_modules/**/*"
     ],
     "extraResources": [
       {
