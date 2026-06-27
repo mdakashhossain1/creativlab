@@ -9,6 +9,8 @@ Route::prefix('attendance')->group(function () {
     Route::post('/checkin',         [AttendanceApiController::class, 'checkIn']);
     Route::post('/checkout',        [AttendanceApiController::class, 'checkOut']);
     Route::get('/status/{fingerprint}', [AttendanceApiController::class, 'status']);
+    Route::get('/by-date',          [AttendanceApiController::class, 'byDate']);
+    Route::post('/admin-edit',      [AttendanceApiController::class, 'adminEdit']);
 });
 
 Route::get('/team-members', [AttendanceApiController::class, 'teamMembers']);

@@ -20,7 +20,8 @@
     "@capacitor/cli": "^6.2.0",
     "@capacitor/core": "^6.2.0",
     "electron": "^33.4.11",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "playwright-core": "^1.61.1"
   },
   "build": {
     "appId": "com.creativlab.attendance",
@@ -36,7 +37,7 @@
     ],
     "extraResources": [
       {
-        "from": "../public/attendance-app",
+        "from": "attendance-app",
         "to": "attendance-app",
         "filter": [
           "**/*"
@@ -44,8 +45,14 @@
       }
     ],
     "win": {
+      "sign": null,
       "target": [
-        { "target": "zip", "arch": ["x64"] }
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "nsis": {

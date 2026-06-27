@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6366f1">
+  <title>CreativLab Attendance</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ── Member detail + edit overlay ──────────────────────────────── -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-sheet">
+    <div class="sheet-handle"></div>
+    <div class="detail-header">
+      <div id="detailAvatar"></div>
+      <div class="detail-info">
+        <h3 id="detailName">—</h3>
+        <p id="detailRole">—</p>
+      </div>
+    </div>
+    <div class="detail-status">
+      <div class="detail-stat"><div class="val" id="detailIn">—</div><div class="lbl">Check In</div></div>
+      <div class="detail-stat"><div class="val" id="detailOut">—</div><div class="lbl">Check Out</div></div>
+      <div class="detail-stat"><div class="val" id="detailHours">—</div><div class="lbl">Hours</div></div>
+    </div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <span class="status-badge absent" id="detailBadge">Absent</span>
+    </div>
+
+    <!-- ── Edit time section ── -->
+    <div class="edit-time-section">
+      <div class="edit-time-label">✏️ Edit Today's Time</div>
+      <div class="edit-time-row">
+        <div class="edit-time-field">
+          <label>Check In</label>
+          <input type="time" id="editCheckIn">
+        </div>
+        <div class="edit-time-field">
+          <label>Check Out</label>
+          <input type="time" id="editCheckOut">
+        </div>
+      </div>
+      <button class="btn-primary" id="saveTimeBtn" onclick="saveDetailTime()">Save Changes</button>
+    </div>
+
+    <button class="close-sheet" onclick="closeDetail()">Close</button>
+  </div>
+</div>
+
+<!-- ── Link device overlay ───────────────────────────────────────── -->
+<div class="detail-overlay" id="linkOverlay">
+  <div class="detail-sheet">
+    <div class="sheet-handle"></div>
+    <h3 style="margin-bottom:6px;">Link Device to Member</h3>
+    <p id="linkDeviceInfo" style="font-size:13px;color:var(--text2);margin-bottom:18px;word-break:break-all;"></p>
+    <div class="form-group">
+      <label>Team Member</label>
+      <select id="linkMemberSelect">
+        <option value="">— Select who uses this device —</option>
+      </select>
+    </div>
+    <button class="btn-primary" id="linkConfirmBtn" onclick="confirmLink()">Link Device</button>
+    <button class="close-sheet" style="margin-top:10px;" onclick="closeLink()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN: Loading                                               -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-loading">
+  <div class="spinner"></div>
+  <p style="color:var(--text2);font-size:14px;">Loading…</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN: Home (team grid)                                      -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-home">
+  <header class="app-header">
+    <h1>👥 Team</h1>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span class="date-badge" id="headerDate"></span>
+      <span id="wifiBadge"     style="display:none;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;"></span>
+      <span id="platformBadge" style="display:none;font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(99,102,241,.12);color:#6366f1;font-weight:600;"></span>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <div class="search-wrap">
+      <input type="search" id="searchInput" placeholder="Search team member…" oninput="filterTeam(this.value)">
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <button class="stat-chip all"     onclick="filterByStatus('all')">👥 All <span id="cnt-all">0</span></button>
+    <button class="stat-chip present" onclick="filterByStatus('present')">✅ Present <span id="cnt-present">0</span></button>
+    <button class="stat-chip late"    onclick="filterByStatus('late')">⏰ Late <span id="cnt-late">0</span></button>
+    <button class="stat-chip absent"  onclick="filterByStatus('absent')">❌ Absent <span id="cnt-absent">0</span></button>
+  </div>
+
+  <div class="team-grid" id="teamGrid"></div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showScreen('home')">    <span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-btn"        onclick="showScreen('devices')"> <span class="nav-icon">📡</span>Devices</button>
+    <button class="nav-btn"        onclick="showScreen('edit')">    <span class="nav-icon">✏️</span>Edit</button>
+    <button class="nav-btn"        onclick="showSettings()">        <span class="nav-icon">⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN: Devices on Wi-Fi                                      -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-devices">
+  <header class="app-header">
+    <h1>📡 Devices</h1>
+    <button class="header-icon-btn" onclick="refreshDevices()" title="Refresh">🔄</button>
+  </header>
+
+  <div id="devicesScanInfo" class="devices-scan-info">Scanning network…</div>
+  <div id="devicesList" class="devices-list"></div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn"        onclick="showScreen('home')">    <span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-btn active" onclick="showScreen('devices')"> <span class="nav-icon">📡</span>Devices</button>
+    <button class="nav-btn"        onclick="showScreen('edit')">    <span class="nav-icon">✏️</span>Edit</button>
+    <button class="nav-btn"        onclick="showSettings()">        <span class="nav-icon">⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN: Edit Attendance                                       -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-edit">
+  <header class="app-header">
+    <h1>✏️ Edit Attendance</h1>
+    <button class="header-icon-btn" onclick="loadEditList()" title="Refresh">🔄</button>
+  </header>
+
+  <div class="edit-date-bar">
+    <span style="font-size:13px;color:var(--text2);">Date</span>
+    <input type="date" id="editDatePicker" onchange="loadEditList()">
+  </div>
+
+  <div class="edit-list" id="editList">
+    <div class="empty-state">
+      <div class="spinner" style="width:32px;height:32px;border-width:3px;"></div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn"        onclick="showScreen('home')">    <span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-btn"        onclick="showScreen('devices')"> <span class="nav-icon">📡</span>Devices</button>
+    <button class="nav-btn active" onclick="showScreen('edit')">    <span class="nav-icon">✏️</span>Edit</button>
+    <button class="nav-btn"        onclick="showSettings()">        <span class="nav-icon">⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN: Settings                                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-settings">
+  <header class="app-header">
+    <h1>⚙️ Settings</h1>
+  </header>
+  <div class="settings-body">
+    <div class="form-group">
+      <label style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block;">
+        Office Wi-Fi Name (SSID)
+      </label>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:8px;">
+        When a linked device connects to this network it will automatically check in.
+        After leaving for 5 minutes it will check out.
+      </p>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="settings-ssid" placeholder="e.g. CreativLab-Office"
+          style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;background:var(--surface2);color:var(--text);outline:none;">
+        <button onclick="detectOfficeSSID()"
+          style="white-space:nowrap;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-size:13px;">
+          Detect
+        </button>
+      </div>
+    </div>
+
+    <div class="settings-info-box">
+      <strong style="color:var(--text);">How auto-attendance works:</strong><br><br>
+      1. Go to <strong style="color:var(--text);">Devices</strong> → link each team member's device<br>
+      2. Set the office Wi-Fi name above<br>
+      3. When a linked device connects → auto check-in<br>
+      4. When it disconnects for 5 min → auto check-out<br>
+      5. Use <strong style="color:var(--text);">Edit</strong> to manually correct any time
+    </div>
+
+    <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+    <button class="close-sheet" style="margin-top:12px;" onclick="showScreen('home')">← Back</button>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn"        onclick="showScreen('home')">    <span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-btn"        onclick="showScreen('devices')"> <span class="nav-icon">📡</span>Devices</button>
+    <button class="nav-btn"        onclick="showScreen('edit')">    <span class="nav-icon">✏️</span>Edit</button>
+    <button class="nav-btn active" onclick="showSettings()">        <span class="nav-icon">⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

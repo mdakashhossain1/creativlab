@@ -1,17 +1,19 @@
 'use strict';
 
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, shell } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage } = require('electron');
 const path  = require('path');
 const fs    = require('fs');
+const os    = require('os');
 const { exec } = require('child_process');
+const https = require('https');
+const http  = require('http');
 
 // ── Paths ──────────────────────────────────────────────────────────
 const CONFIG_PATH = path.join(__dirname, '..', 'config.json');
-// In production (packaged), web assets are in extraResources/attendance-app
-// In dev, they are two levels up in public/attendance-app
-const WEB_ROOT = app.isPackaged
-  ? path.join(process.resourcesPath, 'attendance-app')
-  : path.join(__dirname, '..', '..', 'public', 'attendance-app');
+const isDev       = !app.isPackaged;
+const APP_HTML    = isDev
+  ? path.join(__dirname, '..', 'attendance-app', 'index.html')
+  : path.join(process.resourcesPath, 'attendance-app', 'index.html');
 
 // ── Config ─────────────────────────────────────────────────────────
 function readConfig() {
@@ -24,11 +26,14 @@ function writeConfig(delta) {
 }
 
 // ── State ──────────────────────────────────────────────────────────
-let mainWindow = null;
-let tray       = null;
-let lastSSID   = undefined; // undefined = not yet polled
+let mainWindow   = null;
+let tray         = null;
+let lastSSID     = undefined; // undefined = not yet polled
+let officeLeftAt = -1;
+let scheduledOut = false;
+const GRACE_MS   = 300_000; // 5 minutes
 
-// ── Wi-Fi detection (cross-platform) ──────────────────────────────
+// ── Wi-Fi detection (Windows) ──────────────────────────────────────
 function getWifiSSID() {
   return new Promise((resolve) => {
     let cmd;
@@ -57,29 +62,50 @@ function getWifiSSID() {
   });
 }
 
+// ── HTTP POST helper ───────────────────────────────────────────────
+function apiPost(urlStr, data) {
+  try {
+    const parsed  = new URL(urlStr);
+    const lib     = parsed.protocol === 'https:' ? https : http;
+    const body    = JSON.stringify(data);
+    const req     = lib.request(parsed, {
+      method: 'POST',
+      headers: {
+        'Content-Type':   'application/json',
+        'Accept':         'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    });
+    req.on('error', (e) => console.error('[attendance] API error:', e.message));
+    req.write(body);
+    req.end();
+  } catch (e) {
+    console.error('[attendance] apiPost error:', e.message);
+  }
+}
+
 // ── Window ─────────────────────────────────────────────────────────
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width:    430,
-    height:   800,
-    minWidth: 380,
+    width:     430,
+    height:    780,
+    minWidth:  380,
     minHeight: 600,
-    icon: path.join(__dirname, 'icons', 'icon.ico'),
-    title: 'CreativLab Attendance',
-    show: false,
+    title:     'CreativLab Attendance',
+    show:      false,
     webPreferences: {
       preload:          path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration:  false,
-      // Allow loading local files via file:// and fetching the API (https)
-      webSecurity: false,
+      sandbox:          false,
+      webSecurity:      false,
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'settings.html'));
+  mainWindow.loadFile(APP_HTML);
   mainWindow.once('ready-to-show', () => mainWindow.show());
 
-  // Hide to tray instead of quitting
+  // Minimise to tray instead of closing
   mainWindow.on('close', (e) => {
     if (!app._quitting) {
       e.preventDefault();
@@ -91,23 +117,45 @@ function createWindow() {
 // ── Tray ───────────────────────────────────────────────────────────
 function buildTrayMenu() {
   return Menu.buildFromTemplate([
-    { label: 'Open Attendance App', click: () => { mainWindow.show(); mainWindow.focus(); } },
+    {
+      label: 'Open Settings',
+      click: () => { mainWindow.show(); mainWindow.focus(); },
+    },
     { type: 'separator' },
-    { label: 'Quit', click: () => { app._quitting = true; app.quit(); } },
+    {
+      label: 'Quit',
+      click: () => { app._quitting = true; app.quit(); },
+    },
   ]);
 }
 
 function createTray() {
-  const iconPath = path.join(__dirname, 'icons', 'icon.ico');
-  const icon = fs.existsSync(iconPath)
-    ? nativeImage.createFromPath(iconPath)
-    : nativeImage.createEmpty();
+  // Use a simple 16×16 PNG tray icon. Falls back to an empty icon if missing.
+  const iconPath = path.join(__dirname, 'icons', 'icon.png');
+  const icoPath  = path.join(__dirname, 'icons', 'icon.ico');
+
+  let icon;
+  if (fs.existsSync(iconPath)) {
+    icon = nativeImage.createFromPath(iconPath);
+  } else if (fs.existsSync(icoPath)) {
+    icon = nativeImage.createFromPath(icoPath);
+  } else {
+    // Minimal fallback: 1×1 transparent PNG encoded as base64
+    icon = nativeImage.createFromDataURL(
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4z8BQDwADhQGAWjR9awAAAABJRU5ErkJggg=='
+    );
+  }
 
   tray = new Tray(icon);
   tray.setToolTip('CreativLab Attendance');
   tray.setContextMenu(buildTrayMenu());
   tray.on('click', () => {
-    mainWindow.isVisible() ? mainWindow.hide() : (mainWindow.show(), mainWindow.focus());
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
   });
 }
 
@@ -119,83 +167,58 @@ function updateTray(ssid, isOffice) {
   tray.setToolTip(tip);
 }
 
-// ── HTTP Helper ────────────────────────────────────────────────────
-const https = require('https');
-const http = require('http');
-
-function apiPost(urlStr, data) {
-  const url = new URL(urlStr);
-  const lib = url.protocol === 'https:' ? https : http;
-  const postData = JSON.stringify(data);
-  const req = lib.request(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Content-Length': Buffer.byteLength(postData)
-    }
-  });
-  req.on('error', (e) => console.log('API Error:', e));
-  req.write(postData);
-  req.end();
-}
-
 // ── Wi-Fi polling loop ─────────────────────────────────────────────
-let officeLeftAt = -1;
-let scheduledOut = false;
-const GRACE_MS = 300000; // 5 minutes
-
 function startWifiPoll() {
   async function poll() {
     const config = readConfig();
     const ssid   = await getWifiSSID();
 
     if (ssid !== lastSSID) {
-      const isOffice = !!config.officeSSID && ssid === config.officeSSID;
+      const isOffice  = !!config.officeSSID && ssid === config.officeSSID;
       const wasOffice = !!config.officeSSID && lastSSID === config.officeSSID;
-      
+
       updateTray(ssid, isOffice);
 
-      // Notify renderer just in case
+      // Notify renderer if open
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.webContents.send('wifi-change', ssid, isOffice);
       }
 
-      // Auto-attendance logic
-      const fp = config.deviceFingerprint;
-      const apiBase = config.apiBase || 'https://creativlab.in/api';
+      // Auto-attendance
+      const fp      = config.deviceFingerprint;
+      const apiBase = (config.apiBase || 'https://creativlab.in/api').replace(/\/$/, '');
 
       if (fp && config.officeSSID) {
         if (isOffice && !wasOffice) {
-          // Just arrived at office
           officeLeftAt = -1;
           scheduledOut = false;
+          console.log('[attendance] Arrived at office – checking in…');
           apiPost(`${apiBase}/attendance/checkin`, { device_fingerprint: fp, source: 'wifi' });
-          console.log('Checked in via Wi-Fi');
         } else if (!isOffice && wasOffice) {
-          // Just left office
+          console.log('[attendance] Left office – grace timer started');
           officeLeftAt = Date.now();
         }
       }
+
       lastSSID = ssid;
     }
-    
-    // Check grace period for check-out
+
+    // Grace-period checkout
     if (officeLeftAt > 0 && !scheduledOut) {
-      const config = readConfig();
       if (Date.now() - officeLeftAt >= GRACE_MS) {
         scheduledOut = true;
-        const apiBase = config.apiBase || 'https://creativlab.in/api';
-        if (config.deviceFingerprint) {
-          apiPost(`${apiBase}/attendance/checkout`, { device_fingerprint: config.deviceFingerprint });
-          console.log('Auto checked out via Wi-Fi grace period');
+        const cfg     = readConfig();
+        const apiBase = (cfg.apiBase || 'https://creativlab.in/api').replace(/\/$/, '');
+        if (cfg.deviceFingerprint) {
+          console.log('[attendance] Grace period elapsed – checking out…');
+          apiPost(`${apiBase}/attendance/checkout`, { device_fingerprint: cfg.deviceFingerprint });
         }
       }
     }
   }
 
-  poll(); // immediate first check
-  setInterval(poll, 30_000);
+  poll();                        // run immediately on start
+  setInterval(poll, 30_000);    // then every 30 s
 }
 
 // ── Auto-launch setup ──────────────────────────────────────────────
@@ -203,16 +226,75 @@ async function setupAutoLaunch() {
   try {
     const AutoLaunch = require('auto-launch');
     const al = new AutoLaunch({ name: 'CreativLab Attendance', path: app.getPath('exe') });
-    const enabled = await al.isEnabled();
-    if (!enabled) await al.enable();
-  } catch {}
+    if (!(await al.isEnabled())) await al.enable();
+  } catch { /* optional feature */ }
+}
+
+// ── Network device scan (ARP cache) ───────────────────────────────
+function scanNetworkDevices() {
+  return new Promise((resolve) => {
+    exec('arp -a', { encoding: 'utf8', timeout: 8000 }, (err, stdout) => {
+      if (err) return resolve([]);
+      const devices = [];
+      for (const line of stdout.split('\n')) {
+        const m = line.match(/(\d{1,3}(?:\.\d{1,3}){3})\s+([0-9a-f-]{17})\s+(dynamic|static)/i);
+        if (m) devices.push({ ip: m[1], mac: m[2].toUpperCase(), type: m[3] });
+      }
+      resolve(devices);
+    });
+  });
+}
+
+// ── ARP scan + nbtstat hostname resolution ─────────────────────────
+function scanNetworkFull() {
+  return new Promise((resolve) => {
+    exec('arp -a', { encoding: 'utf8', timeout: 8000 }, (err, stdout) => {
+      if (err) return resolve([]);
+      const devices = [];
+      for (const line of stdout.split('\n')) {
+        const m = line.match(/(\d{1,3}(?:\.\d{1,3}){3})\s+([0-9a-f-]{17})\s+(dynamic|static)/i);
+        if (m) devices.push({ ip: m[1], mac: m[2].toUpperCase(), type: m[3], hostname: null });
+      }
+      if (!devices.length) return resolve(devices);
+      // Try to resolve hostnames via nbtstat -A (best-effort, parallel)
+      let pending = devices.length;
+      devices.forEach((d) => {
+        exec(`nbtstat -A ${d.ip}`, { encoding: 'utf8', timeout: 3000 }, (e, out) => {
+          if (!e && out) {
+            const hm = out.match(/<00>\s+UNIQUE\s+Registered/i) &&
+                       out.match(/^([A-Z0-9_-]{1,15})\s+<00>/im);
+            if (hm) d.hostname = hm[1];
+          }
+          if (--pending === 0) resolve(devices);
+        });
+      });
+    });
+  });
+}
+
+// ── Own network interfaces (to identify which device is THIS PC) ───
+function getNetworkInfo() {
+  const ifaces = os.networkInterfaces();
+  const result = [];
+  for (const [name, addrs] of Object.entries(ifaces)) {
+    for (const addr of addrs) {
+      if (addr.internal) continue;
+      result.push({ iface: name, ip: addr.address, mac: addr.mac, family: addr.family });
+    }
+  }
+  return result;
 }
 
 // ── IPC handlers ───────────────────────────────────────────────────
-ipcMain.handle('get-wifi-ssid', () => getWifiSSID());
-ipcMain.handle('get-config',    () => readConfig());
-ipcMain.handle('save-config',   (_, delta) => { writeConfig(delta); return true; });
-ipcMain.handle('get-version',   () => app.getVersion());
+ipcMain.handle('get-wifi-ssid',      ()      => getWifiSSID());
+ipcMain.handle('get-config',         ()      => readConfig());
+ipcMain.handle('save-config',        (_, d) => { writeConfig(d); return true; });
+ipcMain.handle('get-version',        ()      => app.getVersion());
+ipcMain.handle('scan-network',       ()      => scanNetworkDevices());
+ipcMain.handle('scan-network-full',  ()      => scanNetworkFull());
+ipcMain.handle('get-network-info',   ()      => getNetworkInfo());
+ipcMain.handle('get-username',       ()      => os.userInfo().username);
+ipcMain.handle('get-hostname',       ()      => os.hostname());
 
 // ── App lifecycle ──────────────────────────────────────────────────
 app.whenReady().then(() => {
@@ -222,8 +304,8 @@ app.whenReady().then(() => {
   setupAutoLaunch();
 });
 
-// Keep the process alive — tray app never fully quits unless user picks Quit
-app.on('window-all-closed', () => { /* stay in tray */ });
+// Stay alive in tray
+app.on('window-all-closed', () => { /* intentional – tray app */ });
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });

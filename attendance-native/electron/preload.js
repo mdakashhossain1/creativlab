@@ -33,4 +33,11 @@ contextBridge.exposeInMainWorld('electron', {
 
   // App info
   getVersion: () => ipcRenderer.invoke('get-version'),
+
+  // Network & device identity
+  scanNetwork:     ()      => ipcRenderer.invoke('scan-network'),
+  scanNetworkFull: ()      => ipcRenderer.invoke('scan-network-full'),
+  getNetworkInfo:  ()      => ipcRenderer.invoke('get-network-info'),
+  getUsername:     ()      => ipcRenderer.invoke('get-username'),
+  getHostname:     ()      => ipcRenderer.invoke('get-hostname'),
 });

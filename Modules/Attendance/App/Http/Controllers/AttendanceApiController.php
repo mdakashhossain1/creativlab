@@ -169,4 +169,59 @@ class AttendanceApiController extends Controller
             'status'      => $t->attendance?->status ?? 'absent',
         ]));
     }
+
+    // All team members with attendance for a specific date — for admin Edit screen
+    public function byDate(Request $request)
+    {
+        $request->validate(['date' => 'required|date']);
+        $date  = $request->date;
+        $teams = Team::with(['translate', 'attendance' => fn($q) => $q->whereDate('date', $date)])->get();
+
+        return response()->json($teams->map(fn($t) => [
+            'team_member_id' => $t->id,
+            'name'           => $t->translate?->name ?? 'N/A',
+            'designation'    => $t->translate?->designation ?? '',
+            'image'          => $t->image ? asset($t->image) : null,
+            'check_in'       => $t->attendance?->check_in,
+            'check_out'      => $t->attendance?->check_out,
+            'status'         => $t->attendance?->status ?? 'absent',
+        ]));
+    }
+
+    // Admin manually sets check-in / check-out for any member on any date
+    public function adminEdit(Request $request)
+    {
+        $request->validate([
+            'team_member_id' => 'required|exists:teams,id',
+            'date'           => 'required|date',
+            'check_in'       => 'nullable|date_format:H:i',
+            'check_out'      => 'nullable|date_format:H:i',
+        ]);
+
+        $attendance = Attendance::firstOrNew([
+            'team_id' => $request->team_member_id,
+            'date'    => $request->date,
+        ]);
+
+        if ($request->filled('check_in')) {
+            $attendance->check_in = $request->check_in . ':00';
+        }
+
+        if ($request->filled('check_out')) {
+            $attendance->check_out   = $request->check_out . ':00';
+            $attendance->total_hours = $attendance->computeTotalHours();
+        }
+
+        $attendance->status = $attendance->computeStatus();
+        $attendance->source = $attendance->source ?? 'manual';
+        $attendance->save();
+
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Attendance updated',
+            'check_in'  => $attendance->check_in,
+            'check_out' => $attendance->check_out,
+            'status'    => $attendance->status,
+        ]);
+    }
 }
