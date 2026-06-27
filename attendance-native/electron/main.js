@@ -97,12 +97,21 @@ function apiPost(urlStr, data) {
 
 // ── Window ─────────────────────────────────────────────────────────
 function createWindow() {
+  const winIcon = (() => {
+    const ico = path.join(__dirname, 'icons', 'icon.ico');
+    const png = path.join(__dirname, 'icons', 'icon.png');
+    if (fs.existsSync(ico)) return ico;
+    if (fs.existsSync(png)) return png;
+    return undefined;
+  })();
+
   mainWindow = new BrowserWindow({
     width:     430,
     height:    780,
     minWidth:  380,
     minHeight: 600,
     title:     'CreativLab Attendance',
+    icon:      winIcon,
     show:      false,
     webPreferences: {
       preload:          path.join(__dirname, 'preload.js'),
