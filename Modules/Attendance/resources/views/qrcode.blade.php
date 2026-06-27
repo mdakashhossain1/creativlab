@@ -45,10 +45,10 @@
 
                                         <div>
                                             <div class="mb-2">
-                                                <span class="badge bg-success">v1.0.0</span>
+                                                <span class="badge bg-success">v1.0.1</span>
                                                 <span class="text-muted ms-2" style="font-size:12px;">Windows 10/11 · 64-bit</span>
                                             </div>
-                                            <a href="https://github.com/mdakashhossain1/creativlab/releases/latest/download/CreativLab-Attendance-Setup-1.0.0.exe"
+                                            <a href="https://github.com/mdakashhossain1/creativlab/releases/latest/download/CreativLab-Attendance-Setup-1.0.1.exe"
                                                class="crancy-btn w-100 text-center d-block" style="text-decoration:none;">
                                                 <i class="fas fa-download me-2"></i>Download Installer (.exe)
                                             </a>
