@@ -1,6 +1,6 @@
 {
   "name": "creativlab-attendance",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CreativLab Attendance – native wrapper for Android and Windows",
   "main": "electron/main.js",
   "scripts": {
