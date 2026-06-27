@@ -7,7 +7,8 @@ const os    = require('os');
 const { exec } = require('child_process');
 const https = require('https');
 const http  = require('http');
-const { autoUpdater } = require('electron-updater');
+let autoUpdater = null;
+try { autoUpdater = require('electron-updater').autoUpdater; } catch (_) {}
 
 // ── Paths ──────────────────────────────────────────────────────────
 const isDev    = !app.isPackaged;
@@ -440,13 +441,12 @@ function registerBackgroundService() {
 
 // ── Auto-updater ───────────────────────────────────────────────────
 function setupAutoUpdater() {
-  if (isDev) return; // only run in packaged app
+  if (isDev || !autoUpdater) return;
 
   autoUpdater.autoDownload        = true;
   autoUpdater.autoInstallOnAppQuit = true;
 
   autoUpdater.on('update-available', (info) => {
-    console.log('[updater] Update available:', info.version);
     if (mainWindow && !mainWindow.isDestroyed())
       mainWindow.webContents.send('update-available', info.version);
   });
@@ -457,10 +457,8 @@ function setupAutoUpdater() {
   });
 
   autoUpdater.on('update-downloaded', (info) => {
-    console.log('[updater] Update downloaded:', info.version);
     if (mainWindow && !mainWindow.isDestroyed())
       mainWindow.webContents.send('update-downloaded', info.version);
-    // Update tray tooltip
     if (tray) tray.setToolTip(`CreativLab Attendance\n⬆ Update v${info.version} ready — restart to install`);
   });
 
@@ -468,7 +466,6 @@ function setupAutoUpdater() {
     console.error('[updater] Error:', err.message);
   });
 
-  // Check on launch, then every 4 hours
   autoUpdater.checkForUpdatesAndNotify().catch(() => {});
   setInterval(() => autoUpdater.checkForUpdatesAndNotify().catch(() => {}), 4 * 60 * 60 * 1000);
 }
@@ -483,7 +480,7 @@ ipcMain.handle('scan-network-full',  ()      => scanNetworkFull());
 ipcMain.handle('get-network-info',   ()      => getNetworkInfo());
 ipcMain.handle('get-username',       ()      => os.userInfo().username);
 ipcMain.handle('get-hostname',       ()      => os.hostname());
-ipcMain.handle('install-update',     ()      => { autoUpdater.quitAndInstall(); });
+ipcMain.handle('install-update',     ()      => { if (autoUpdater) autoUpdater.quitAndInstall(); });
 
 // Renderer can ask for an immediate monitor scan (e.g. after linking a new device)
 ipcMain.handle('trigger-monitor-scan', () => {
