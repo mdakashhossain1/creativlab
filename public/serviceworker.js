@@ -44,6 +44,10 @@ self.addEventListener("fetch", event => {
     if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
         return;
     }
+    // Skip attendance-app requests to avoid conflicts with its own service worker
+    if (event.request.url.includes('/attendance-app')) {
+        return;
+    }
     event.respondWith(
         caches.match(event.request)
             .then(response => {
