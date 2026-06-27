@@ -29,6 +29,110 @@ Route::get('/attendance-app/{any}', function () {
     return response(file_get_contents(public_path('attendance-app/index.html')));
 })->where('any', '.*');
 
+Route::get('/debug-paths', function () {
+    $results = [];
+    $results['public_path'] = public_path();
+    $results['base_path'] = base_path();
+    
+    $fileToCheck = 'uploads/custom-images/team-2026-06-23-11-56-27-7839.webp';
+    $results['file_in_public_path'] = file_exists(public_path($fileToCheck));
+    
+    // Check if the file is in public_html
+    $publicHtmlPath = '/home/u663255439/domains/creativlab.in/public_html/' . $fileToCheck;
+    $results['file_in_public_html'] = file_exists($publicHtmlPath);
+    
+    // Find all files matching the name on the server
+    $foundFiles = [];
+    $searchDir = '/home/u663255439';
+    if (is_dir($searchDir)) {
+        try {
+            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($searchDir));
+            foreach ($it as $file) {
+                if ($file->isFile() && str_contains($file->getFilename(), 'team-2026')) {
+                    $foundFiles[] = $file->getPathname();
+                    if (count($foundFiles) >= 20) break; // Limit search results
+                }
+            }
+        } catch (\Exception $e) {
+            $results['search_error'] = $e->getMessage();
+        }
+    }
+    $results['found_files'] = $foundFiles;
+    
+    // Let's list some files in the public_path uploads/custom-images
+    $customImagesDir = public_path('uploads/custom-images');
+    $results['custom_images_dir'] = $customImagesDir;
+    if (is_dir($customImagesDir)) {
+        $results['files_in_custom_images'] = array_slice(scandir($customImagesDir), 0, 30);
+    } else {
+        $results['files_in_custom_images'] = 'Directory not found';
+    }
+    
+    return response()->json($results);
+});
+
+Route::get('/fix-uploads', function () {
+    $results = [];
+    
+    $source = base_path('public/uploads');
+    $dest = base_path('../public_html/uploads');
+    
+    $results['source_dir'] = $source;
+    $results['dest_dir'] = $dest;
+    $results['source_exists'] = is_dir($source);
+    $results['dest_exists'] = is_dir($dest);
+    
+    if (!is_dir($source)) {
+        return response()->json(['error' => 'Source directory not found: ' . $source, 'results' => $results]);
+    }
+    
+    if (!is_dir($dest)) {
+        return response()->json(['error' => 'Destination directory not found: ' . $dest, 'results' => $results]);
+    }
+    
+    $copied = [];
+    $errors = [];
+    
+    try {
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($it as $item) {
+            $subPath = $it->getSubPathName();
+            $target = $dest . DIRECTORY_SEPARATOR . $subPath;
+            
+            if ($item->isDir()) {
+                if (!is_dir($target)) {
+                    mkdir($target, 0755, true);
+                }
+            } else {
+                if (!file_exists($target)) {
+                    $targetDir = dirname($target);
+                    if (!is_dir($targetDir)) {
+                        mkdir($targetDir, 0755, true);
+                    }
+                    
+                    if (copy($item->getPathname(), $target)) {
+                        $copied[] = $subPath;
+                    } else {
+                        $errors[] = "Failed to copy $subPath";
+                    }
+                }
+            }
+        }
+    } catch (\Exception $e) {
+        $results['copy_exception'] = $e->getMessage();
+    }
+    
+    $results['copied'] = $copied;
+    $results['errors'] = $errors;
+    $results['total_copied'] = count($copied);
+    
+    return response()->json($results);
+});
+
 Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
 
     // PWA Routes
