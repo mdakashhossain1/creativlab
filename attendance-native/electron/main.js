@@ -76,7 +76,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(WEB_ROOT, 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, 'settings.html'));
   mainWindow.once('ready-to-show', () => mainWindow.show());
 
   // Hide to tray instead of quitting
@@ -119,19 +119,77 @@ function updateTray(ssid, isOffice) {
   tray.setToolTip(tip);
 }
 
+// ── HTTP Helper ────────────────────────────────────────────────────
+const https = require('https');
+const http = require('http');
+
+function apiPost(urlStr, data) {
+  const url = new URL(urlStr);
+  const lib = url.protocol === 'https:' ? https : http;
+  const postData = JSON.stringify(data);
+  const req = lib.request(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Content-Length': Buffer.byteLength(postData)
+    }
+  });
+  req.on('error', (e) => console.log('API Error:', e));
+  req.write(postData);
+  req.end();
+}
+
 // ── Wi-Fi polling loop ─────────────────────────────────────────────
+let officeLeftAt = -1;
+let scheduledOut = false;
+const GRACE_MS = 300000; // 5 minutes
+
 function startWifiPoll() {
   async function poll() {
     const config = readConfig();
     const ssid   = await getWifiSSID();
 
     if (ssid !== lastSSID) {
-      lastSSID = ssid;
       const isOffice = !!config.officeSSID && ssid === config.officeSSID;
+      const wasOffice = !!config.officeSSID && lastSSID === config.officeSSID;
+      
       updateTray(ssid, isOffice);
-      // Notify renderer
+
+      // Notify renderer just in case
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.webContents.send('wifi-change', ssid, isOffice);
+      }
+
+      // Auto-attendance logic
+      const fp = config.deviceFingerprint;
+      const apiBase = config.apiBase || 'https://creativlab.in/api';
+
+      if (fp && config.officeSSID) {
+        if (isOffice && !wasOffice) {
+          // Just arrived at office
+          officeLeftAt = -1;
+          scheduledOut = false;
+          apiPost(`${apiBase}/attendance/checkin`, { device_fingerprint: fp, source: 'wifi' });
+          console.log('Checked in via Wi-Fi');
+        } else if (!isOffice && wasOffice) {
+          // Just left office
+          officeLeftAt = Date.now();
+        }
+      }
+      lastSSID = ssid;
+    }
+    
+    // Check grace period for check-out
+    if (officeLeftAt > 0 && !scheduledOut) {
+      const config = readConfig();
+      if (Date.now() - officeLeftAt >= GRACE_MS) {
+        scheduledOut = true;
+        const apiBase = config.apiBase || 'https://creativlab.in/api';
+        if (config.deviceFingerprint) {
+          apiPost(`${apiBase}/attendance/checkout`, { device_fingerprint: config.deviceFingerprint });
+          console.log('Auto checked out via Wi-Fi grace period');
+        }
       }
     }
   }

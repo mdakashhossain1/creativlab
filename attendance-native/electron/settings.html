@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Attendance Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px;
+      background: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+    }
+    h2 { margin-top: 0; font-size: 20px; font-weight: 600; color: #fff; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; color: #94a3b8; }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    input:focus { outline: none; border-color: #6366f1; }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 12px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #4f46e5; }
+    .status { margin-top: 16px; font-size: 14px; color: #10b981; display: none; text-align: center; }
+  </style>
+</head>
+<body>
+  <h2>Settings</h2>
+  
+  <div class="form-group">
+    <label>API Base URL</label>
+    <input type="text" id="apiBase" placeholder="https://creativlab.in/api" />
+  </div>
+  
+  <div class="form-group">
+    <label>Office Wi-Fi SSID</label>
+    <input type="text" id="officeSSID" placeholder="Enter exactly as it appears in Wi-Fi list" />
+  </div>
+  
+  <div class="form-group">
+    <label>Device Fingerprint</label>
+    <input type="text" id="deviceFingerprint" placeholder="Unique identifier for this device" />
+  </div>
+  
+  <button id="saveBtn">Save Configuration</button>
+  <div id="status" class="status">Settings saved successfully!</div>
+  
+  <script>
+    async function loadConfig() {
+      const cfg = await window.electron.getConfig();
+      document.getElementById('apiBase').value = cfg.apiBase || 'https://creativlab.in/api';
+      document.getElementById('officeSSID').value = cfg.officeSSID || '';
+      document.getElementById('deviceFingerprint').value = cfg.deviceFingerprint || '';
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('saveBtn');
+      const status = document.getElementById('status');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      await window.electron.saveConfig({
+        apiBase: document.getElementById('apiBase').value,
+        officeSSID: document.getElementById('officeSSID').value,
+        deviceFingerprint: document.getElementById('deviceFingerprint').value
+      });
+      
+      status.style.display = 'block';
+      btn.textContent = 'Save Configuration';
+      btn.disabled = false;
+      
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 3000);
+    });
+
+    loadConfig();
+  </script>
+</body>
+</html>
