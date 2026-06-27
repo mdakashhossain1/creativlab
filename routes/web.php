@@ -22,11 +22,11 @@ Route::get('/attendance-app', function () {
     if (request()->getPathInfo() === '/attendance-app') {
         return redirect('/attendance-app/');
     }
-    return response()->file(public_path('attendance-app/index.html'));
+    return response(file_get_contents(public_path('attendance-app/index.html')));
 });
 
 Route::get('/attendance-app/{any}', function () {
-    return response()->file(public_path('attendance-app/index.html'));
+    return response(file_get_contents(public_path('attendance-app/index.html')));
 })->where('any', '.*');
 
 Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
