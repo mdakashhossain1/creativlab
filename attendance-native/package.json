@@ -78,7 +78,8 @@
     "publish": {
       "provider": "github",
       "owner": "mdakashhossain1",
-      "repo": "creativlab"
+      "repo": "creativlab",
+      "releaseType": "release"
     }
   }
 }
