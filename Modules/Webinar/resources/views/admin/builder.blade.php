@@ -501,12 +501,21 @@
 
     // ── Save ──────────────────────────────────────────────────────────────
     function savePage(showToast) {
-        // editor.getHtml() returns the clean serialized component tree —
-        // inline styles are preserved because avoidInlineStyle:false above.
-        // Keep html and css as separate fields; the view combines them for output.
         const html = editor.getHtml();
         const css  = editor.getCss();
         const data = JSON.stringify(editor.getProjectData());
+
+        // DIAGNOSTIC — open browser console (F12) to see what is being saved.
+        // If html has style="..." inline → inline styles are present, problem is in PHP/DB.
+        // If html has class="cXXX" with no style= → GrapesJS converted to classes, check css below.
+        // If css is empty + html has class refs → ROOT CAUSE found: classes without matching rules.
+        console.group('[WB Save Diagnostic]');
+        console.log('HTML (first 800 chars):', html.substring(0, 800));
+        console.log('CSS (first 800 chars):', css.substring(0, 800));
+        console.log('Has inline styles?', /style="/.test(html));
+        console.log('Has class refs?', /class="/.test(html));
+        console.log('CSS empty?', !css.trim());
+        console.groupEnd();
 
         fetch(saveUrl, {
             method: 'POST',
