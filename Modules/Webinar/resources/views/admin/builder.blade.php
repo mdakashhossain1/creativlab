@@ -491,9 +491,20 @@
 
     // ── Save ──────────────────────────────────────────────────────────────
     function savePage(showToast) {
-        const html = editor.getHtml();
+        // Pull the live rendered HTML straight from the canvas iframe DOM —
+        // this is WYSIWYG: every inline style is exactly what the browser applied.
+        let bodyHtml;
+        try {
+            bodyHtml = editor.Canvas.getDocument().body.innerHTML;
+        } catch(e) {
+            bodyHtml = editor.getHtml();
+        }
+
         const css  = editor.getCss();
         const data = JSON.stringify(editor.getProjectData());
+
+        // Prepend CSS as a <style> block so styles travel with the HTML
+        const fullHtml = css ? '<style>' + css + '</style>' + bodyHtml : bodyHtml;
 
         fetch(saveUrl, {
             method: 'POST',
@@ -501,7 +512,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
             },
-            body: JSON.stringify({ html, css, data }),
+            body: JSON.stringify({ html: fullHtml, css, data }),
         })
         .then(r => r.json())
         .then(data => {
