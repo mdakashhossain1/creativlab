@@ -31,15 +31,16 @@
     $registerUrl = route('webinar.register', $webinar->slug);
     $csrfToken   = csrf_token();
 
-    // CSS and HTML are stored separately; combine here so styles are always applied.
-    // Also handle legacy saves where CSS was embedded directly inside page_html.
+    // GrapesJS stores all styles as #id{} rules in page_css.
+    // page_html contains matching id="" elements (body wrapper already stripped at save time).
+    // Prepend CSS so the #id selectors apply to the elements below.
     $pageCss  = $webinar->page_css  ?? '';
     $pageHtml = $webinar->page_html ?? '';
 
-    // Strip any legacy embedded <style> block from page_html to avoid duplicates
-    $pageHtml = preg_replace('/^<style>.*?<\/style>/si', '', $pageHtml);
+    // Backward compat: strip legacy embedded <style> block if present in page_html
+    $pageHtml = preg_replace('/^<style\b[^>]*>.*?<\/style>\s*/si', '', $pageHtml);
 
-    $output  = $pageCss ? "<style>{$pageCss}</style>" : '';
+    $output  = $pageCss ? "<style>{$pageCss}</style>\n" : '';
     $output .= $pageHtml;
     $output  = str_replace('__WB_REGISTER_URL__', $registerUrl, $output);
     $output  = str_replace('__WB_CSRF_TOKEN__',   $csrfToken,   $output);

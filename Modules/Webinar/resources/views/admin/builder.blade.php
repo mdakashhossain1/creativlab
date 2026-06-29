@@ -501,21 +501,13 @@
 
     // ── Save ──────────────────────────────────────────────────────────────
     function savePage(showToast) {
-        const html = editor.getHtml();
+        // GrapesJS wraps getHtml() output in <body id="...">...</body>.
+        // Strip that wrapper so page_html is raw inner content only.
+        // CSS uses #id selectors — must be saved from the same getHtml() call to match.
+        const rawHtml = editor.getHtml();
+        const html = rawHtml.replace(/^<body[^>]*>/i, '').replace(/<\/body>\s*$/i, '').trim();
         const css  = editor.getCss();
         const data = JSON.stringify(editor.getProjectData());
-
-        // DIAGNOSTIC — open browser console (F12) to see what is being saved.
-        // If html has style="..." inline → inline styles are present, problem is in PHP/DB.
-        // If html has class="cXXX" with no style= → GrapesJS converted to classes, check css below.
-        // If css is empty + html has class refs → ROOT CAUSE found: classes without matching rules.
-        console.group('[WB Save Diagnostic]');
-        console.log('HTML (first 800 chars):', html.substring(0, 800));
-        console.log('CSS (first 800 chars):', css.substring(0, 800));
-        console.log('Has inline styles?', /style="/.test(html));
-        console.log('Has class refs?', /class="/.test(html));
-        console.log('CSS empty?', !css.trim());
-        console.groupEnd();
 
         fetch(saveUrl, {
             method: 'POST',
