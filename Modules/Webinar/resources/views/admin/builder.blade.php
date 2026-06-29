@@ -51,6 +51,8 @@
         .gjs-block { border-radius: 6px; border-color: #1e3a5f; padding: 8px 4px; }
         .gjs-block:hover { border-color: #6366f1; }
         .gjs-block__label { font-size: 11px; color: #cbd5e1; }
+        .gjs-block-media { display: flex; align-items: center; justify-content: center; height: 48px; }
+        .gjs-block-media i { font-size: 26px; color: #818cf8; }
     </style>
 </head>
 <body>
@@ -138,7 +140,8 @@
     const bm = editor.BlockManager;
 
     bm.add('wb-hero', {
-        label: '🎬 Hero Banner',
+        label: 'Hero Banner',
+        media: '<i class="fas fa-film"></i>',
         category: 'Webinar',
         content: `
 <section style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:100px 20px;text-align:center;color:#fff;">
@@ -157,7 +160,8 @@
     });
 
     bm.add('wb-countdown', {
-        label: '⏰ Countdown Timer',
+        label: 'Countdown Timer',
+        media: '<i class="fas fa-clock"></i>',
         category: 'Webinar',
         content: `
 <section style="background:#f8fafc;padding:60px 20px;text-align:center;">
@@ -185,7 +189,8 @@
     });
 
     bm.add('wb-about', {
-        label: '📋 About Section',
+        label: 'About Section',
+        media: '<i class="fas fa-info-circle"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#fff;">
@@ -209,7 +214,8 @@
     });
 
     bm.add('wb-speaker', {
-        label: '🎤 Speaker Card',
+        label: 'Speaker Card',
+        media: '<i class="fas fa-microphone"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#f8fafc;">
@@ -229,7 +235,8 @@
     });
 
     bm.add('wb-schedule', {
-        label: '📅 Schedule / Agenda',
+        label: 'Schedule / Agenda',
+        media: '<i class="fas fa-calendar-alt"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#fff;">
@@ -260,7 +267,8 @@
     });
 
     bm.add('wb-pricing', {
-        label: '💰 Pricing / Ticket',
+        label: 'Pricing / Ticket',
+        media: '<i class="fas fa-tags"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#f8fafc;">
@@ -296,7 +304,8 @@
     });
 
     bm.add('wb-faq', {
-        label: '❓ FAQ Accordion',
+        label: 'FAQ Accordion',
+        media: '<i class="fas fa-question-circle"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#fff;">
@@ -320,7 +329,8 @@
     });
 
     bm.add('wb-testimonial', {
-        label: '⭐ Testimonials',
+        label: 'Testimonials',
+        media: '<i class="fas fa-star"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#f8fafc;">
@@ -350,7 +360,8 @@
     });
 
     bm.add('wb-register-form', {
-        label: '📝 Registration Form',
+        label: 'Registration Form',
+        media: '<i class="fas fa-clipboard-list"></i>',
         category: 'Webinar',
         content: `
 <section id="register" style="padding:80px 20px;background:linear-gradient(135deg,#1a1a2e,#16213e);">
@@ -387,7 +398,8 @@
     });
 
     bm.add('wb-contact-link', {
-        label: '📬 Contact / Query',
+        label: 'Contact / Query',
+        media: '<i class="fas fa-envelope"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:60px 20px;background:#f1f5f9;text-align:center;">
@@ -400,7 +412,8 @@
     });
 
     bm.add('wb-video', {
-        label: '🎥 Video Embed',
+        label: 'Video Embed',
+        media: '<i class="fas fa-video"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:#000;">
@@ -417,7 +430,8 @@
     });
 
     bm.add('wb-cta', {
-        label: '🚀 Call to Action',
+        label: 'Call to Action',
+        media: '<i class="fas fa-rocket"></i>',
         category: 'Webinar',
         content: `
 <section style="padding:80px 20px;background:linear-gradient(135deg,#6366f1,#818cf8);text-align:center;">
@@ -430,7 +444,8 @@
     });
 
     bm.add('wb-divider', {
-        label: '➖ Divider',
+        label: 'Divider',
+        media: '<i class="fas fa-minus"></i>',
         category: 'Webinar',
         content: '<hr style="border:none;border-top:2px solid #e2e8f0;margin:40px auto;max-width:200px;">',
     });
