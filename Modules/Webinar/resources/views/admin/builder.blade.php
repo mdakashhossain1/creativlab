@@ -106,6 +106,9 @@
         width: 'auto',
         storageManager: false,
         fromElement: false,
+        // Keep all styles as inline attributes so getHtml() always includes them
+        avoidInlineStyle: false,
+        forceClass: false,
         plugins: ['gjs-blocks-basic'],
         pluginsOpts: {
             'gjs-blocks-basic': {
@@ -137,10 +140,17 @@
     });
 
     // ── Load saved content (project data takes priority over raw HTML/CSS) ──
+    // Strip any legacy embedded <style> block from page_html before feeding to setComponents
+    function stripEmbeddedStyle(html) {
+        return html ? html.replace(/^<style>[\s\S]*?<\/style>/i, '').trim() : '';
+    }
+    const cleanSavedHtml = stripEmbeddedStyle(savedHtml);
+
     if (savedData) {
-        try { editor.loadProjectData(JSON.parse(savedData)); } catch(e) { editor.setComponents(savedHtml || getDefaultPage()); editor.setStyle(savedCss || ''); }
-    } else if (savedHtml) {
-        editor.setComponents(savedHtml);
+        try { editor.loadProjectData(JSON.parse(savedData)); }
+        catch(e) { editor.setComponents(cleanSavedHtml || getDefaultPage()); editor.setStyle(savedCss || ''); }
+    } else if (cleanSavedHtml) {
+        editor.setComponents(cleanSavedHtml);
         editor.setStyle(savedCss || '');
     } else {
         editor.setComponents(getDefaultPage());
@@ -491,20 +501,12 @@
 
     // ── Save ──────────────────────────────────────────────────────────────
     function savePage(showToast) {
-        // Pull the live rendered HTML straight from the canvas iframe DOM —
-        // this is WYSIWYG: every inline style is exactly what the browser applied.
-        let bodyHtml;
-        try {
-            bodyHtml = editor.Canvas.getDocument().body.innerHTML;
-        } catch(e) {
-            bodyHtml = editor.getHtml();
-        }
-
+        // editor.getHtml() returns the clean serialized component tree —
+        // inline styles are preserved because avoidInlineStyle:false above.
+        // Keep html and css as separate fields; the view combines them for output.
+        const html = editor.getHtml();
         const css  = editor.getCss();
         const data = JSON.stringify(editor.getProjectData());
-
-        // Prepend CSS as a <style> block so styles travel with the HTML
-        const fullHtml = css ? '<style>' + css + '</style>' + bodyHtml : bodyHtml;
 
         fetch(saveUrl, {
             method: 'POST',
@@ -512,7 +514,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
             },
-            body: JSON.stringify({ html: fullHtml, css, data }),
+            body: JSON.stringify({ html, css, data }),
         })
         .then(r => r.json())
         .then(data => {

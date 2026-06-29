@@ -30,11 +30,21 @@
 @php
     $registerUrl = route('webinar.register', $webinar->slug);
     $csrfToken   = csrf_token();
-    $html = $webinar->page_html ?? '';
-    $html = str_replace('__WB_REGISTER_URL__', $registerUrl, $html);
-    $html = str_replace('__WB_CSRF_TOKEN__',   $csrfToken,   $html);
+
+    // CSS and HTML are stored separately; combine here so styles are always applied.
+    // Also handle legacy saves where CSS was embedded directly inside page_html.
+    $pageCss  = $webinar->page_css  ?? '';
+    $pageHtml = $webinar->page_html ?? '';
+
+    // Strip any legacy embedded <style> block from page_html to avoid duplicates
+    $pageHtml = preg_replace('/^<style>.*?<\/style>/si', '', $pageHtml);
+
+    $output  = $pageCss ? "<style>{$pageCss}</style>" : '';
+    $output .= $pageHtml;
+    $output  = str_replace('__WB_REGISTER_URL__', $registerUrl, $output);
+    $output  = str_replace('__WB_CSRF_TOKEN__',   $csrfToken,   $output);
 @endphp
-{!! $html !!}
+{!! $output !!}
 
 </body>
 </html>
