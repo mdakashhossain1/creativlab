@@ -501,13 +501,21 @@
 
     // ── Save ──────────────────────────────────────────────────────────────
     function savePage(showToast) {
-        // GrapesJS wraps getHtml() output in <body id="...">...</body>.
-        // Strip that wrapper so page_html is raw inner content only.
-        // CSS uses #id selectors — must be saved from the same getHtml() call to match.
+        // GrapesJS uses auto-generated #id selectors for ALL styles.
+        // CSS and HTML MUST come from the same getHtml()/getCss() call —
+        // different calls or sessions generate different IDs, causing mismatches.
+        //
+        // Solution: merge them immediately into one self-contained HTML string.
+        // page_html = "<style>#id{...}</style><section id="...">...</section>"
+        // This is atomic — IDs in <style> always match IDs in the HTML below.
         const rawHtml = editor.getHtml();
-        const html = rawHtml.replace(/^<body[^>]*>/i, '').replace(/<\/body>\s*$/i, '').trim();
+        // GrapesJS wraps content in <body id="...">...</body> — strip the wrapper.
+        const innerHtml = rawHtml.replace(/^<body[^>]*>/i, '').replace(/<\/body>\s*$/i, '').trim();
         const css  = editor.getCss();
         const data = JSON.stringify(editor.getProjectData());
+
+        // Merge CSS + HTML into one atomic blob — never separately
+        const html = css ? '<style>' + css + '</style>\n' + innerHtml : innerHtml;
 
         fetch(saveUrl, {
             method: 'POST',

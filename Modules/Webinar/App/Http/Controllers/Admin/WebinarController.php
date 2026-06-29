@@ -92,18 +92,18 @@ class WebinarController extends Controller
 
     public function savePage(Request $request, Webinar $webinar)
     {
-        // Save html and css first — these are critical for the frontend to render.
+        // page_html is the atomic merged blob: "<style>#id{...}</style><section id="...">
+        // CSS and HTML are merged at save time in JS so #id selectors always match.
         $webinar->update([
             'page_html' => $request->input('html', ''),
-            'page_css'  => $request->input('css', ''),
+            'page_css'  => $request->input('css', ''),  // kept as backup reference
         ]);
 
-        // page_data is for builder state reload only. Save separately so a missing
-        // column (migration not yet run on this environment) never blocks the html/css save.
+        // page_data is builder-reload state only — missing column must never block the save above.
         try {
             $webinar->update(['page_data' => $request->input('data', '')]);
         } catch (\Exception $e) {
-            // column not yet migrated — not fatal
+            // migration not yet run — not fatal
         }
 
         return response()->json(['success' => true, 'message' => 'Page saved successfully!']);

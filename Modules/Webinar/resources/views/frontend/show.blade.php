@@ -31,19 +31,12 @@
     $registerUrl = route('webinar.register', $webinar->slug);
     $csrfToken   = csrf_token();
 
-    // GrapesJS stores all styles as #id{} rules in page_css.
-    // page_html contains matching id="" elements (body wrapper already stripped at save time).
-    // Prepend CSS so the #id selectors apply to the elements below.
-    $pageCss  = $webinar->page_css  ?? '';
-    $pageHtml = $webinar->page_html ?? '';
-
-    // Backward compat: strip legacy embedded <style> block if present in page_html
-    $pageHtml = preg_replace('/^<style\b[^>]*>.*?<\/style>\s*/si', '', $pageHtml);
-
-    $output  = $pageCss ? "<style>{$pageCss}</style>\n" : '';
-    $output .= $pageHtml;
-    $output  = str_replace('__WB_REGISTER_URL__', $registerUrl, $output);
-    $output  = str_replace('__WB_CSRF_TOKEN__',   $csrfToken,   $output);
+    // page_html is a self-contained atomic blob: "<style>#id{...}</style><section id="...">
+    // CSS and HTML are merged at save time so #id selectors always match the elements.
+    // Just output it directly — no combining, no stripping needed.
+    $output = $webinar->page_html ?? '';
+    $output = str_replace('__WB_REGISTER_URL__', $registerUrl, $output);
+    $output = str_replace('__WB_CSRF_TOKEN__',   $csrfToken,   $output);
 @endphp
 {!! $output !!}
 
