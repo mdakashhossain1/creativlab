@@ -106,6 +106,21 @@ class WebinarController extends Controller
         return view('webinar::admin.registrations', compact('webinar', 'registrations'));
     }
 
+    public function registrationsJson(Webinar $webinar)
+    {
+        $rows = $webinar->registrations()->latest()->get([
+            'id', 'name', 'email', 'phone',
+            'payment_method', 'payment_status', 'amount', 'transaction_id', 'created_at',
+        ]);
+        return response()->json([
+            'total'    => $rows->count(),
+            'approved' => $rows->where('payment_status', 'approved')->count(),
+            'pending'  => $rows->where('payment_status', 'pending')->count(),
+            'revenue'  => $rows->where('payment_status', 'approved')->sum('amount'),
+            'rows'     => $rows,
+        ]);
+    }
+
     public function deleteRegistration(WebinarRegistration $registration)
     {
         $webinar = $registration->webinar;

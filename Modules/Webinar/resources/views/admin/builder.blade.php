@@ -34,7 +34,52 @@
         .wb-btn-redo   { background: #334155; color: #e2e8f0; }
         .wb-btn-clear  { background: #dc2626; color: #fff; }
         .wb-btn-back   { background: #475569; color: #fff; text-decoration: none; }
+        .wb-btn-regs   { background: #0f766e; color: #fff; }
         #wb-status     { font-size: 12px; color: #94a3b8; margin-left: auto; white-space: nowrap; }
+
+        /* ── Registrations drawer ── */
+        #wb-regs-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; }
+        #wb-regs-drawer  {
+            position:fixed; top:0; right:-560px; width:560px; height:100%; max-width:100vw;
+            background:#0f172a; border-left:1px solid #1e3a5f; z-index:1001;
+            display:flex; flex-direction:column; transition:right .3s ease;
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+        }
+        #wb-regs-drawer.open { right:0; }
+        #wb-regs-head {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:18px 24px; background:#16213e; border-bottom:1px solid #1e3a5f; flex-shrink:0;
+        }
+        #wb-regs-head h3 { color:#fff; font-size:16px; font-weight:700; margin:0; }
+        #wb-regs-close { background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer; padding:4px 8px; }
+        #wb-regs-close:hover { color:#fff; }
+        #wb-regs-stats { display:flex; gap:12px; padding:16px 24px; background:#0f172a; flex-shrink:0; border-bottom:1px solid #1e293b; }
+        .wb-stat { flex:1; background:#16213e; border-radius:10px; padding:12px 16px; text-align:center; }
+        .wb-stat-val { font-size:1.4rem; font-weight:800; color:#fff; line-height:1; }
+        .wb-stat-lbl { font-size:11px; color:#64748b; margin-top:4px; text-transform:uppercase; letter-spacing:1px; }
+        .wb-stat-val.green { color:#10b981; }
+        .wb-stat-val.yellow { color:#f59e0b; }
+        .wb-stat-val.blue   { color:#38bdf8; }
+        #wb-regs-body { flex:1; overflow-y:auto; padding:16px 24px; }
+        .wb-reg-row {
+            background:#16213e; border:1px solid #1e3a5f; border-radius:10px;
+            padding:16px 18px; margin-bottom:10px;
+            display:grid; grid-template-columns:1fr auto; gap:8px 16px; align-items:start;
+        }
+        .wb-reg-row:hover { border-color:#334155; }
+        .wb-reg-name  { font-size:14px; font-weight:700; color:#fff; }
+        .wb-reg-email { font-size:13px; color:#818cf8; margin-top:2px; }
+        .wb-reg-phone { font-size:12px; color:#64748b; margin-top:2px; }
+        .wb-reg-meta  { font-size:11px; color:#475569; margin-top:6px; }
+        .wb-reg-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; text-align:center; }
+        .wb-badge-approved { background:rgba(16,185,129,.15); color:#10b981; border:1px solid #10b981; }
+        .wb-badge-pending  { background:rgba(245,158,11,.15); color:#f59e0b; border:1px solid #f59e0b; }
+        .wb-badge-free     { background:rgba(99,102,241,.15); color:#818cf8; border:1px solid #818cf8; }
+        .wb-reg-amount { font-size:13px; font-weight:700; color:#fff; text-align:right; }
+        #wb-regs-empty { text-align:center; padding:60px 20px; color:#475569; }
+        #wb-regs-empty i { font-size:40px; margin-bottom:16px; display:block; }
+        #wb-regs-refresh { background:none; border:1px solid #334155; color:#94a3b8; font-size:12px; padding:4px 12px; border-radius:6px; cursor:pointer; }
+        #wb-regs-refresh:hover { border-color:#818cf8; color:#818cf8; }
         #wb-device-btns button { background: #334155; border: none; color: #e2e8f0; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; margin: 0 2px; }
         #wb-device-btns button.active { background: #6366f1; }
 
@@ -74,10 +119,32 @@
     <div class="wb-sep"></div>
     <button class="wb-btn wb-btn-clear" id="btnClear" title="Clear canvas"><i class="fas fa-trash-alt"></i> Clear</button>
     <button class="wb-btn wb-btn-save" id="btnSave"><i class="fas fa-save"></i> Save Page</button>
+    <button class="wb-btn wb-btn-regs" id="btnRegs"><i class="fas fa-users"></i> Registrations <span id="regs-count" style="background:rgba(255,255,255,.2);border-radius:10px;padding:1px 7px;margin-left:4px;font-size:11px;"></span></button>
     <a href="{{ route('webinar.show', $webinar->slug) }}" target="_blank" class="wb-btn wb-btn-prev">
         <i class="fas fa-external-link-alt"></i> Preview
     </a>
     <span id="wb-status">Last saved: auto</span>
+</div>
+
+{{-- ─── Registrations Drawer ─────────────────────────────────────────────── --}}
+<div id="wb-regs-overlay"></div>
+<div id="wb-regs-drawer">
+    <div id="wb-regs-head">
+        <h3><i class="fas fa-users" style="color:#10b981;margin-right:8px;"></i> Registrations</h3>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <button id="wb-regs-refresh" onclick="loadRegs()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button id="wb-regs-close"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+    <div id="wb-regs-stats">
+        <div class="wb-stat"><div class="wb-stat-val" id="stat-total">—</div><div class="wb-stat-lbl">Total</div></div>
+        <div class="wb-stat"><div class="wb-stat-val green" id="stat-approved">—</div><div class="wb-stat-lbl">Approved</div></div>
+        <div class="wb-stat"><div class="wb-stat-val yellow" id="stat-pending">—</div><div class="wb-stat-lbl">Pending</div></div>
+        <div class="wb-stat"><div class="wb-stat-val blue" id="stat-revenue">—</div><div class="wb-stat-lbl">Revenue</div></div>
+    </div>
+    <div id="wb-regs-body">
+        <div id="wb-regs-empty"><i class="fas fa-inbox"></i>No registrations yet.</div>
+    </div>
 </div>
 
 {{-- ─── GrapesJS Canvas ─────────────────────────────────────────────────── --}}
@@ -520,9 +587,92 @@
 
     // ── Panel tweaks ──────────────────────────────────────────────────────
     editor.on('load', () => {
-        // Show blocks panel by default
         editor.runCommand('open-blocks');
     });
+
+    // ── Registrations Drawer ──────────────────────────────────────────────
+    const regsJsonUrl = @json(route('admin.webinar.registrations-json', $webinar->id));
+    const overlay = document.getElementById('wb-regs-overlay');
+    const drawer  = document.getElementById('wb-regs-drawer');
+
+    function openDrawer() {
+        overlay.style.display = 'block';
+        drawer.classList.add('open');
+        loadRegs();
+    }
+    function closeDrawer() {
+        overlay.style.display = 'none';
+        drawer.classList.remove('open');
+    }
+
+    document.getElementById('btnRegs').addEventListener('click', openDrawer);
+    document.getElementById('wb-regs-close').addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    function fmtDate(str) {
+        if (!str) return '—';
+        const d = new Date(str);
+        return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
+             + ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+    }
+
+    function loadRegs() {
+        document.getElementById('wb-regs-body').innerHTML =
+            '<div style="text-align:center;padding:40px;color:#64748b;"><i class="fas fa-spinner fa-spin" style="font-size:24px;"></i><p style="margin-top:12px;">Loading...</p></div>';
+
+        fetch(regsJsonUrl, { headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' } })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('stat-total').textContent    = data.total;
+                document.getElementById('stat-approved').textContent = data.approved;
+                document.getElementById('stat-pending').textContent  = data.pending;
+                document.getElementById('stat-revenue').textContent  = data.revenue > 0 ? '₹' + parseFloat(data.revenue).toFixed(2) : '—';
+                document.getElementById('regs-count').textContent    = data.total;
+
+                const body = document.getElementById('wb-regs-body');
+                if (!data.rows || data.rows.length === 0) {
+                    body.innerHTML = '<div id="wb-regs-empty"><i class="fas fa-inbox"></i>No registrations yet.</div>';
+                    return;
+                }
+
+                body.innerHTML = data.rows.map(r => {
+                    const method = r.payment_method || 'free';
+                    const status = r.payment_status || 'approved';
+                    const badgeCls = status === 'approved' ? 'wb-badge-approved'
+                                   : status === 'pending'  ? 'wb-badge-pending'
+                                   : 'wb-badge-free';
+                    const amt = parseFloat(r.amount || 0) > 0
+                        ? '<div class="wb-reg-amount">₹' + parseFloat(r.amount).toFixed(2) + '</div>'
+                        : '<div class="wb-reg-amount" style="color:#64748b;">Free</div>';
+                    const txn = r.transaction_id
+                        ? '<span style="color:#334155;">TXN: ' + r.transaction_id + '</span> · '
+                        : '';
+                    return `<div class="wb-reg-row">
+                        <div>
+                            <div class="wb-reg-name">${r.name}</div>
+                            <div class="wb-reg-email"><i class="fas fa-envelope" style="font-size:10px;margin-right:4px;"></i>${r.email}</div>
+                            ${r.phone ? '<div class="wb-reg-phone"><i class="fas fa-phone" style="font-size:10px;margin-right:4px;"></i>' + r.phone + '</div>' : ''}
+                            <div class="wb-reg-meta">${txn}<i class="fas fa-clock" style="font-size:10px;margin-right:4px;"></i>${fmtDate(r.created_at)}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            ${amt}
+                            <div style="margin-top:6px;"><span class="wb-reg-badge ${badgeCls}">${status}</span></div>
+                            <div style="margin-top:4px;font-size:11px;color:#475569;text-transform:capitalize;">${method}</div>
+                        </div>
+                    </div>`;
+                }).join('');
+            })
+            .catch(() => {
+                document.getElementById('wb-regs-body').innerHTML =
+                    '<div id="wb-regs-empty"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i>Failed to load. Click Refresh.</div>';
+            });
+    }
+
+    // Refresh count badge on open
+    fetch(regsJsonUrl, { headers: { 'Accept': 'application/json' } })
+        .then(r => r.json()).then(d => {
+            if (d.total > 0) document.getElementById('regs-count').textContent = d.total;
+        }).catch(() => {});
 
 })();
 </script>
