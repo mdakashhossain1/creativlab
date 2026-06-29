@@ -8,6 +8,11 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group
     Route::get('webinar', 'Admin\WebinarController@index')->name('webinar.index');
     Route::get('webinar/create', 'Admin\WebinarController@create')->name('webinar.create');
     Route::post('webinar', 'Admin\WebinarController@store')->name('webinar.store');
+
+    // registration sub-routes BEFORE the {webinar} wildcard to avoid conflict
+    Route::delete('webinar/registration/{registration}', 'Admin\WebinarController@deleteRegistration')->name('webinar.registration.delete');
+    Route::patch('webinar/registration/{registration}/approve', 'Admin\WebinarController@approveRegistration')->name('webinar.registration.approve');
+
     Route::get('webinar/{webinar}/edit', 'Admin\WebinarController@edit')->name('webinar.edit');
     Route::put('webinar/{webinar}', 'Admin\WebinarController@update')->name('webinar.update');
     Route::delete('webinar/{webinar}', 'Admin\WebinarController@destroy')->name('webinar.destroy');
@@ -16,8 +21,6 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group
     Route::post('webinar/{webinar}/save-page', 'Admin\WebinarController@savePage')->name('webinar.save-page');
 
     Route::get('webinar/{webinar}/registrations', 'Admin\WebinarController@registrations')->name('webinar.registrations');
-    Route::delete('webinar/registration/{registration}', 'Admin\WebinarController@deleteRegistration')->name('webinar.registration.delete');
-    Route::patch('webinar/registration/{registration}/approve', 'Admin\WebinarController@approveRegistration')->name('webinar.registration.approve');
 });
 
 // ─── Frontend routes ──────────────────────────────────────────────────────────

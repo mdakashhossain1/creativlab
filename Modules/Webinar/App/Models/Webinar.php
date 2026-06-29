@@ -22,8 +22,5 @@ class Webinar extends Model
         return $this->hasMany(WebinarRegistration::class);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
+
 }
