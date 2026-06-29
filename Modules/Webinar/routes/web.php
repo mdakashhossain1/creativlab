@@ -21,7 +21,6 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group
     Route::post('webinar/{webinar}/save-page', 'Admin\WebinarController@savePage')->name('webinar.save-page');
 
     Route::get('webinar/{webinar}/registrations', 'Admin\WebinarController@registrations')->name('webinar.registrations');
-    Route::get('webinar/{webinar}/registrations-json', 'Admin\WebinarController@registrationsJson')->name('webinar.registrations-json');
 });
 
 // ─── Frontend routes ──────────────────────────────────────────────────────────
