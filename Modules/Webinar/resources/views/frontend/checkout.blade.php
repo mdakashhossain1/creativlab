@@ -1,42 +1,47 @@
-@extends('inner_layout')
-
-@section('title')
-<title>Checkout — {{ $webinar->title }}</title>
-@endsection
-
-@push('style_section')
-<style>
-    .wb-checkout { padding: 80px 20px; background: linear-gradient(135deg,#1a1a2e,#16213e); min-height: 80vh; }
-    .wb-checkout-box { max-width: 640px; margin: 0 auto; }
-    .wb-checkout-box h2 { color: #fff; font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; }
-    .wb-checkout-box .sub { color: #94a3b8; margin-bottom: 32px; }
-    .wb-order-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-    .wb-order-card .row-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: #cbd5e1; font-size: 14px; }
-    .wb-order-card .row-line:last-child { border-bottom: none; font-weight: 700; font-size: 16px; color: #fff; }
-    .wb-pay-method { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 20px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s; }
-    .wb-pay-method:hover, .wb-pay-method.active { border-color: #6366f1; background: rgba(99,102,241,.1); }
-    .wb-pay-method h5 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .wb-pay-method p { color: #64748b; font-size: 13px; margin: 0; }
-    .wb-pay-body { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.08); }
-    .wb-pay-body.show { display: block; }
-    .wb-input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 8px; color: #fff; font-size: 14px; outline: none; margin-bottom: 12px; }
-    .wb-input::placeholder { color: #64748b; }
-    .wb-input:focus { border-color: #6366f1; }
-    .wb-pay-btn { width: 100%; padding: 14px; background: #6366f1; color: #fff; font-size: 16px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; }
-    .wb-pay-btn:hover { background: #4f46e5; }
-    .wb-section-title { color: #818cf8; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-</style>
-@endpush
-
-@section('frontend_content')
-<main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Checkout — {{ $webinar->title }}</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg,#1a1a2e,#16213e); min-height: 100vh; }
+        .wb-checkout { padding: 60px 20px; }
+        .wb-checkout-box { max-width: 640px; margin: 0 auto; }
+        .wb-checkout-box h2 { color: #fff; font-size: 1.8rem; font-weight: 800; margin: 0 0 4px; }
+        .wb-sub { color: #94a3b8; margin: 0 0 32px; }
+        .wb-section-title { color: #818cf8; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .wb-order-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+        .row-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: #cbd5e1; font-size: 14px; }
+        .row-line:last-child { border-bottom: none; font-weight: 700; font-size: 16px; color: #fff; }
+        .wb-pay-method { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 20px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s; }
+        .wb-pay-method:hover, .wb-pay-method.active { border-color: #6366f1; background: rgba(99,102,241,.1); }
+        .wb-pay-method h5 { color: #fff; font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+        .wb-pay-method p { color: #64748b; font-size: 13px; margin: 0; }
+        .wb-pay-body { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.08); }
+        .wb-pay-body.show { display: block; }
+        .wb-input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 8px; color: #fff; font-size: 14px; outline: none; margin-bottom: 12px; }
+        .wb-input::placeholder { color: #64748b; }
+        .wb-input:focus { border-color: #6366f1; }
+        .wb-pay-btn { width: 100%; padding: 14px; background: #6366f1; color: #fff; font-size: 16px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; }
+        .wb-pay-btn:hover { background: #4f46e5; }
+        .wb-alert-error { background: rgba(220,38,38,.15); border: 1px solid #dc2626; color: #fca5a5; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .wb-back { display: inline-flex; align-items: center; gap: 6px; color: #818cf8; text-decoration: none; font-size: 14px; margin-bottom: 32px; }
+        .wb-back:hover { color: #a5b4fc; }
+    </style>
+</head>
+<body>
 <div class="wb-checkout">
     <div class="wb-checkout-box">
+
+        <a href="{{ route('webinar.show', $webinar->slug) }}" class="wb-back">← Back to webinar</a>
 
         <div style="text-align:center;margin-bottom:40px;">
             <p class="wb-section-title">Secure Checkout</p>
             <h2>Complete Your Registration</h2>
-            <p class="sub">for <strong style="color:#818cf8;">{{ $webinar->title }}</strong></p>
+            <p class="wb-sub">for <strong style="color:#818cf8;">{{ $webinar->title }}</strong></p>
         </div>
 
         {{-- Order Summary --}}
@@ -57,12 +62,10 @@
         <p class="wb-section-title">Choose Payment Method</p>
 
         @if(session('alert-type') === 'error')
-        <div style="background:rgba(220,38,38,.15);border:1px solid #dc2626;color:#fca5a5;padding:12px 16px;border-radius:8px;margin-bottom:20px;font-size:14px;">
-            {{ session('message') }}
-        </div>
+        <div class="wb-alert-error">{{ session('message') }}</div>
         @endif
 
-        {{-- ── Stripe ── --}}
+        {{-- Stripe --}}
         @if(!empty($payment->stripe_key ?? null))
         <div class="wb-pay-method" onclick="toggleMethod('stripe')">
             <h5>💳 Credit / Debit Card (Stripe)</h5>
@@ -82,7 +85,7 @@
         </div>
         @endif
 
-        {{-- ── Razorpay ── --}}
+        {{-- Razorpay --}}
         @if(!empty($payment->razorpay_key ?? null))
         <div class="wb-pay-method" onclick="toggleMethod('razorpay')">
             <h5>🔷 Razorpay</h5>
@@ -97,7 +100,7 @@
         </div>
         @endif
 
-        {{-- ── Bank Transfer ── --}}
+        {{-- Bank Transfer --}}
         <div class="wb-pay-method" onclick="toggleMethod('bank')">
             <h5>🏦 Bank Transfer</h5>
             <p>Manual bank payment — pending admin approval</p>
@@ -108,7 +111,7 @@
                     Account Name: {{ $payment->bank_account_name ?? 'N/A' }}<br>
                     Account Number: {{ $payment->bank_account_number ?? 'N/A' }}<br>
                     Bank Name: {{ $payment->bank_name ?? 'N/A' }}<br>
-                    @if(!empty($payment->bank_routing_number ?? null)) Routing: {{ $payment->bank_routing_number }}<br> @endif
+                    @if(!empty($payment->bank_routing_number ?? null))Routing: {{ $payment->bank_routing_number }}<br>@endif
                 </div>
                 @else
                 <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:16px;margin-bottom:16px;font-size:13px;color:#94a3b8;">
@@ -128,96 +131,74 @@
         </p>
     </div>
 </div>
-</main>
-@endsection
 
-@push('js_section')
 <script src="https://js.stripe.com/v2/"></script>
 <script>
 function toggleMethod(id) {
     document.querySelectorAll('.wb-pay-body').forEach(el => el.classList.remove('show'));
     document.querySelectorAll('.wb-pay-method').forEach(el => el.classList.remove('active'));
     const body = document.getElementById('method-' + id);
-    const parent = body ? body.closest('.wb-pay-method') : null;
-    if (body) { body.classList.add('show'); if (parent) parent.classList.add('active'); }
+    if (body) {
+        body.classList.add('show');
+        body.closest('.wb-pay-method').classList.add('active');
+    }
 }
 
-// Card number formatting
 const cardEl = document.getElementById('cardNumber');
 if (cardEl) {
     cardEl.addEventListener('input', function () {
-        let v = this.value.replace(/\D/g, '').substring(0, 16);
-        this.value = v.replace(/(.{4})/g, '$1 ').trim();
+        let v = this.value.replace(/\D/g,'').substring(0,16);
+        this.value = v.replace(/(.{4})/g,'$1 ').trim();
     });
 }
 const expiryEl = document.getElementById('cardExpiry');
 if (expiryEl) {
     expiryEl.addEventListener('input', function () {
-        let v = this.value.replace(/\D/g, '').substring(0, 4);
+        let v = this.value.replace(/\D/g,'').substring(0,4);
         if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
         this.value = v;
     });
 }
 
-// Stripe submit
 const stripeForm = document.getElementById('stripe-form');
 if (stripeForm) {
     const stripeKey = @json($payment->stripe_key ?? '');
     if (stripeKey) Stripe.setPublishableKey(stripeKey);
-
     document.getElementById('stripe-submit').addEventListener('click', function (e) {
         e.preventDefault();
-        const cardNum = (document.getElementById('cardNumber').value || '').replace(/\s/g, '');
-        const expiry  = (document.getElementById('cardExpiry').value || '').replace(/\s/g, '').split('/');
+        const cardNum = (document.getElementById('cardNumber').value || '').replace(/\s/g,'');
+        const expiry  = (document.getElementById('cardExpiry').value || '').replace(/\s/g,'').split('/');
         const cvc     = document.getElementById('cardCvc').value || '';
-
-        Stripe.card.createToken({
-            number: cardNum,
-            exp_month: (expiry[0] || '').trim(),
-            exp_year: (expiry[1] || '').trim(),
-            cvc: cvc
-        }, function (status, response) {
-            if (response.error) {
-                alert(response.error.message);
-            } else {
-                document.getElementById('stripeToken').value = response.id;
-                stripeForm.submit();
-            }
+        Stripe.card.createToken({ number: cardNum, exp_month: (expiry[0]||'').trim(), exp_year: (expiry[1]||'').trim(), cvc }, function (status, response) {
+            if (response.error) { alert(response.error.message); }
+            else { document.getElementById('stripeToken').value = response.id; stripeForm.submit(); }
         });
     });
 }
 
-// Razorpay
 const razorpayBtn = document.getElementById('razorpay-btn');
 if (razorpayBtn) {
-    const rzpKey   = @json($payment->razorpay_key ?? '');
-    const rzpAmt   = @json((int)($webinar->price * 100));
-    const webTitle = @json($webinar->title);
-    const attendeeName  = @json($attendee['name']);
-    const attendeeEmail = @json($attendee['email']);
-
+    const rzpKey = @json($payment->razorpay_key ?? '');
+    const options = {
+        key: rzpKey,
+        amount: @json((int)($webinar->price * 100)),
+        currency: 'INR',
+        name: @json($webinar->title),
+        description: 'Webinar Registration',
+        handler: function (response) {
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay-form').submit();
+        },
+        prefill: { name: @json($attendee['name']), email: @json($attendee['email']) },
+        theme: { color: '#6366f1' }
+    };
     razorpayBtn.addEventListener('click', function () {
-        const options = {
-            key: rzpKey,
-            amount: rzpAmt,
-            currency: 'INR',
-            name: webTitle,
-            description: 'Webinar Registration',
-            handler: function (response) {
-                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
-                document.getElementById('razorpay-form').submit();
-            },
-            prefill: { name: attendeeName, email: attendeeEmail },
-            theme: { color: '#6366f1' }
-        };
-        const rzp = new Razorpay(options);
-        rzp.open();
+        new Razorpay(options).open();
     });
-
-    // Load Razorpay script dynamically
     const s = document.createElement('script');
     s.src = 'https://checkout.razorpay.com/v1/checkout.js';
     document.head.appendChild(s);
 }
 </script>
-@endpush
+</body>
+</html>
