@@ -23,37 +23,7 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin')->name('admin.')->group
     Route::get('webinar/{webinar}/registrations', 'Admin\WebinarController@registrations')->name('webinar.registrations');
 });
 
-// ─── Temporary diagnostic route (remove after CSS bug is confirmed fixed) ────
-Route::middleware(['web', 'auth:admin'])->get('webinar-debug/{slug}', function ($slug) {
-    $w = \Modules\Webinar\App\Models\Webinar::where('slug', $slug)->firstOrFail();
-    $html = $w->page_html ?? '';
-    $css  = $w->page_css  ?? '';
 
-    preg_match_all('/#([a-z0-9]+)\s*\{/', $html, $htmlIds);   // IDs found inside embedded <style>
-    preg_match_all('/\sid="([^"]+)"/', $html, $elemIds);       // id="" on elements
-    preg_match_all('/#([a-z0-9]+)\s*\{/', $css, $cssIds);     // IDs in page_css column
-
-    $overlap = array_intersect($elemIds[1], $cssIds[1]);
-
-    return response()->json([
-        'page_html_length'     => strlen($html),
-        'page_css_length'      => strlen($css),
-        'page_html_first_200'  => substr($html, 0, 200),
-        'page_css_first_200'   => substr($css, 0, 200),
-        'html_has_style_tag'   => strpos($html, '<style') !== false,
-        'html_has_body_wrapper'=> (bool) preg_match('/^<body/i', ltrim($html)),
-        'element_ids_in_html'  => array_slice($elemIds[1], 0, 10),
-        'ids_in_page_css_col'  => array_slice($cssIds[1], 0, 10),
-        'matching_ids'         => array_values($overlap),
-        'match_count'          => count($overlap),
-        'css_col_id_count'     => count($cssIds[1]),
-        'verdict'              => count($cssIds[1]) > 0 && count($overlap) === count($cssIds[1])
-                                    ? 'PASS — all CSS IDs match HTML element IDs'
-                                    : (count($overlap) > 0
-                                        ? 'PARTIAL — only '.count($overlap).' of '.count($cssIds[1]).' CSS IDs match'
-                                        : 'FAIL — no CSS IDs match HTML element IDs'),
-    ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-});
 
 // ─── Frontend routes ──────────────────────────────────────────────────────────
 Route::middleware(['web'])->group(function () {
