@@ -1,72 +1,95 @@
 @extends('admin.master_layout')
 
 @section('title')
-<title>Webinar Pages</title>
+<title>{{ __('Webinar Pages') }}</title>
 @endsection
 
 @section('body-header')
-<h4 class="crancy-header__title">Webinar Pages</h4>
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Webinars</li>
-    </ol>
-</nav>
+<h3 class="crancy-header__title m-0">{{ __('Webinar Pages') }}</h3>
+<p class="crancy-header__text">{{ __('Dashboard') }} >> {{ __('Webinar Pages') }}</p>
 @endsection
 
 @section('body-content')
-<div class="crancy-body">
-    <div class="crancy-ds">
-        <div class="crancy-ds__main crancy-ds__main--v3">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
+<!-- crancy Dashboard -->
+<section class="crancy-adashboard crancy-show">
+    <div class="container container__bscreen">
+        <div class="row">
+            <div class="col-12">
+                <div class="crancy-body">
+                    <div class="crancy-dsinner">
+
                         <div class="crancy-table crancy-table--v3 mg-top-30">
-                            <div class="crancy-table__heading">
-                                <h4 class="crancy-table__title">All Webinar Pages</h4>
-                                <a href="{{ route('admin.webinar.create') }}" class="crancy-btn crancy-btn__header">
-                                    <i class="fas fa-plus"></i> Create Webinar
-                                </a>
+
+                            <div class="crancy-customer-filter">
+                                <div class="crancy-customer-filter__single crancy-customer-filter__single--csearch d-flex items-center justify-between create_new_btn_box">
+                                    <div class="crancy-header__form crancy-header__form--customer create_new_btn_inline_box">
+                                        <h4 class="crancy-product-card__title">{{ __('Webinar Pages') }}</h4>
+                                        <a href="{{ route('admin.webinar.create') }}" class="crancy-btn">
+                                            <span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M1 8H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </span> {{ __('Create New') }}
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="crancy-table__inner">
-                                <table id="dataTable" class="table crancy-table__main">
-                                    <thead>
+
+                            <!-- crancy Table -->
+                            <div id="crancy-table__main_wrapper" class="dt-bootstrap5 no-footer">
+                                <table class="crancy-table__main crancy-table__main-v3 no-footer" id="dataTable">
+
+                                    <!-- Head -->
+                                    <thead class="crancy-table__head">
                                         <tr>
-                                            <th>#</th>
-                                            <th>Title</th>
-                                            <th>Slug</th>
-                                            <th>Date</th>
-                                            <th>Price</th>
-                                            <th>Registrations</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">#</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Title') }}</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Slug') }}</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Date') }}</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Price') }}</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Registrations') }}</th>
+                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Status') }}</th>
+                                            <th class="crancy-table__column-3 crancy-table__h3 sorting">{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+
+                                    <!-- Body -->
+                                    <tbody class="crancy-table__body">
                                         @foreach($webinars as $i => $webinar)
-                                        <tr>
-                                            <td>{{ $i + 1 }}</td>
-                                            <td><strong>{{ $webinar->title }}</strong></td>
-                                            <td><small class="text-muted">{{ $webinar->slug }}</small></td>
-                                            <td>{{ $webinar->webinar_date ? $webinar->webinar_date->format('d M Y, H:i') : '—' }}</td>
-                                            <td>
+                                        <tr class="odd">
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
+                                                <h4 class="crancy-table__product-title">{{ $i + 1 }}</h4>
+                                            </td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
+                                                <h4 class="crancy-table__product-title">{{ $webinar->title }}</h4>
+                                            </td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
+                                                <h4 class="crancy-table__product-title">{{ $webinar->slug }}</h4>
+                                            </td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
+                                                <h4 class="crancy-table__product-title">
+                                                    {{ $webinar->webinar_date ? $webinar->webinar_date->format('d M Y, H:i') : '—' }}
+                                                </h4>
+                                            </td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($webinar->payment_enabled)
-                                                    {{ $webinar->currency_symbol }}{{ number_format($webinar->price, 2) }}
+                                                    <h4 class="crancy-table__product-title">{{ $webinar->currency_symbol }}{{ number_format($webinar->price, 2) }}</h4>
                                                 @else
-                                                    <span class="badge bg-success">Free</span>
+                                                    <span class="badge bg-success text-white">{{ __('Free') }}</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                <span class="badge bg-secondary">{{ $webinar->registrations()->count() }}</span>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
+                                                <h4 class="crancy-table__product-title">{{ $webinar->registrations()->count() }}</h4>
                                             </td>
-                                            <td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($webinar->status)
-                                                    <span class="badge bg-success">Active</span>
+                                                    <span class="badge bg-success text-white">{{ __('Active') }}</span>
                                                 @else
-                                                    <span class="badge bg-secondary">Draft</span>
+                                                    <span class="badge bg-danger text-white">{{ __('Draft') }}</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="crancy-table__column-2 crancy-table__data-2">
                                                 <div class="dropdown">
                                                     <button class="crancy-btn dropdown-toggle" type="button"
                                                         id="dropdownWebinar{{ $webinar->id }}"
@@ -97,13 +120,13 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <form action="{{ route('admin.webinar.destroy', $webinar->id) }}" method="POST"
-                                                                  onsubmit="return confirm('Delete this webinar?')">
-                                                                @csrf @method('DELETE')
-                                                                <button type="submit" class="dropdown-item text-danger">
-                                                                    <i class="fas fa-trash"></i> {{ __('Delete') }}
-                                                                </button>
-                                                            </form>
+                                                            <a onclick="webinarDeleteConfirm({{ $webinar->id }})"
+                                                               href="javascript:;"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#deleteModal"
+                                                               class="dropdown-item text-danger">
+                                                                <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                                            </a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -111,13 +134,49 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
+
                                 </table>
                             </div>
+                            <!-- End crancy Table -->
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
+<!-- End crancy Dashboard -->
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">{{ __('Delete Confirmation') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('Are you really want to delete this webinar?') }}</p>
+            </div>
+            <div class="modal-footer" style="display:flex;flex-wrap:nowrap;justify-content:space-between;gap:10px;">
+                <form action="" id="webinar_delete_form" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:auto !important;">{{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary" style="width:auto !important;">{{ __('Yes, Delete') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
+
+@push('js_section')
+<script>
+    "use strict";
+    function webinarDeleteConfirm(id) {
+        $("#webinar_delete_form").attr("action", '{{ url("admin/webinar") }}/' + id);
+    }
+</script>
+@endpush
