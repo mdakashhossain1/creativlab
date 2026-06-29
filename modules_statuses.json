@@ -37,5 +37,6 @@
     "Attendance": true,
     "Payroll": true,
     "ArknoxMonitor": true,
-    "Task": true
+    "Task": true,
+    "Webinar": true
 }
