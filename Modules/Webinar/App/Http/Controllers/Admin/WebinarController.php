@@ -95,6 +95,7 @@ class WebinarController extends Controller
         $webinar->update([
             'page_html' => $request->input('html', ''),
             'page_css'  => $request->input('css', ''),
+            'page_data' => $request->input('data', ''),
         ]);
 
         return response()->json(['success' => true, 'message' => 'Page saved successfully!']);

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Webinar extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'page_html', 'page_css',
+        'title', 'slug', 'page_html', 'page_css', 'page_data',
         'webinar_date', 'total_seats', 'payment_enabled',
         'price', 'currency_symbol', 'status',
     ];

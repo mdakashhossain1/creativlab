@@ -93,6 +93,7 @@
     'use strict';
 
     // ── Saved page content ─────────────────────────────────────────────────
+    const savedData = @json($webinar->page_data ?? '');
     const savedHtml = @json($webinar->page_html ?? '');
     const savedCss  = @json($webinar->page_css  ?? '');
     const saveUrl   = @json(route('admin.webinar.save-page', $webinar->id));
@@ -105,8 +106,6 @@
         width: 'auto',
         storageManager: false,
         fromElement: false,
-        components: savedHtml || getDefaultPage(),
-        style: savedCss || '',
         plugins: ['gjs-blocks-basic'],
         pluginsOpts: {
             'gjs-blocks-basic': {
@@ -136,6 +135,16 @@
         canvas: { styles: ['https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'] },
         assetManager: { upload: false },
     });
+
+    // ── Load saved content (project data takes priority over raw HTML/CSS) ──
+    if (savedData) {
+        try { editor.loadProjectData(JSON.parse(savedData)); } catch(e) { editor.setComponents(savedHtml || getDefaultPage()); editor.setStyle(savedCss || ''); }
+    } else if (savedHtml) {
+        editor.setComponents(savedHtml);
+        editor.setStyle(savedCss || '');
+    } else {
+        editor.setComponents(getDefaultPage());
+    }
 
     // ── Custom Webinar Blocks ──────────────────────────────────────────────
     const bm = editor.BlockManager;
@@ -484,6 +493,7 @@
     function savePage(showToast) {
         const html = editor.getHtml();
         const css  = editor.getCss();
+        const data = JSON.stringify(editor.getProjectData());
 
         fetch(saveUrl, {
             method: 'POST',
@@ -491,7 +501,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken,
             },
-            body: JSON.stringify({ html, css }),
+            body: JSON.stringify({ html, css, data }),
         })
         .then(r => r.json())
         .then(data => {
