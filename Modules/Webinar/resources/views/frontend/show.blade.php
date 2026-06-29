@@ -8,7 +8,6 @@
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; padding: 0; }
         img { max-width: 100%; }
-        {!! $webinar->page_css !!}
 
         /* Flash toast */
         .wb-toast { position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 14px 22px; border-radius: 8px; font-family: sans-serif; font-size: 15px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.25); animation: wb-fadein .3s ease; max-width: 360px; }

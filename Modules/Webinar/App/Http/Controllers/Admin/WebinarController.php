@@ -92,9 +92,15 @@ class WebinarController extends Controller
 
     public function savePage(Request $request, Webinar $webinar)
     {
+        $html = $request->input('html', '');
+        $css  = $request->input('css', '');
+
+        // Embed CSS into the HTML so they always travel together on the frontend
+        $fullHtml = $css ? "<style>{$css}</style>{$html}" : $html;
+
         $webinar->update([
-            'page_html' => $request->input('html', ''),
-            'page_css'  => $request->input('css', ''),
+            'page_html' => $fullHtml,
+            'page_css'  => $css,
             'page_data' => $request->input('data', ''),
         ]);
 
