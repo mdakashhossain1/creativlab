@@ -57,9 +57,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('admin.webinar.registrations', $webinar->id) }}" class="text-primary">
-                                                    {{ $webinar->registrations()->count() }} registrations
-                                                </a>
+                                                <span class="badge bg-secondary">{{ $webinar->registrations()->count() }}</span>
                                             </td>
                                             <td>
                                                 @if($webinar->status)
@@ -69,20 +67,45 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="d-flex gap-2 flex-wrap">
-                                                    <a href="{{ route('admin.webinar.builder', $webinar->id) }}" class="btn btn-sm btn-primary" title="Open Builder">
-                                                        <i class="fas fa-paint-brush"></i> Builder
-                                                    </a>
-                                                    <a href="{{ route('webinar.show', $webinar->slug) }}" target="_blank" class="btn btn-sm btn-info" title="Preview">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.webinar.edit', $webinar->id) }}" class="btn btn-sm btn-warning" title="Edit Settings">
-                                                        <i class="fas fa-cog"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.webinar.destroy', $webinar->id) }}" method="POST" onsubmit="return confirm('Delete this webinar?')">
-                                                        @csrf @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                                                    </form>
+                                                <div class="dropdown">
+                                                    <button class="crancy-btn dropdown-toggle" type="button"
+                                                        id="dropdownWebinar{{ $webinar->id }}"
+                                                        data-bs-toggle="dropdown"
+                                                        data-bs-flip="false"
+                                                        aria-expanded="false">
+                                                        {{ __('Action') }}
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownWebinar{{ $webinar->id }}">
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('admin.webinar.builder', $webinar->id) }}">
+                                                                <i class="fas fa-paint-brush"></i> {{ __('Page Builder') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('webinar.show', $webinar->slug) }}" target="_blank">
+                                                                <i class="fas fa-eye"></i> {{ __('Preview') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('admin.webinar.registrations', $webinar->id) }}">
+                                                                <i class="fas fa-users"></i> {{ __('Registrations') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('admin.webinar.edit', $webinar->id) }}">
+                                                                <i class="fas fa-cog"></i> {{ __('Settings') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <form action="{{ route('admin.webinar.destroy', $webinar->id) }}" method="POST"
+                                                                  onsubmit="return confirm('Delete this webinar?')">
+                                                                @csrf @method('DELETE')
+                                                                <button type="submit" class="dropdown-item text-danger">
+                                                                    <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>
