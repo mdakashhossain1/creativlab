@@ -3,7 +3,6 @@
 namespace Modules\Blog\App\Http\Controllers;
 
 use Auth;
-use Image, File, Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\Blog\App\Models\Blog;
@@ -47,12 +46,7 @@ class BlogController extends Controller
         $blog = new Blog();
 
         if($request->image){
-            $image_name = 'blog-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name ='uploads/custom-images/'.$image_name;
-            Image::make($request->image)
-                ->encode('webp', 80)
-                ->save(public_path().'/'.$image_name);
-            $blog->image = $image_name;
+            $blog->image = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/custom-images', ['prefix' => 'blog', 'format' => 'webp', 'quality' => 80]);
         }
 
         $blog->blog_category_id = $request->category;
@@ -109,16 +103,11 @@ class BlogController extends Controller
 
         if($request->image){
             $old_image = $blog->image;
-            $image_name = 'blog-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name ='uploads/custom-images/'.$image_name;
-            Image::make($request->image)
-                ->encode('webp', 80)
-                ->save(public_path().'/'.$image_name);
-            $blog->image = $image_name;
+            $blog->image = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/custom-images', ['prefix' => 'blog', 'format' => 'webp', 'quality' => 80]);
             $blog->save();
 
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -156,7 +145,7 @@ class BlogController extends Controller
 
         $old_image = $blog->image;
         if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+            app(\App\Services\UploadManager::class)->delete($old_image);
         }
 
         BlogComment::where('blog_id', $id)->delete();

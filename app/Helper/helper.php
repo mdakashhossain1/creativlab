@@ -370,7 +370,17 @@ function home2_hero_animation_image_4()
 if (!function_exists('getImageOrPlaceholder')) {
     function getImageOrPlaceholder(?string $imagePath, string $size = '800x600'): string
     {
-        if ($imagePath && file_exists(public_path($imagePath))) {
+        if (!$imagePath) {
+            return "https://placehold.co/{$size}?text={$size}";
+        }
+
+        // Full URL (R2 or external) — return as-is
+        if (str_starts_with($imagePath, 'http://') || str_starts_with($imagePath, 'https://')) {
+            return $imagePath;
+        }
+
+        // Legacy local relative path
+        if (file_exists(public_path($imagePath))) {
             return asset($imagePath);
         }
 

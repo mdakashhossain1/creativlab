@@ -19,7 +19,7 @@ use Modules\Brand\Entities\Brand;
 use App\Models\ProjectTranslation;
 use App\Http\Controllers\Controller;
 use Modules\Ecommerce\Entities\Cart;
-use Image, File, Str, Artisan;
+use File, Artisan;
 use Modules\Coupon\App\Models\Coupon;
 use Modules\Listing\Entities\Listing;
 use Modules\Category\Entities\Category;
@@ -126,16 +126,10 @@ class GlobalSettingController extends Controller
 
         if($request->logo){
             $old_logo = $logo_setting->value;
-            $image = $request->logo;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $logo_setting->value = $logo_name;
+            $logo_setting->value = app(\App\Services\UploadManager::class)->upload($request->logo, 'uploads/website-images', ['prefix' => 'logo']);
             $logo_setting->save();
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
         }
 
@@ -143,16 +137,10 @@ class GlobalSettingController extends Controller
 
         if($request->white_logo){
             $old_logo = $white_logo_setting->value;
-            $image = $request->white_logo;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'white_logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                ->save(public_path().'/'.$logo_name);
-            $white_logo_setting->value = $logo_name;
+            $white_logo_setting->value = app(\App\Services\UploadManager::class)->upload($request->white_logo, 'uploads/website-images', ['prefix' => 'white-logo']);
             $white_logo_setting->save();
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
         }
 
@@ -160,16 +148,10 @@ class GlobalSettingController extends Controller
 
         if($request->footer_logo){
             $old_logo = $footer_logo_setting->value;
-            $image = $request->footer_logo;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'footer-logo-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $footer_logo_setting->value = $logo_name;
+            $footer_logo_setting->value = app(\App\Services\UploadManager::class)->upload($request->footer_logo, 'uploads/website-images', ['prefix' => 'footer-logo']);
             $footer_logo_setting->save();
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
         }
 
@@ -177,16 +159,10 @@ class GlobalSettingController extends Controller
 
         if($request->favicon){
             $old_favicon = $logo_setting->value;
-            $favicon = $request->favicon;
-            $ext = $favicon->getClientOriginalExtension();
-            $favicon_name = 'favicon-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $favicon_name = 'uploads/website-images/'.$favicon_name;
-            Image::make($favicon)
-                    ->save(public_path().'/'.$favicon_name);
-            $logo_setting->value = $favicon_name;
+            $logo_setting->value = app(\App\Services\UploadManager::class)->upload($request->favicon, 'uploads/website-images', ['prefix' => 'favicon']);
             $logo_setting->save();
             if($old_favicon){
-                if(File::exists(public_path().'/'.$old_favicon))unlink(public_path().'/'.$old_favicon);
+                app(\App\Services\UploadManager::class)->delete($old_favicon);
             }
         }
 
@@ -310,7 +286,7 @@ class GlobalSettingController extends Controller
             $admin_image = $admin->image;
             $admin->delete();
             if($admin_image){
-                if(File::exists(public_path().'/'.$admin_image))unlink(public_path().'/'.$admin_image);
+                app(\App\Services\UploadManager::class)->delete($admin_image);
             }
         }
 
@@ -366,17 +342,11 @@ class GlobalSettingController extends Controller
 
         if($request->error_image){
             $old_logo = $setting->value;
-            $image = $request->error_image;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'error-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->error_image, 'uploads/website-images', ['prefix' => 'error-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
         }
 
@@ -400,17 +370,11 @@ class GlobalSettingController extends Controller
 
         if($request->login_page_bg){
             $old_logo = $setting->value;
-            $image = $request->login_page_bg;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'login-bg-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->login_page_bg, 'uploads/website-images', ['prefix' => 'login-bg-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
 
         }
@@ -435,17 +399,11 @@ class GlobalSettingController extends Controller
 
         if($request->admin_login){
             $old_logo = $setting->value;
-            $image = $request->admin_login;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'admin-bg-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->admin_login, 'uploads/website-images', ['prefix' => 'admin-bg-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
 
         }
@@ -470,17 +428,11 @@ class GlobalSettingController extends Controller
 
         if($request->breadcrumb_image){
             $old_logo = $setting->value;
-            $image = $request->breadcrumb_image;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'breadcrumb-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->breadcrumb_image, 'uploads/website-images', ['prefix' => 'breadcrumb-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
 
         }
@@ -532,17 +484,11 @@ class GlobalSettingController extends Controller
 
         if($request->default_avatar){
             $old_logo = $setting->value;
-            $image = $request->default_avatar;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'avatar-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->default_avatar, 'uploads/website-images', ['prefix' => 'avatar-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
 
         }
@@ -567,17 +513,11 @@ class GlobalSettingController extends Controller
 
         if($request->maintenance_image){
             $old_logo = $setting->value;
-            $image = $request->maintenance_image;
-            $ext = $image->getClientOriginalExtension();
-            $logo_name = 'maintenance-image-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $logo_name = 'uploads/website-images/'.$logo_name;
-            $logo = Image::make($image)
-                    ->save(public_path().'/'.$logo_name);
-            $setting->value = $logo_name;
+            $setting->value = app(\App\Services\UploadManager::class)->upload($request->maintenance_image, 'uploads/website-images', ['prefix' => 'maintenance-image']);
             $setting->save();
 
             if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
+                app(\App\Services\UploadManager::class)->delete($old_logo);
             }
 
         }
@@ -637,24 +577,11 @@ class GlobalSettingController extends Controller
             if (isset($iconData['icon']) && $iconData['icon']) {
                 $oldIconPath = $iconSetting->icon_path;
 
-                $image = $iconData['icon'];
-                $ext = $image->getClientOriginalExtension();
-                $iconName = 'pwa-icon-' . $iconData['icon_size'] . '-' . date('Y-m-d-h-i-s-') . rand(999, 9999) . '.' . $ext;
-                $iconPath = 'uploads/pwa-icons/' . $iconName;
+                $iconSetting->icon_path = app(\App\Services\UploadManager::class)->upload($iconData['icon'], 'uploads/pwa-icons', ['prefix' => 'pwa-icon-' . $iconData['icon_size']]);
 
-                // Create directory if it doesn't exist
-                if (!File::exists(public_path('uploads/pwa-icons'))) {
-                    File::makeDirectory(public_path('uploads/pwa-icons'), 0755, true);
+                if ($oldIconPath) {
+                    app(\App\Services\UploadManager::class)->delete($oldIconPath);
                 }
-
-                $image->move(public_path('uploads/pwa-icons'), $iconName);
-
-                // Delete old icon if exists
-                if ($oldIconPath && File::exists(public_path($oldIconPath))) {
-                    unlink(public_path($oldIconPath));
-                }
-
-                $iconSetting->icon_path = $iconPath;
             }
 
             // Update other fields

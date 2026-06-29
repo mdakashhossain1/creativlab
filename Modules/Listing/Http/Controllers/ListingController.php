@@ -2,7 +2,6 @@
 
 namespace Modules\Listing\Http\Controllers;
 
-use Image, File;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -37,22 +36,11 @@ class ListingController extends Controller
         $listing = new Listing();
 
         if($request->thumb_image){
-
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->thumb_image->getClientOriginalExtension();
-            $image_name ='uploads/custom-images/'.$image_name;
-            $request->thumb_image->move(public_path('uploads/custom-images'), $image_name);
-
-            $listing->thumb_image = $image_name ?? null;
-
+            $listing->thumb_image = app(\App\Services\UploadManager::class)->upload($request->thumb_image, 'uploads/custom-images', ['prefix' => 'listing']);
         }
 
         if($request->background_image){
-            $image_name = 'listing'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name ='uploads/custom-images/'.$image_name;
-            Image::make($request->background_image)
-                ->encode('webp', 80)
-                ->save(public_path().'/'.$image_name);
-            $listing->background_image = $image_name;
+            $listing->background_image = app(\App\Services\UploadManager::class)->upload($request->background_image, 'uploads/custom-images', ['prefix' => 'listing', 'format' => 'webp', 'quality' => 80]);
         }
 
         $listing->category_id = $request->category_id;
@@ -101,29 +89,16 @@ class ListingController extends Controller
         if($request->lang_code == admin_lang()) {
 
             if($request->thumb_image){
-
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$request->thumb_image->getClientOriginalExtension();
-                $image_name ='uploads/custom-images/'.$image_name;
-                $request->thumb_image->move(public_path('uploads/custom-images'), $image_name);
-
-                $listing->thumb_image = $image_name;
-
+                $listing->thumb_image = app(\App\Services\UploadManager::class)->upload($request->thumb_image, 'uploads/custom-images', ['prefix' => 'listing']);
             }
-
-
 
             if($request->background_image){
                 $old_image = $listing->background_image;
-                $image_name = 'listing'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-                $image_name ='uploads/custom-images/'.$image_name;
-                Image::make($request->background_image)
-                    ->encode('webp', 80)
-                    ->save(public_path().'/'.$image_name);
-                $listing->background_image = $image_name;
+                $listing->background_image = app(\App\Services\UploadManager::class)->upload($request->background_image, 'uploads/custom-images', ['prefix' => 'listing', 'format' => 'webp', 'quality' => 80]);
                 $listing->save();
 
                 if($old_image) {
-                    if(File::exists(public_path().'/'.$old_image)) unlink(public_path().'/'.$old_image);
+                    app(\App\Services\UploadManager::class)->delete($old_image);
                 }
             }
 
@@ -156,7 +131,7 @@ class ListingController extends Controller
         $old_image = $listing->thumb_image;
 
         if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+            app(\App\Services\UploadManager::class)->delete($old_image);
         }
 
         ListingTranslation::where('listing_id',$id)->delete();

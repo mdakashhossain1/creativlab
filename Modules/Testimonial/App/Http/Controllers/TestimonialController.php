@@ -2,50 +2,36 @@
 
 namespace Modules\Testimonial\App\Http\Controllers;
 
-use Image, File, Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Services\UploadManager;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Modules\Language\App\Models\Language;
+use Modules\Testimonial\App\Http\Requests\TestimonialRequest;
 use Modules\Testimonial\App\Models\Testimonial;
 use Modules\Testimonial\App\Models\TestimonialTrasnlation;
-use Modules\Testimonial\App\Http\Requests\TestimonialRequest;
 
 class TestimonialController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $testimonials = Testimonial::with('translate')->latest()->get();
-
         return view('testimonial::index', ['testimonials' => $testimonials]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('testimonial::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(TestimonialRequest $request)
+    public function store(TestimonialRequest $request): RedirectResponse
     {
         $testimonial = new Testimonial();
 
-        if($request->image){
-            $extention = $request->image->getClientOriginalExtension();
-            $image_name = Str::slug($request->name).date('-Ymdhis').'.'.$extention;
-            $image_name = 'uploads/custom-images/'.$image_name;
-            Image::make($request->image)
-                ->save(public_path().'/'.$image_name);
-            $testimonial->image = $image_name;
+        if ($request->image) {
+            $testimonial->image = app(UploadManager::class)->upload(
+                $request->image, 'uploads/custom-images', ['prefix' => 'testimonial']
+            );
         }
 
         $testimonial->rating = $request->rating;
@@ -53,9 +39,7 @@ class TestimonialController extends Controller
         $testimonial->save();
 
         $languages = Language::all();
-
-        foreach($languages as $language){
-
+        foreach ($languages as $language) {
             $testimonial_trans = new TestimonialTrasnlation();
             $testimonial_trans->lang_code = $language->lang_code;
             $testimonial_trans->testimonial_id = $testimonial->id;
@@ -65,48 +49,29 @@ class TestimonialController extends Controller
             $testimonial_trans->save();
         }
 
-
-        $notify_message = trans('Created successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        $notify_message = array('message' => trans('Created successfully'), 'alert-type' => 'success');
         return redirect()->route('admin.testimonial.edit', ['testimonial' => $testimonial->id, 'lang_code' => admin_lang()])->with($notify_message);
-
     }
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request, $id)
     {
         $testimonial = Testimonial::findOrFail($id);
-
         $translate = TestimonialTrasnlation::where(['lang_code' => $request->lang_code, 'testimonial_id' => $id])->first();
-
         return view('testimonial::edit', ['testimonial' => $testimonial, 'translate' => $translate]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $testimonial = Testimonial::findOrFail($id);
 
-        if($request->lang_code == admin_lang()){
-            if($request->image){
+        if ($request->lang_code == admin_lang()) {
+            if ($request->image) {
                 $existing_file = $testimonial->image;
-                $extention = $request->image->getClientOriginalExtension();
-                $image_name = Str::slug($request->name).date('-Ymdhis').'.'.$extention;
-                $image_name = 'uploads/custom-images/'.$image_name;
-                Image::make($request->image)
-                    ->save(public_path().'/'.$image_name);
-                $testimonial->image = $image_name;
+                $testimonial->image = app(UploadManager::class)->upload(
+                    $request->image, 'uploads/custom-images', ['prefix' => 'testimonial']
+                );
                 $testimonial->save();
-
-                if(File::exists(public_path().'/'.$existing_file)){
-                    unlink(public_path().'/'.$existing_file);
-                };
+                app(UploadManager::class)->delete($existing_file);
             }
 
             $testimonial->rating = $request->rating;
@@ -120,40 +85,25 @@ class TestimonialController extends Controller
         $testimonial_trans->comment = $request->comment;
         $testimonial_trans->save();
 
-
-
-        $notify_message = trans('Updated successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        $notify_message = array('message' => trans('Updated successfully'), 'alert-type' => 'success');
         return redirect()->back()->with($notify_message);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $testimonial = Testimonial::findOrFail($id);
-        $existing_file = $testimonial->image;
-
+        app(UploadManager::class)->delete($testimonial->image);
         $testimonial->delete();
-
         TestimonialTrasnlation::where('testimonial_id', $id)->delete();
 
-        if(File::exists(public_path().'/'.$existing_file)){
-            unlink(public_path().'/'.$existing_file);
-        };
-
-        $notify_message = trans('Deleted successfully');
-        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        $notify_message = array('message' => trans('Deleted successfully'), 'alert-type' => 'success');
         return redirect()->back()->with($notify_message);
-
     }
 
-
-    public function setup_language($lang_code){
-        $testimonial_trans = TestimonialTrasnlation::where('lang_code' , admin_lang())->get();
-
-        foreach($testimonial_trans as $testimonial_tran){
+    public function setup_language($lang_code)
+    {
+        $testimonial_trans = TestimonialTrasnlation::where('lang_code', admin_lang())->get();
+        foreach ($testimonial_trans as $testimonial_tran) {
             $new_trans = new TestimonialTrasnlation();
             $new_trans->lang_code = $lang_code;
             $new_trans->name = $testimonial_tran->name;
@@ -161,7 +111,6 @@ class TestimonialController extends Controller
             $new_trans->comment = $testimonial_tran->comment;
             $new_trans->testimonial_id = $testimonial_tran->testimonial_id;
             $new_trans->save();
-
         }
     }
 }

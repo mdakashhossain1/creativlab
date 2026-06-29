@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers;
 
-use Image, File;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Category\Entities\Category;
@@ -46,12 +45,7 @@ class CategoryController extends Controller
         $category = new Category();
 
         if($request->image){
-            $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name ='uploads/custom-images/'.$image_name;
-            Image::make($request->image)
-                ->encode('webp', 80)
-                ->save(public_path().'/'.$image_name);
-            $category->icon = $image_name;
+            $category->icon = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/custom-images', ['prefix' => 'category', 'format' => 'webp', 'quality' => 80]);
         }
 
         $category->slug = $request->slug;
@@ -100,15 +94,10 @@ class CategoryController extends Controller
 
             if($request->image){
                 $old_image = $category->icon;
-                $image_name = 'category-'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-                $image_name ='uploads/custom-images/'.$image_name;
-                Image::make($request->image)
-                    ->encode('webp', 80)
-                    ->save(public_path().'/'.$image_name);
-                $category->icon = $image_name;
+                $category->icon = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/custom-images', ['prefix' => 'category', 'format' => 'webp', 'quality' => 80]);
                 $category->save();
                 if($old_image){
-                    if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                    app(\App\Services\UploadManager::class)->delete($old_image);
                 }
             }
 
@@ -153,7 +142,7 @@ class CategoryController extends Controller
         $old_icon = $sub_category->icon;
 
         if($old_icon){
-            if(File::exists(public_path().'/'.$old_icon))unlink(public_path().'/'.$old_icon);
+            app(\App\Services\UploadManager::class)->delete($old_icon);
         }
 
         $sub_category->delete();

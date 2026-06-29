@@ -76,14 +76,9 @@ class UserSupportTicketController extends Controller
 
         if ($request->hasFile('documents')) {
             foreach ($request->documents as $index => $request_file) {
-                $extention = $request_file->getClientOriginalExtension();
-                $file_name = 'support-ticket-' . time() . $index . '.' . $extention;
-                $destinationPath = public_path('uploads/custom-images/');
-                $request_file->move($destinationPath, $file_name);
-
                 $document = new MessageDocument();
                 $document->message_id = $ticket_message->id;
-                $document->file_name = $file_name;
+                $document->file_name = app(\App\Services\UploadManager::class)->upload($request_file, 'uploads/custom-images', ['prefix' => 'support-ticket']);
                 $document->model_name = 'SupportTicketMessage';
                 $document->save();
             }
@@ -158,14 +153,9 @@ class UserSupportTicketController extends Controller
 
         if ($request->hasFile('documents')) {
             foreach ($request->documents as $index => $request_file) {
-                $extention = $request_file->getClientOriginalExtension();
-                $file_name = 'support-ticket-' . time() . $index . '.' . $extention;
-                $destinationPath = public_path('uploads/custom-images/');
-                $request_file->move($destinationPath, $file_name);
-
                 $document = new MessageDocument();
                 $document->message_id = $ticket_message->id;
-                $document->file_name = $file_name;
+                $document->file_name = app(\App\Services\UploadManager::class)->upload($request_file, 'uploads/custom-images', ['prefix' => 'support-ticket']);
                 $document->model_name = 'SupportTicketMessage';
                 $document->save();
             }

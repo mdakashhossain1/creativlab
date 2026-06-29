@@ -5,7 +5,6 @@ namespace Modules\SupportTicket\App\Http\Controllers\Support\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Modules\SupportTicket\App\Models\SupportTicket;
 use Modules\SupportTicket\App\Models\MessageDocument;
 use Modules\SupportTicket\App\Models\SupportTicketMessage;
@@ -80,14 +79,9 @@ class AdminSupportTicketController extends Controller
 
         if ($request->hasFile('documents')) {
             foreach ($request->documents as $index => $request_file) {
-                $extention = $request_file->getClientOriginalExtension();
-                $file_name = 'support-ticket-' . time() . $index . '.' . $extention;
-                $destinationPath = public_path('uploads/custom-images/');
-                $request_file->move($destinationPath, $file_name);
-
                 $document = new MessageDocument();
                 $document->message_id = $ticket_message->id;
-                $document->file_name = $file_name;
+                $document->file_name = app(\App\Services\UploadManager::class)->upload($request_file, 'uploads/custom-images', ['prefix' => 'support-ticket']);
                 $document->model_name = 'SupportTicketMessage';
                 $document->save();
             }
@@ -120,9 +114,8 @@ class AdminSupportTicketController extends Controller
 
             $documents = MessageDocument::where('message_id', $ticket_message->id)->where('model_name', 'SupportTicketMessage')->get();
             foreach ($documents as $document) {
-                $exist_file_name = $document->file_name;
-                if ($exist_file_name) {
-                    if (File::exists(public_path('uploads/custom-images') . '/' . $exist_file_name)) unlink(public_path('uploads/custom-images') . '/' . $exist_file_name);
+                if ($document->file_name) {
+                    app(\App\Services\UploadManager::class)->delete($document->file_name);
                 }
 
                 $document->delete();

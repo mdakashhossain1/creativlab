@@ -20,6 +20,7 @@ use Modules\Currency\App\Models\Currency;
 use Modules\Language\App\Models\Language;
 use Modules\GlobalSetting\App\Models\GlobalSetting;
 use Modules\SupportTicket\App\Models\SupportTicket;
+use App\Services\UploadManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(UploadManager::class);
     }
 
     /**

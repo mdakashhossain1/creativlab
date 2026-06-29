@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use File;
-use App\Models\Frontend;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Frontend;
+use App\Services\UploadManager;
+use Illuminate\Http\Request;
 
 class FrontEndManagementController extends Controller
 {
@@ -202,18 +202,17 @@ class FrontEndManagementController extends Controller
             return $existingImages ?? [];
         }
 
+        $uploader = app(UploadManager::class);
+
         foreach ($configuredImages as $imageKey => $imageDetails) {
             if ($request->hasFile($imageKey)) {
-                $image = $request->file($imageKey);
-                $imageName = time() . '_' . $imageKey . '.' . $image->getClientOriginalExtension();
-
                 $oldFile = $existingImages[$imageKey] ?? null;
-                if ($oldFile && File::exists(public_path($oldFile))) {
-                    unlink(public_path($oldFile));
-                }
-
-                $image->move(public_path('uploads/website-images'), $imageName);
-                $imageData[$imageKey] = 'uploads/website-images/' . $imageName;
+                $uploader->delete($oldFile);
+                $imageData[$imageKey] = $uploader->upload(
+                    $request->file($imageKey),
+                    'uploads/website-images',
+                    ['prefix' => $imageKey]
+                );
             } elseif (isset($existingImages[$imageKey])) {
                 $imageData[$imageKey] = $existingImages[$imageKey];
             }

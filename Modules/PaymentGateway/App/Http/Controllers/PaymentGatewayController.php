@@ -2,7 +2,6 @@
 
 namespace Modules\PaymentGateway\App\Http\Controllers;
 
-use Image, File;
 use App\Http\Controllers\Controller;
 use Modules\PaymentGateway\App\Models\PaymentGateway;
 use Modules\PaymentGateway\App\Http\Requests\BankRequest;
@@ -50,16 +49,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'stripe-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'stripe']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -82,16 +75,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'paypal']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -116,16 +103,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'razorpay']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -148,16 +129,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'paystack']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -180,16 +155,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'instamojo']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -208,16 +177,10 @@ class PaymentGatewayController extends Controller
 
         if($request->image){
             $old_image = $exist_image->value;
-            $new_image = $request->image;
-            $ext = $new_image->getClientOriginalExtension();
-            $image_name = 'paypal-'.date('Y-m-d-h-i-s-').rand(999,9999).'.'.$ext;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($new_image)
-                    ->save(public_path().'/'.$image_name);
-            $exist_image->value = $image_name;
+            $exist_image->value = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'bank']);
             $exist_image->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 

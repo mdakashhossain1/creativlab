@@ -2,10 +2,8 @@
 
 namespace Modules\Project\App\Http\Controllers;
 
-use Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\RedirectResponse;
 use Modules\Project\App\Models\Project;
 use Modules\Project\App\Models\PortfolioCategory;
@@ -14,7 +12,6 @@ use Modules\Language\App\Models\Language;
 use Modules\Project\App\Models\ProjectGallery;
 use Modules\Project\App\Models\ProjectTranslation;
 use Modules\GlobalSetting\App\Models\GlobalSetting;
-use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -55,17 +52,11 @@ class ProjectController extends Controller
         $project = new Project();
 
         if ($request->thumb_image) {
-            $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-            $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->thumb_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
-            $project->thumb_image = $image_name;
+            $project->thumb_image = app(\App\Services\UploadManager::class)->upload($request->thumb_image, 'uploads/custom-images', ['prefix' => 'project', 'format' => 'webp', 'quality' => 80]);
         }
 
         if ($request->author_image) {
-            $image_name = 'project-author' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-            $image_name = 'uploads/custom-images/' . $image_name;
-            Image::make($request->author_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
-            $project->author_image = $image_name;
+            $project->author_image = app(\App\Services\UploadManager::class)->upload($request->author_image, 'uploads/custom-images', ['prefix' => 'project-author', 'format' => 'webp', 'quality' => 80]);
         }
 
         $project->portfolio_category_id = $request->portfolio_category_id;
@@ -127,19 +118,13 @@ class ProjectController extends Controller
             ]);
 
             if ($request->thumb_image) {
-                $image_name = 'project' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-                $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($request->thumb_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
-                $project->thumb_image = $image_name;
+                $project->thumb_image = app(\App\Services\UploadManager::class)->upload($request->thumb_image, 'uploads/custom-images', ['prefix' => 'project', 'format' => 'webp', 'quality' => 80]);
             }
 
             if ($request->author_image) {
                 $old = $project->author_image;
-                $image_name = 'project-author' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-                $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($request->author_image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
-                $project->author_image = $image_name;
-                if ($old && File::exists(public_path() . '/' . $old)) unlink(public_path() . '/' . $old);
+                $project->author_image = app(\App\Services\UploadManager::class)->upload($request->author_image, 'uploads/custom-images', ['prefix' => 'project-author', 'format' => 'webp', 'quality' => 80]);
+                if ($old) app(\App\Services\UploadManager::class)->delete($old);
             }
 
             $project->portfolio_category_id = $request->portfolio_category_id;
@@ -184,23 +169,23 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
 
-        if ($project->thumb_image && File::exists(public_path() . '/' . $project->thumb_image)) {
-            unlink(public_path() . '/' . $project->thumb_image);
+        if ($project->thumb_image) {
+            app(\App\Services\UploadManager::class)->delete($project->thumb_image);
         }
 
         ProjectTranslation::where('project_id', $id)->delete();
 
         foreach (ProjectGallery::where('project_id', $id)->get() as $gallery) {
-            if ($gallery->image && File::exists(public_path() . '/' . $gallery->image)) {
-                unlink(public_path() . '/' . $gallery->image);
+            if ($gallery->image) {
+                app(\App\Services\UploadManager::class)->delete($gallery->image);
             }
             $gallery->delete();
         }
 
         // Delete portfolio items belonging to this project
         foreach (PortfolioItem::where('project_id', $id)->get() as $item) {
-            if ($item->thumbnail && File::exists(public_path() . '/' . $item->thumbnail)) {
-                unlink(public_path() . '/' . $item->thumbnail);
+            if ($item->thumbnail) {
+                app(\App\Services\UploadManager::class)->delete($item->thumbnail);
             }
             $item->delete();
         }
@@ -247,10 +232,7 @@ class ProjectController extends Controller
         $item->description             = $request->input('description', '');
 
         if ($request->hasFile('thumbnail')) {
-            $name = 'portfolio-thumb' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . '.webp';
-            $name = 'uploads/custom-images/' . $name;
-            Image::make($request->thumbnail)->encode('webp', 80)->save(public_path() . '/' . $name);
-            $item->thumbnail = $name;
+            $item->thumbnail = app(\App\Services\UploadManager::class)->upload($request->thumbnail, 'uploads/custom-images', ['prefix' => 'portfolio-thumb', 'format' => 'webp', 'quality' => 80]);
         }
 
         $item->save();
@@ -264,8 +246,8 @@ class ProjectController extends Controller
         $item = PortfolioItem::findOrFail($id);
         $project_id = $item->project_id;
 
-        if ($item->thumbnail && File::exists(public_path() . '/' . $item->thumbnail)) {
-            unlink(public_path() . '/' . $item->thumbnail);
+        if ($item->thumbnail) {
+            app(\App\Services\UploadManager::class)->delete($item->thumbnail);
         }
 
         $item->delete();
@@ -289,10 +271,7 @@ class ProjectController extends Controller
         foreach ($request->file as $index => $image) {
             $gallery_image = new ProjectGallery();
             if ($image) {
-                $image_name = 'project-gallery' . date('-Y-m-d-h-i-s-') . rand(999, 9999) . $index . '.webp';
-                $image_name = 'uploads/custom-images/' . $image_name;
-                Image::make($image)->encode('webp', 80)->save(public_path() . '/' . $image_name);
-                $gallery_image->image = $image_name;
+                $gallery_image->image = app(\App\Services\UploadManager::class)->upload($image, 'uploads/custom-images', ['prefix' => 'project-gallery', 'format' => 'webp', 'quality' => 80]);
             }
             $gallery_image->project_id = $id;
             $gallery_image->save();
@@ -307,8 +286,8 @@ class ProjectController extends Controller
     public function delete_listing_project($id)
     {
         $gallery = ProjectGallery::findOrFail($id);
-        if ($gallery->image && File::exists(public_path() . '/' . $gallery->image)) {
-            unlink(public_path() . '/' . $gallery->image);
+        if ($gallery->image) {
+            app(\App\Services\UploadManager::class)->delete($gallery->image);
         }
         $gallery->delete();
 

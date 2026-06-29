@@ -2,11 +2,10 @@
 
 namespace Modules\Partner\App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
+use App\Services\UploadManager;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Modules\Partner\App\Models\Partner;
 
 class PartnerController extends Controller
@@ -14,8 +13,7 @@ class PartnerController extends Controller
     public function index()
     {
         $partners = Partner::all();
-
-        return view('partner::index',compact('partners'));
+        return view('partner::index', compact('partners'));
     }
 
     public function create()
@@ -23,8 +21,7 @@ class PartnerController extends Controller
         return view('partner::create');
     }
 
-
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate(
             ['logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'],
@@ -32,72 +29,53 @@ class PartnerController extends Controller
         );
 
         $partner = new Partner();
-        if($request->logo){
-            $extention = $request->logo->getClientOriginalExtension();
-            $logo_name = 'our-partner'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-            $logo_name = 'uploads/custom-images/'.$logo_name;
-            $request->logo->move(public_path('uploads/custom-images/'),$logo_name);
-            $partner->logo=$logo_name;
+
+        if ($request->logo) {
+            $partner->logo = app(UploadManager::class)->upload(
+                $request->logo, 'uploads/custom-images', ['prefix' => 'partner']
+            );
         }
 
         $partner->link = $request->link;
         $partner->save();
 
-        $notification = trans('Created Successfully');
-        $notification=array('message'=>$notification,'alert-type'=>'success');
+        $notification = array('message' => trans('Created Successfully'), 'alert-type' => 'success');
         return redirect()->route('admin.partner.index')->with($notification);
     }
-
 
     public function edit($id)
     {
         $partner = Partner::findOrFail($id);
-
         return view('partner::edit', compact('partner'));
     }
 
-
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
-        $partner = Partner::find($id);
+        $partner = Partner::findOrFail($id);
 
-
-        if($request->logo){
+        if ($request->logo) {
             $old_logo = $partner->logo;
-            $extention = $request->logo->getClientOriginalExtension();
-            $logo_name = 'Partner'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-            $logo_name = 'uploads/custom-images/'.$logo_name;
-
-            $request->logo->move(public_path('uploads/custom-images/'),$logo_name);
-
-            $partner->logo = $logo_name;
+            $partner->logo = app(UploadManager::class)->upload(
+                $request->logo, 'uploads/custom-images', ['prefix' => 'partner']
+            );
             $partner->save();
-            if($old_logo){
-                if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-            }
+            app(UploadManager::class)->delete($old_logo);
         }
 
         $partner->link = $request->link;
         $partner->save();
 
-        $notification = trans('Update Successfully');
-        $notification = array('message'=>$notification,'alert-type'=>'success');
+        $notification = array('message' => trans('Update Successfully'), 'alert-type' => 'success');
         return redirect()->route('admin.partner.index')->with($notification);
     }
 
-
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
-        $partner = Partner::find($id);
-        $old_logo = $partner->logo;
+        $partner = Partner::findOrFail($id);
+        app(UploadManager::class)->delete($partner->logo);
         $partner->delete();
-        if($old_logo){
-            if(File::exists(public_path().'/'.$old_logo))unlink(public_path().'/'.$old_logo);
-        }
 
-        $notification = trans('Delete Successfully');
-        $notification = array('message'=>$notification,'alert-type'=>'success');
+        $notification = array('message' => trans('Delete Successfully'), 'alert-type' => 'success');
         return redirect()->route('admin.partner.index')->with($notification);
     }
-
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
-use Auth, Str, Image, File, Hash;
+use Auth, Hash;
 use App\Http\Requests\EditProfileRequest;
 use App\Http\Requests\PasswordChangeRequest;
 
@@ -39,17 +39,10 @@ class ProfileController extends Controller
 
         if($request->hasFile('image')){
             $old_image = $admin->image;
-            $user_image = $request->image;
-            $extention = $user_image->getClientOriginalExtension();
-            $image_name = Str::slug($request->name).date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-            $image_name = 'uploads/website-images/'.$image_name;
-            Image::make($request->image)
-                ->save(public_path($image_name));
-
-            $admin->image = $image_name;
+            $admin->image = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/website-images', ['prefix' => 'admin']);
             $admin->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 

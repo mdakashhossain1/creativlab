@@ -9,16 +9,13 @@ use Modules\Ecommerce\Entities\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Image;
 use Modules\City\Entities\City;
 use Modules\Country\Entities\Country;
 use Modules\State\App\Models\State;
 use Modules\State\App\Models\StateTranslation;
-use Str;
 
 class ProfileController extends Controller
 {
@@ -114,15 +111,10 @@ class ProfileController extends Controller
 
         if($request->file('image')){
             $old_image = $user->image;
-            $user_image = $request->image;
-            $extention = $user_image->getClientOriginalExtension();
-            $image_name = Str::slug($user->name).date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-            $image_name = 'uploads/custom-images/'.$image_name;
-            Image::make($user_image)->save(public_path().'/'.$image_name);
-            $user->image = $image_name;
+            $user->image = app(\App\Services\UploadManager::class)->upload($request->image, 'uploads/custom-images', ['prefix' => 'user']);
             $user->save();
             if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
+                app(\App\Services\UploadManager::class)->delete($old_image);
             }
         }
 
@@ -139,23 +131,15 @@ class ProfileController extends Controller
 
         $user = auth()->user();
 
-        // Delete old image if needed
-        if ($user->image && file_exists(public_path($user->image))) {
-            unlink(public_path($user->image));
-        }
+        app(\App\Services\UploadManager::class)->delete($user->image);
 
-        // Save new image
-        $image = $request->file('image');
-        $extention = $image->getClientOriginalExtension();
-        $image_name = Str::slug($user->name).date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
-        $image_name = 'uploads/custom-images/'.$image_name;
-        Image::make($image)->save(public_path().'/'.$image_name);
+        $image_url = app(\App\Services\UploadManager::class)->upload($request->file('image'), 'uploads/custom-images', ['prefix' => 'user']);
 
-        $user->image = $image_name;
+        $user->image = $image_url;
         $user->save();
 
         return response()->json([
-            'image_url' => asset($image_name)
+            'image_url' => $image_url
         ]);
     }
 
@@ -315,10 +299,7 @@ class ProfileController extends Controller
             try {
                 // Handle image deletion
                 if ($user->image) {
-                    $imagePath = public_path($user->image);
-                    if (File::exists($imagePath)) {
-                        File::delete($imagePath);
-                    }
+                    app(\App\Services\UploadManager::class)->delete($user->image);
                 }
 
                 // Delete related records
