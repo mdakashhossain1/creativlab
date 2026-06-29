@@ -32,7 +32,7 @@
                                  <p class="md:text-48 text-34 font-semibold text-center text-main-black"
                                      data-scroll-qs="scroll"
                                      data-count-qs="{{ getTranslatedValue($fan_fact_content,'counter_number_one') }}"
-                                     data-type-qs="{{ __('k+') }}" data-speed-qs="600"></p>
+                                     data-type-qs="{{ __('+') }}" data-speed-qs="600"></p>
                                  <hr class="border-[3px] border-purple w-[80px]" />
                                  <p class="text-center text-paragraph text-18 font-semibold">
                                      {{ getTranslatedValue($fan_fact_content,'counter_text_one') }}
@@ -53,7 +53,7 @@
                              <div class="flex flex-col space-y-5 justify-between items-center relative z-10">
                                  <p data-scroll-qs="scroll"
                                      data-count-qs="{{ getTranslatedValue($fan_fact_content,'counter_number_two') }}"
-                                     data-type-qs="{{ __('k+') }}" data-speed-qs="600"
+                                     data-type-qs="{{ __('+') }}" data-speed-qs="600"
                                      class="md:text-48 text-34 font-semibold text-center text-main-black">
                                  </p>
                                  <hr class="border-[3px] border-purple w-[80px]" />
