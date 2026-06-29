@@ -18,33 +18,123 @@
                     <div class="crancy-dsinner">
 
                         {{-- Stats Row --}}
-                        <div class="row g-3 mg-top-30">
-                            <div class="col-6 col-md-3">
-                                <div class="crancy-wc__form-main text-center p-3">
-                                    <h3 style="font-size:2rem;font-weight:800;color:#6366f1;margin:0 0 4px;">{{ $registrations->count() }}</h3>
-                                    <p class="text-muted mb-0" style="font-size:13px;">Total Registrations</p>
+                        <div class="row mg-top-30">
+
+                            {{-- Total Registrations --}}
+                            <div class="col-lg-3 col-md-6 col-12 mg-top-30">
+                                <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                    <div class="flex-main" style="color:#6366f1;">
+                                        <span>
+                                            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                <path d="M27 15a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 14c6.627 0 12 2.686 12 6v2H15v-2c0-3.314 5.373-6 12-6z" fill="currentcolor"/>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-1">
+                                            <div class="crancy-ecom-card__heading">
+                                                <div class="crancy-ecom-card__icon">
+                                                    <h4 class="crancy-ecom-card__title">{{ __('Total Registrations') }}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="crancy-ecom-card__content">
+                                                <div class="crancy-ecom-card__camount">
+                                                    <div class="crancy-ecom-card__camount__inside">
+                                                        <h3 class="crancy-ecom-card__amount">{{ $registrations->count() }}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-3">
-                                <div class="crancy-wc__form-main text-center p-3">
-                                    <h3 style="font-size:2rem;font-weight:800;color:#10b981;margin:0 0 4px;">{{ $registrations->where('payment_status','approved')->count() }}</h3>
-                                    <p class="text-muted mb-0" style="font-size:13px;">Approved</p>
+
+                            {{-- Approved --}}
+                            <div class="col-lg-3 col-md-6 col-12 mg-top-30">
+                                <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                    <div class="flex-main" style="color:#10b981;">
+                                        <span>
+                                            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                <path d="M22 27.5l4 4 9-9" stroke="currentcolor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="27" cy="27" r="11" stroke="currentcolor" stroke-width="2"/>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-1">
+                                            <div class="crancy-ecom-card__heading">
+                                                <div class="crancy-ecom-card__icon">
+                                                    <h4 class="crancy-ecom-card__title">{{ __('Approved') }}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="crancy-ecom-card__content">
+                                                <div class="crancy-ecom-card__camount">
+                                                    <div class="crancy-ecom-card__camount__inside">
+                                                        <h3 class="crancy-ecom-card__amount">{{ $registrations->where('payment_status','approved')->count() }}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-3">
-                                <div class="crancy-wc__form-main text-center p-3">
-                                    <h3 style="font-size:2rem;font-weight:800;color:#f59e0b;margin:0 0 4px;">{{ $registrations->where('payment_status','pending')->count() }}</h3>
-                                    <p class="text-muted mb-0" style="font-size:13px;">Pending</p>
+
+                            {{-- Pending --}}
+                            <div class="col-lg-3 col-md-6 col-12 mg-top-30">
+                                <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                    <div class="flex-main" style="color:#f59e0b;">
+                                        <span>
+                                            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                <circle cx="27" cy="27" r="11" stroke="currentcolor" stroke-width="2"/>
+                                                <path d="M27 21v7l4 2" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-1">
+                                            <div class="crancy-ecom-card__heading">
+                                                <div class="crancy-ecom-card__icon">
+                                                    <h4 class="crancy-ecom-card__title">{{ __('Pending') }}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="crancy-ecom-card__content">
+                                                <div class="crancy-ecom-card__camount">
+                                                    <div class="crancy-ecom-card__camount__inside">
+                                                        <h3 class="crancy-ecom-card__amount">{{ $registrations->where('payment_status','pending')->count() }}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-3">
-                                <div class="crancy-wc__form-main text-center p-3">
-                                    <h3 style="font-size:2rem;font-weight:800;color:#374151;margin:0 0 4px;">
-                                        {{ $webinar->currency_symbol }}{{ number_format($registrations->where('payment_status','approved')->sum('amount'), 2) }}
-                                    </h3>
-                                    <p class="text-muted mb-0" style="font-size:13px;">Total Revenue</p>
+
+                            {{-- Total Revenue --}}
+                            <div class="col-lg-3 col-md-6 col-12 mg-top-30">
+                                <div class="crancy-ecom-card crancy-ecom-card__v2">
+                                    <div class="flex-main" style="color:#8b5cf6;">
+                                        <span>
+                                            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle opacity="0.08" cx="27" cy="27" r="27" fill="currentcolor"/>
+                                                <path d="M27 16v2m0 18v2m-6-11h3a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h5m0 0V14m0 4h2" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="27" cy="27" r="11" stroke="currentcolor" stroke-width="2"/>
+                                            </svg>
+                                        </span>
+                                        <div class="flex-1">
+                                            <div class="crancy-ecom-card__heading">
+                                                <div class="crancy-ecom-card__icon">
+                                                    <h4 class="crancy-ecom-card__title">{{ __('Total Revenue') }}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="crancy-ecom-card__content">
+                                                <div class="crancy-ecom-card__camount">
+                                                    <div class="crancy-ecom-card__camount__inside">
+                                                        <h3 class="crancy-ecom-card__amount">{{ $webinar->currency_symbol }}{{ number_format($registrations->where('payment_status','approved')->sum('amount'), 2) }}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
 
                         {{-- Table --}}
