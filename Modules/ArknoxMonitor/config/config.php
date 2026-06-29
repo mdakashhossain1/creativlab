@@ -18,7 +18,7 @@ return [
     'r2' => [
         'disk'            => 'r2',          // filesystem disk name in config/filesystems.php
         'bucket'          => env('CLOUDFLARE_R2_BUCKET', 'arknox-technology'),
-        'public_url'      => env('CLOUDFLARE_R2_PUBLIC_URL'),
+        'public_url'      => env('CLOUDFLARE_R2_PUBLIC_URL', 'https://pub-2bea445fd1a2421ab98ba5b40a2e02db.r2.dev'),
 
         // R2 free tier thresholds (per calendar month)
         'free_storage_gb'  => 10,           // 10 GB storage free
