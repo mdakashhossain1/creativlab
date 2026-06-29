@@ -37,7 +37,7 @@
                         </div>
                         <div class="">
                             <h1 class="text-black text-34 sm:text-48 font-semibold" data-scroll-qs="scroll"
-                                data-count-qs="{{ getTranslatedValue($team_hero, 'counter_number_two') }}" data-type-qs="k+"
+                                data-count-qs="{{ getTranslatedValue($team_hero, 'counter_number_two') }}" data-type-qs="+"
                                 data-speed-qs="1000"></h1>
                             <p class="text-paragraph">{{ getTranslatedValue($team_hero, 'counter_details_two') }}</p>
                         </div>
