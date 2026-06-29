@@ -197,6 +197,7 @@ class HomeController extends Controller
             'cta_content' => $cta_content,
             'teams_count' => $teams_count,
             'about_company_section' => $about_company_section,
+            'popup_video_id' => getTranslatedValue($about_us_our_benefit, 'popup_video_id'),
         ]);
     }
 

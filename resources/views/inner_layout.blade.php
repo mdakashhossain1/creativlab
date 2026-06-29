@@ -561,7 +561,7 @@
             X
         </button>
         <iframe class="absolute max-w-[80%] aspect-[1280/720] mx-auto"
-            src="https://www.youtube.com/embed/{{ getTranslatedValue($hero_image ?? null, 'hero_video_id') }}" frameborder="0"
+            src="https://www.youtube.com/embed/{{ $popup_video_id ?? getTranslatedValue($hero_image ?? null, 'hero_video_id') }}" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>
