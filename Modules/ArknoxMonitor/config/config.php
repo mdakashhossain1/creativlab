@@ -13,4 +13,22 @@ return [
         'cron/run',              // scheduler trigger — automated, not a user visit
         'api/attendance',        // device polling
     ],
+
+    // Cloudflare R2 usage tracking
+    'r2' => [
+        'disk'            => 'r2',          // filesystem disk name in config/filesystems.php
+        'bucket'          => env('CLOUDFLARE_R2_BUCKET', 'arknox-technology'),
+        'public_url'      => env('CLOUDFLARE_R2_PUBLIC_URL'),
+
+        // R2 free tier thresholds (per calendar month)
+        'free_storage_gb'  => 10,           // 10 GB storage free
+        'free_class_a_ops' => 1_000_000,    // 1M PUT/DELETE/LIST ops free
+        'free_class_b_ops' => 10_000_000,   // 10M GET/HEAD ops free
+
+        // R2 overage pricing (USD)
+        'price_storage_gb' => 0.015,        // per GB over free tier
+        'price_class_a'    => 4.50,         // per million Class A ops over free tier
+        'price_class_b'    => 0.36,         // per million Class B ops over free tier
+        // egress is always free on R2
+    ],
 ];

@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Modules\ArknoxMonitor\App\Services\BillingEngine;
 use Modules\ArknoxMonitor\App\Services\HealthChecker;
 use Modules\ArknoxMonitor\App\Services\QueryBuffer;
+use Modules\ArknoxMonitor\App\Services\R2StorageService;
+use Modules\ArknoxMonitor\App\Services\R2UsageBuffer;
 
 class ArknoxMonitorServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class ArknoxMonitorServiceProvider extends ServiceProvider
 
         $this->app->singleton(HealthChecker::class);
         $this->app->singleton(BillingEngine::class);
+        $this->app->singleton(R2StorageService::class);
 
         $this->app->register(RouteServiceProvider::class);
     }
@@ -36,6 +39,7 @@ class ArknoxMonitorServiceProvider extends ServiceProvider
             // Flush accumulated stats at the very end of each request
             $this->app->terminating(function () {
                 QueryBuffer::flush();
+                R2UsageBuffer::flush();
             });
         });
     }
