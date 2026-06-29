@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# User-uploaded files (server-only, never tracked by git)
+/public/uploads/
