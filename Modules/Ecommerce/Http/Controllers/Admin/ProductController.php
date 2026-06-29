@@ -5,8 +5,7 @@ namespace Modules\Ecommerce\Http\Controllers\Admin;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\ImageManager;
+
 use Modules\Brand\Entities\Brand;
 use Modules\Category\Entities\Category;
 use Modules\Ecommerce\Entities\Product;
@@ -68,25 +67,11 @@ class ProductController extends Controller
 
         // Handle image upload and watermarking
         if ($request->hasFile('thumbnail_image')) {
-            // Store the old image path if this is an update
             $old_image = $id ? $product->thumbnail_image : null;
-
-            // Generate new image name
-            $image_name = 'listing'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name = 'uploads/custom-images/'.$image_name;
-
-            // Process and save the new image
-            $manager = new ImageManager(['driver' => 'gd']);
-            $image = $manager->make($request->thumbnail_image);
-
-            // Save the new image
-            $image->encode('webp', 80)->save(public_path().'/'.$image_name);
-            $product->thumbnail_image = $image_name;
-
-            // Delete old image if it exists
-            if ($old_image && File::exists(public_path().'/'.$old_image)) {
-                File::delete(public_path().'/'.$old_image);
-            }
+            if ($old_image) app(\App\Services\UploadManager::class)->delete($old_image);
+            $product->thumbnail_image = app(\App\Services\UploadManager::class)->upload(
+                $request->file('thumbnail_image'), 'uploads/custom-images', ['format' => 'webp', 'quality' => 80, 'prefix' => 'listing']
+            );
         }
 
         $product->save();
@@ -150,27 +135,12 @@ class ProductController extends Controller
                 $product->is_digital = $request->boolean('is_digital');
                 $product->download_url = $request->boolean('is_digital') ? $request->download_url : null;
 
-                // Handle image upload and watermarking
                 if ($request->hasFile('thumbnail_image')) {
-                    // Store the old image path if this is an update
-                    $old_image = $id ? $product->thumbnail_image : null;
-
-                    // Generate new image name
-                    $image_name = 'listing'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-                    $image_name = 'uploads/custom-images/'.$image_name;
-
-                    // Process and save the new image
-                    $manager = new ImageManager(['driver' => 'gd']);
-                    $image = $manager->make($request->thumbnail_image);
-
-                    // Save the new image
-                    $image->encode('webp', 80)->save(public_path().'/'.$image_name);
-                    $product->thumbnail_image = $image_name;
-
-                    // Delete old image if it exists
-                    if ($old_image && File::exists(public_path().'/'.$old_image)) {
-                        File::delete(public_path().'/'.$old_image);
-                    }
+                    $old_image = $product->thumbnail_image;
+                    if ($old_image) app(\App\Services\UploadManager::class)->delete($old_image);
+                    $product->thumbnail_image = app(\App\Services\UploadManager::class)->upload(
+                        $request->file('thumbnail_image'), 'uploads/custom-images', ['format' => 'webp', 'quality' => 80, 'prefix' => 'listing']
+                    );
                 }
 
                 $product->save();
@@ -194,9 +164,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $old_image = $product->thumbnail_image;
 
-        if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-        }
+        if ($old_image) app(\App\Services\UploadManager::class)->delete($old_image);
 
         ProductTranslation::where('product_id',$id)->delete();
         ProductReview::where('product_id',$id)->delete();
@@ -205,12 +173,7 @@ class ProductController extends Controller
 
         $galleries = ProductGallery::where('product_id', $id)->get();
         foreach($galleries as $gallery){
-            $old_image = $gallery->image;
-
-            if($old_image){
-                if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-            }
-
+            if ($gallery->image) app(\App\Services\UploadManager::class)->delete($gallery->image);
             $gallery->delete();
         }
 
@@ -258,16 +221,9 @@ class ProductController extends Controller
             $gallery_image = new ProductGallery();
 
             if($image) {
-
-                $image_name = 'listing'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-                $image_name = 'uploads/custom-images/'.$image_name;
-                $manager = new ImageManager(['driver' => 'gd']);
-                $image = $manager->make($image);
-
-                $image->encode('webp', 80)->save(public_path().'/'.$image_name);
-
-                $gallery_image->image = $image_name;
-
+                $gallery_image->image = app(\App\Services\UploadManager::class)->upload(
+                    $image, 'uploads/custom-images', ['format' => 'webp', 'quality' => 80, 'prefix' => 'listing']
+                );
             }
 
             $gallery_image->product_id = $id;

@@ -1,9 +1,7 @@
 <?php
 
 namespace Modules\Page\App\Http\Controllers;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
-use Intervention\Image\ImageManager;
 use Modules\Language\App\Models\Language;
 use Modules\Page\App\Models\Slider;
 use Modules\Page\App\Models\SliderTranslation;
@@ -35,22 +33,12 @@ class SliderController extends Controller
 
         $slider->url = $request->url;
 
-        // Handle image upload and watermarking
         if ($request->hasFile('image')) {
             $old_image = $id ? $slider->image : null;
-            $image_name = 'slider'.date('-Y-m-d-h-i-s-').rand(999,9999).'.webp';
-            $image_name = 'uploads/custom-images/'.$image_name;
-            $manager = new ImageManager(['driver' => 'gd']);
-            $image = $manager->make($request->image);
-
-            // Save the new image
-            $image->encode('webp', 80)->save(public_path().'/'.$image_name);
-            $slider->image = $image_name;
-
-            // Delete old image if it exists
-            if ($old_image && File::exists(public_path().'/'.$old_image)) {
-                File::delete(public_path().'/'.$old_image);
-            }
+            if ($old_image) app(\App\Services\UploadManager::class)->delete($old_image);
+            $slider->image = app(\App\Services\UploadManager::class)->upload(
+                $request->file('image'), 'uploads/custom-images', ['format' => 'webp', 'quality' => 80, 'prefix' => 'slider']
+            );
         }
 
         $slider->save();
@@ -85,9 +73,7 @@ class SliderController extends Controller
         $slider = Slider::findOrFail($id);
         $old_image = $slider->image;
 
-        if($old_image){
-            if(File::exists(public_path().'/'.$old_image))unlink(public_path().'/'.$old_image);
-        }
+        if ($old_image) app(\App\Services\UploadManager::class)->delete($old_image);
 
         SliderTranslation::where('slider_id',$id)->delete();
 
