@@ -50,22 +50,6 @@
 
                                     <div class="col-md-6">
                                         <div class="crancy-wc__form-group">
-                                            <label>Webinar Date & Time</label>
-                                            <input type="datetime-local" name="webinar_date" class="form-control crancy-wc__form-input"
-                                                   value="{{ old('webinar_date', isset($webinar->webinar_date) ? $webinar->webinar_date->format('Y-m-d\TH:i') : '') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="crancy-wc__form-group">
-                                            <label>Total Seats (0 = unlimited)</label>
-                                            <input type="number" name="total_seats" class="form-control crancy-wc__form-input"
-                                                   value="{{ old('total_seats', $webinar->total_seats ?? 0) }}" min="0">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="crancy-wc__form-group">
                                             <label>Status</label>
                                             <select name="status" class="form-control crancy-wc__form-input">
                                                 <option value="1" {{ old('status', $webinar->status ?? 1) == 1 ? 'selected' : '' }}>Active</option>

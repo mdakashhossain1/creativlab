@@ -46,7 +46,6 @@
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">#</th>
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Title') }}</th>
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Slug') }}</th>
-                                            <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Date') }}</th>
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Price') }}</th>
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Registrations') }}</th>
                                             <th class="crancy-table__column-2 crancy-table__h2 sorting">{{ __('Status') }}</th>
@@ -66,11 +65,6 @@
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 <h4 class="crancy-table__product-title">{{ $webinar->slug }}</h4>
-                                            </td>
-                                            <td class="crancy-table__column-2 crancy-table__data-2">
-                                                <h4 class="crancy-table__product-title">
-                                                    {{ $webinar->webinar_date ? $webinar->webinar_date->format('d M Y, H:i') : '—' }}
-                                                </h4>
                                             </td>
                                             <td class="crancy-table__column-2 crancy-table__data-2">
                                                 @if($webinar->payment_enabled)

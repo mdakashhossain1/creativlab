@@ -33,8 +33,7 @@ class WebinarFrontendController extends Controller
     public function show(string $slug)
     {
         $webinar = Webinar::where('slug', $slug)->where('status', 1)->firstOrFail();
-        $registered = session()->has('webinar_registered_' . $webinar->id);
-        return view('webinar::frontend.show', compact('webinar', 'registered'));
+        return view('webinar::frontend.show', compact('webinar'));
     }
 
     public function register(Request $request, string $slug)

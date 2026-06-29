@@ -354,13 +354,33 @@
         category: 'Webinar',
         content: `
 <section id="register" style="padding:80px 20px;background:linear-gradient(135deg,#1a1a2e,#16213e);">
-  <div style="max-width:560px;margin:0 auto;text-align:center;">
-    <p style="color:#818cf8;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Reserve Your Spot</p>
-    <h2 style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:12px;">Register for the Webinar</h2>
-    <p style="color:#94a3b8;margin-bottom:40px;">Fill in your details below — your confirmation will be sent by email.</p>
-    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;">
-      <p style="color:#94a3b8;font-size:14px;">The registration form will appear here on the live page.</p>
-      <div style="background:#6366f1;color:#fff;padding:14px 32px;border-radius:8px;font-weight:700;margin-top:20px;display:inline-block;">Register Now</div>
+  <div style="max-width:520px;margin:0 auto;">
+    <p style="color:#818cf8;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;text-align:center;">Reserve Your Spot</p>
+    <h2 style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:12px;text-align:center;">Register for the Webinar</h2>
+    <p style="color:#94a3b8;margin-bottom:32px;text-align:center;">Fill in your details — confirmation sent to your email.</p>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:36px;">
+      <form method="POST" action="__WB_REGISTER_URL__" style="display:flex;flex-direction:column;gap:14px;">
+        <input type="hidden" name="_token" value="__WB_CSRF_TOKEN__">
+        <div>
+          <label style="color:#cbd5e1;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Full Name *</label>
+          <input type="text" name="name" required placeholder="Your full name"
+            style="width:100%;padding:12px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:15px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="color:#cbd5e1;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address *</label>
+          <input type="email" name="email" required placeholder="your@email.com"
+            style="width:100%;padding:12px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:15px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="color:#cbd5e1;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Phone Number</label>
+          <input type="text" name="phone" placeholder="+1 (555) 000-0000"
+            style="width:100%;padding:12px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:15px;outline:none;box-sizing:border-box;">
+        </div>
+        <button type="submit"
+          style="width:100%;padding:14px;background:#6366f1;color:#fff;font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin-top:4px;">
+          Register Now →
+        </button>
+      </form>
     </div>
   </div>
 </section>`,
